@@ -1,68 +1,55 @@
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using System.Collections.Generic;
+using TMPro;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager Instance; // 单例方便程序A调用
+    // 单例模式：让程序 A 或 Controller 随时能通过 UIManager.Instance 找到它
+    public static UIManager Instance;
 
-    [Header("Event Window")]
-    public TextMeshProUGUI contentText;
-    public Transform optionsParent;
-    public GameObject optionPrefab;
+    [Header("文本与容器引用")]
+    public TextMeshProUGUI eventContentText; // 事件描述的正文
+    public Transform optionsParent;          // 存放选项按钮的父节点 (带 VerticalLayoutGroup)
 
-    [Header("Popups")]
-    public GameObject[] allPanels; // 拖入背包、状态、树状图面板
-    [Header("Visual References")]
-    public Image backgroundImage; // 拖入场景中的 Background 对象
-    public Image windowImage;     // 拖入场景中的 Window_Frame 对象
+    [Header("环境与窗口引用")]
+    public Image backgroundImage;            // 全屏背景图
+    public Image windowImage;                // 事件弹窗的底框图
+
+    [Header("预制体")]
+    public GameObject optionPrefab;          // 刚才做好的 Option_Button_Prefab
+
     private void Awake() => Instance = this;
 
-    // --- 给程序 A 调用的核心方法 ---
-    public void ShowNewEvent(string text, List<OptionInfo> options)
+    /// <summary>
+    /// 【核心接口】当“回合数据”发生变化时，Controller 会调用此方法
+    /// </summary>
+    /// <param name="model">程序 A 传来的完整回合数据包</param>
+    /// <param name="onOptionClick">当玩家点击某个选项时，UI 层通知逻辑层的方法</param>
+    public void OnRoundDataChanged(RoundModel model, System.Action<string> onOptionClick)
     {
-        contentText.text = text;
+        // 1. 刷新文本内容
+        eventContentText.text = model.Content;
 
-        // 1. 清理旧选项
-        foreach (Transform child in optionsParent) Destroy(child.gameObject);
+        // 2. 刷新背景与窗口皮肤（如果数据里提供了新的 Sprite）
+        if (model.BgSprite != null) backgroundImage.sprite = model.BgSprite;
+        if (model.WindowSprite != null) windowImage.sprite = model.WindowSprite;
 
-        // 2. 生成新选项
-        foreach (var opt in options)
+        // 3. 清理旧的选项按钮
+        // 遍历所有子物体并销毁
+        foreach (Transform child in optionsParent)
+            Destroy(child.gameObject);
+
+        // 4. 根据数据模型生成新的选项按钮
+        foreach (var optData in model.Options)
         {
-            var go = Instantiate(optionPrefab, optionsParent);
-            go.GetComponent<OptionButtonUI>().Setup(opt.text, opt.isUnlocked, () => {
-                Debug.Log("选择了：" + opt.text);
-                // 这里写逻辑：通知程序A处理该选项的后果
-            });
+            // 实例化预制体
+            GameObject go = Instantiate(optionPrefab, optionsParent);
+            // 获取按钮身上的脚本并执行渲染逻辑
+            OptionButtonUI btnScript = go.GetComponent<OptionButtonUI>();
+
+            // 将单个选项的数据和“点击回调”传给按钮
+            btnScript.Render(optData, onOptionClick);
         }
     }
-    public void SetBackground(Sprite newBg)
-    {
-        if (newBg != null)
-        {
-            backgroundImage.sprite = newBg;
-        }
-    }
-    // --- 底部导航逻辑 ---
-    public void OpenPanel(int index)
-    {
-        // 关闭所有，打开指定的（简单逻辑）
-        foreach (var p in allPanels) p.SetActive(false);
-        allPanels[index].SetActive(true);
-    }
-    public void SetWindowStyle(Sprite newWindowSprite)
-    {
-        if (newWindowSprite != null)
-        {
-            windowImage.sprite = newWindowSprite;
-        }
-    }
-}
-
-// 模拟数据结构，实际由程序 A 定义
-public struct OptionInfo
-{
-    public string text;
-    public bool isUnlocked;
 }
