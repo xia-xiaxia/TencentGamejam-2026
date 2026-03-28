@@ -37,6 +37,9 @@ public static partial class StoryCsvImporter
                 EventId = Require(row, "eventId", path),
                 Text = Get(row, "Text"),
                 NextNodeId = Get(row, "nextNodeId"),
+                RequiredItemId = Get(row, "requiredItemId"),
+                RequiredUnlockedNodeId = Get(row, "requiredUnlockedNodeId"),
+                ConsumeItemId = Get(row, "consumeItemId"),
                 Order = ParseInt(Get(row, "order"), i)
             };
 
@@ -72,7 +75,7 @@ public static partial class StoryCsvImporter
 
     private static List<CharacterRow> ReadCharacters(string path)
     {
-        List<Dictionary<string, string>> rows = ReadCsvAsMaps(path, new[] { "id", "name", "description", "image" });
+        List<Dictionary<string, string>> rows = ReadCsvAsMaps(path, new[] { "id", "name", "description", "image", "health" });
         List<CharacterRow> result = new List<CharacterRow>();
 
         for (int i = 0; i < rows.Count; i++)
@@ -83,7 +86,8 @@ public static partial class StoryCsvImporter
                 Id = Require(row, "id", path),
                 Name = Get(row, "name"),
                 Description = Get(row, "description"),
-                Image = Get(row, "image")
+                Image = Get(row, "image"),
+                Health = ParseFloat(Get(row, "health"))
             };
 
             result.Add(item);

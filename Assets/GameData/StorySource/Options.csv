@@ -1,4 +1,4 @@
-optionId,eventId,order,Text,nextNodeId
-O001,S001,0,Look around,S002
-O002,S001,1,Open the door,S003
-O003,S002,0,Take the key,S003
+optionId,eventId,order,Text,nextNodeId,requiredItemId,requiredUnlockedNodeId,consumeItemId
+O001,S001,0,Look around,S002,,,
+O002,S001,1,Open the door,S003,I001,,I001
+O003,S002,0,Take the key,S003,,,

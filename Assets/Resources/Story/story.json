@@ -16,11 +16,15 @@
                 {
                     "Text": "Look around",
                     "nextNodeId": "S002",
+                    "requiredItemId": "",
+                    "consumeItemId": "",
                     "effects": []
                 },
                 {
                     "Text": "Open the door",
                     "nextNodeId": "S003",
+                    "requiredItemId": "I001",
+                    "consumeItemId": "I001",
                     "effects": []
                 }
             ]
@@ -41,6 +45,8 @@
                 {
                     "Text": "Take the key",
                     "nextNodeId": "S003",
+                    "requiredItemId": "",
+                    "consumeItemId": "",
                     "effects": [
                         {
                             "targetKey": "sanity",
@@ -66,6 +72,7 @@
             "name": "Hero",
             "description": "Main character",
             "image": "characters/hero",
+            "health": 100.0,
             "bag": [
                 {
                     "id": "I001",
@@ -88,6 +95,7 @@
             "name": "NPC_A",
             "description": "Guide NPC",
             "image": "characters/npc_a",
+            "health": 80.0,
             "bag": [
                 {
                     "id": "I101",

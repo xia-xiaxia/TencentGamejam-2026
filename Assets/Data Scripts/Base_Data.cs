@@ -26,6 +26,9 @@ public class OptionData
 {
     public string Text;
     public string nextNodeId;
+    public string requiredItemId;
+    public string requiredUnlockedNodeId;
+    public string consumeItemId;
     public List<EffectData> effects;
 
 }
@@ -44,7 +47,10 @@ public enum EffectType
 {
     Add,
     Subtract,
-    Set
+    Set,
+    UnlockNode,
+    ApplyStatus,
+    RemoveStatus
 }
 
 [System.Serializable]
@@ -54,6 +60,7 @@ public class CharacterData
     public string name;
     public string description;
     public string image; // 存放在 Resources 文件夹下的图片路径
+    public float health;
 
     public List<ItemData> bag;
 }
