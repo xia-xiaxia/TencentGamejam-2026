@@ -65,7 +65,7 @@ public partial class BackBoard
         if (bag != null && bag.Count > 0)
         {
             bag.Clear();
-            NotifyBlackboardChanged("bag:" + currentCharacterId);
+            NotifyBlackboardChanged("bag.add:" + currentCharacterId);
         }
 
         if (!EnterNode(nodeId))

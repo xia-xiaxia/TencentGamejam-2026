@@ -4,39 +4,39 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// ±³°üÊÓÍ¼£º
-/// - ÔÚ Inspector ÅäÖÃËùÓĞ¿ÉÄÜµÄÎïÆ·Ô¤ÖÆÌå£¨id ¶ÔÓ¦£©
-/// - ¼àÌı BackBoard µÄºÚ°åÊÂ¼ş£¨¿ÉÅäÖÃÇ°×º£©À´Ìí¼Ó / ÒÆ³ıÎïÆ·
-/// - ÒÔ¹Ì¶¨¼ä¾àÅÅÁĞ£ºÒ»ĞĞ 5 ¸ö£¬×î¶à 15 ¸ö£¨×î¶à 3 ĞĞ£©
-/// - Ö§³Ö GridLayoutGroup£¨ÓÅÏÈ£©»òÎŞ²¼¾ÖÊ±µÄ¼òµ¥Íø¸ñ¶¨Î»»ØÍË
+/// èƒŒåŒ…è§†å›¾ï¼š
+/// - åœ¨ Inspector é…ç½®æ‰€æœ‰å¯èƒ½çš„ç‰©å“é¢„åˆ¶ä½“ï¼ˆid å¯¹åº”ï¼‰
+/// - ç›‘å¬ BackBoard çš„é»‘æ¿äº‹ä»¶ï¼ˆå¯é…ç½®å‰ç¼€ï¼‰æ¥æ·»åŠ  / ç§»é™¤ç‰©å“
+/// - ä»¥å›ºå®šé—´è·æ’åˆ—ï¼šä¸€è¡Œ 5 ä¸ªï¼Œæœ€å¤š 15 ä¸ªï¼ˆæœ€å¤š 3 è¡Œï¼‰
+/// - æ”¯æŒ GridLayoutGroupï¼ˆä¼˜å…ˆï¼‰æˆ–æ— å¸ƒå±€æ—¶çš„ç®€å•ç½‘æ ¼å®šä½å›é€€
 /// </summary>
 public class BagUI : MonoBehaviour
 {
     [Serializable]
     public class ItemEntry
     {
-        public string id;           // ÎïÆ·Î¨Ò» id£¨ÓÃÓÚÌí¼Ó/ÒÆ³ı£©
-        public GameObject prefab;   // ¶ÔÓ¦µÄ°´Å¥Ô¤ÖÆÌå£¨Ó¦°üº¬ Button + Image/Text£©
+        public string id;           // ç‰©å“å”¯ä¸€ idï¼ˆç”¨äºæ·»åŠ /ç§»é™¤ï¼‰
+        public GameObject prefab;   // å¯¹åº”çš„æŒ‰é’®é¢„åˆ¶ä½“ï¼ˆåº”åŒ…å« Button + Image/Textï¼‰
     }
 
     public List<ItemEntry> itemPrefabs = new List<ItemEntry>();
 
-    [Header("ÈİÆ÷Óë²¼¾Ö")]
-    public RectTransform contentParent;      // °´Å¥ÈİÆ÷£¨ÍÆ¼öÌí¼Ó GridLayoutGroup£©
-    public Vector2 cellSize = new Vector2(100f, 100f);    // »ØÍË²¼¾ÖÊ±µ¥Ôª´óĞ¡
-    public Vector2 spacing = new Vector2(8f, 8f);         // »ØÍË²¼¾ÖÊ±¼ä¾à
+    [Header("å®¹å™¨ä¸å¸ƒå±€")]
+    public RectTransform contentParent;      // æŒ‰é’®å®¹å™¨ï¼ˆæ¨èæ·»åŠ  GridLayoutGroupï¼‰
+    public Vector2 cellSize = new Vector2(100f, 100f);    // å›é€€å¸ƒå±€æ—¶å•å…ƒå¤§å°
+    public Vector2 spacing = new Vector2(8f, 8f);         // å›é€€å¸ƒå±€æ—¶é—´è·
 
-    [Header("ĞĞÎªÉèÖÃ")]
-    public int itemsPerRow = 5;      // Ã¿ĞĞÊıÁ¿£¨¹Ì¶¨Îª 5£©
-    public int maxItems = 15;        // ×î´óÎïÆ·ÊıÁ¿£¨¹Ì¶¨Îª 15£©
-    public string addPrefix = "bag.add:";     // ºÚ°åÊÂ¼ş add Ç°×º£¬¸ñÊ½Àı£º "bag.add:ITEM_ID"
-    public string removePrefix = "bag.remove:"; // ºÚ°åÊÂ¼ş remove Ç°×º£¬¸ñÊ½Àı£º "bag.remove:ITEM_ID"
+    [Header("è¡Œä¸ºè®¾ç½®")]
+    public int itemsPerRow = 5;      // æ¯è¡Œæ•°é‡ï¼ˆå›ºå®šä¸º 5ï¼‰
+    public int maxItems = 15;        // æœ€å¤§ç‰©å“æ•°é‡ï¼ˆå›ºå®šä¸º 15ï¼‰
+    public string addPrefix = "bag.add:";     // é»‘æ¿äº‹ä»¶ add å‰ç¼€ï¼Œæ ¼å¼ä¾‹ï¼š "bag.add:ITEM_ID"
+    public string removePrefix = "bag.remove:"; // é»‘æ¿äº‹ä»¶ remove å‰ç¼€ï¼Œæ ¼å¼ä¾‹ï¼š "bag.remove:ITEM_ID"
 
-    [Header("ÏÔÊ¾¿ØÖÆ")]
-    public GameObject bagRoot;       // Õû¸ö±³°üÃæ°åµÄ¸ù£¨¿ÉÔÚ Inspector Ö¸¶¨£©£»ÈôÎª¿ÕÔòÊ¹ÓÃ±¾¶ÔÏó
-    public bool startVisible = false; // Æô¶¯Ê±ÊÇ·ñÏÔÊ¾±³°ü
+    [Header("æ˜¾ç¤ºæ§åˆ¶")]
+    public GameObject bagRoot;       // æ•´ä¸ªèƒŒåŒ…é¢æ¿çš„æ ¹ï¼ˆå¯åœ¨ Inspector æŒ‡å®šï¼‰ï¼›è‹¥ä¸ºç©ºåˆ™ä½¿ç”¨æœ¬å¯¹è±¡
+    public bool startVisible = false; // å¯åŠ¨æ—¶æ˜¯å¦æ˜¾ç¤ºèƒŒåŒ…
 
-    // ÔËĞĞÊ±Êı¾İ
+    // è¿è¡Œæ—¶æ•°æ®
     private readonly Dictionary<string, GameObject> spawned = new Dictionary<string, GameObject>(StringComparer.Ordinal);
     private GridLayoutGroup gridLayout;
     private bool isOpen;
@@ -56,7 +56,7 @@ public class BagUI : MonoBehaviour
 
     private void OnEnable()
     {
-        // ¶©ÔÄ BackBoard µÄºÚ°å±ä¸üÊÂ¼ş£¨Èç¹û´æÔÚ£©
+        // è®¢é˜… BackBoard çš„é»‘æ¿å˜æ›´äº‹ä»¶ï¼ˆå¦‚æœå­˜åœ¨ï¼‰
         if (BackBoard.Instance != null)
         {
             BackBoard.Instance.OnBlackboardValueChanged += HandleBlackboardChanged;
@@ -73,7 +73,7 @@ public class BagUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        // ÇåÀíËùÓĞÉú³ÉÎï
+        // æ¸…ç†æ‰€æœ‰ç”Ÿæˆç‰©
         ClearAll();
     }
 
@@ -101,18 +101,18 @@ public class BagUI : MonoBehaviour
     }
 
     /// <summary>
-    /// ³¢ÊÔÌí¼ÓÎïÆ·£¨ÓÉ id Ö¸¶¨£©¡£ÈôÒÑ´æÔÚ»òÒÑ´ïÉÏÏŞÔòºöÂÔ¡£
+    /// å°è¯•æ·»åŠ ç‰©å“ï¼ˆç”± id æŒ‡å®šï¼‰ã€‚è‹¥å·²å­˜åœ¨æˆ–å·²è¾¾ä¸Šé™åˆ™å¿½ç•¥ã€‚
     /// </summary>
     public bool AddItemById(string id)
     {
         if (string.IsNullOrEmpty(id) || contentParent == null) return false;
         if (spawned.ContainsKey(id)) return false;
-        if (spawned.Count >= Math.Min(maxItems, 15)) return false; // Ç¿ÖÆ²»³¬¹ı 15
+        if (spawned.Count >= Math.Min(maxItems, 15)) return false; // å¼ºåˆ¶ä¸è¶…è¿‡ 15
 
         ItemEntry entry = itemPrefabs.Find(e => string.Equals(e.id, id, StringComparison.Ordinal));
         if (entry == null || entry.prefab == null)
         {
-            Debug.LogWarning($"BagUI: Î´ÕÒµ½ id={id} µÄÎïÆ·Ô¤ÖÆÌå¡£", this);
+            Debug.LogWarning($"BagUI: æœªæ‰¾åˆ° id={id} çš„ç‰©å“é¢„åˆ¶ä½“ã€‚", this);
             return false;
         }
 
@@ -122,7 +122,7 @@ public class BagUI : MonoBehaviour
         go.transform.localScale = Vector3.one;
         spawned[id] = go;
 
-        // ÈôÃ»ÓĞ GridLayoutGroup£¬ÔòÊÖ¶¯¶¨Î»
+        // è‹¥æ²¡æœ‰ GridLayoutGroupï¼Œåˆ™æ‰‹åŠ¨å®šä½
         if (gridLayout == null)
         {
             LayoutManual();
@@ -132,7 +132,7 @@ public class BagUI : MonoBehaviour
     }
 
     /// <summary>
-    /// ÒÆ³ıÎïÆ·
+    /// ç§»é™¤ç‰©å“
     /// </summary>
     public bool RemoveItemById(string id)
     {
@@ -147,7 +147,7 @@ public class BagUI : MonoBehaviour
         spawned.Remove(id);
         Destroy(go);
 
-        // ÖØĞÂ²¼¾Ö
+        // é‡æ–°å¸ƒå±€
         if (gridLayout == null)
         {
             LayoutManual();
@@ -157,7 +157,7 @@ public class BagUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Çå¿Õ±³°ü
+    /// æ¸…ç©ºèƒŒåŒ…
     /// </summary>
     public void ClearAll()
     {
@@ -169,8 +169,8 @@ public class BagUI : MonoBehaviour
     }
 
     /// <summary>
-    /// »ØÍËµÄÊÖ¶¯Íø¸ñ²¼¾Ö£¨µ±ÈİÆ÷Ã»ÓĞ GridLayoutGroup Ê±Ê¹ÓÃ£©¡£
-    /// ÒÔ top-left ÎªÆğµãÏòÓÒ¡¢ÏòÏÂÅÅÁĞ£¬Ã¿ĞĞ itemsPerRow ¸ö¡£
+    /// å›é€€çš„æ‰‹åŠ¨ç½‘æ ¼å¸ƒå±€ï¼ˆå½“å®¹å™¨æ²¡æœ‰ GridLayoutGroup æ—¶ä½¿ç”¨ï¼‰ã€‚
+    /// ä»¥ top-left ä¸ºèµ·ç‚¹å‘å³ã€å‘ä¸‹æ’åˆ—ï¼Œæ¯è¡Œ itemsPerRow ä¸ªã€‚
     /// </summary>
     private void LayoutManual()
     {
@@ -179,11 +179,11 @@ public class BagUI : MonoBehaviour
         int index = 0;
         foreach (Transform child in contentParent)
         {
-            // ½ö¶ÔÖ÷¶¯Éú³ÉµÄ×Ó¶ÔÏó½øĞĞ¶¨Î»£»Ìø¹ı·ÇÊµÀı»¯Ïî£¨ÈôÓĞ£©
+            // ä»…å¯¹ä¸»åŠ¨ç”Ÿæˆçš„å­å¯¹è±¡è¿›è¡Œå®šä½ï¼›è·³è¿‡éå®ä¾‹åŒ–é¡¹ï¼ˆè‹¥æœ‰ï¼‰
             if (child == null) continue;
-            if (index >= 15) // Ç¿ÖÆÉÏÏŞ
+            if (index >= 15) // å¼ºåˆ¶ä¸Šé™
             {
-                // ³¬³öÉÏÏŞµÄÖ±½ÓÒş²Ø»òÏú»Ù ¡ª ÕâÀïÑ¡ÔñÒş²Ø
+                // è¶…å‡ºä¸Šé™çš„ç›´æ¥éšè—æˆ–é”€æ¯ â€” è¿™é‡Œé€‰æ‹©éšè—
                 child.gameObject.SetActive(false);
                 index++;
                 continue;
@@ -192,7 +192,7 @@ public class BagUI : MonoBehaviour
             int col = index % itemsPerRow;
             int row = index / itemsPerRow;
 
-            // ¼ÆËãÎ»ÖÃ£¨ÃªµãÓë pivot ¿ÉÄÜÓ°Ïì±íÏÖ£¬¼Ù¶¨ contentParent pivot ÔÚ×óÉÏ£©
+            // è®¡ç®—ä½ç½®ï¼ˆé”šç‚¹ä¸ pivot å¯èƒ½å½±å“è¡¨ç°ï¼Œå‡å®š contentParent pivot åœ¨å·¦ä¸Šï¼‰
             float x = col * (cellSize.x + spacing.x);
             float y = -row * (cellSize.y + spacing.y);
 
@@ -212,17 +212,17 @@ public class BagUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Íâ²¿½Ó¿Ú£º·µ»Øµ±Ç°ÒÑÏÔÊ¾µÄÎïÆ· id ÁĞ±í£¨°´´´½¨Ë³Ğò£©¡£
+    /// å¤–éƒ¨æ¥å£ï¼šè¿”å›å½“å‰å·²æ˜¾ç¤ºçš„ç‰©å“ id åˆ—è¡¨ï¼ˆæŒ‰åˆ›å»ºé¡ºåºï¼‰ã€‚
     /// </summary>
     public List<string> GetCurrentItemIds()
     {
         return new List<string>(spawned.Keys);
     }
 
-    // ========== ÏÔÊ¾¿ØÖÆ·½·¨£¨¹©°´Å¥ OnClick Ö¸Ïò£© ==========
+    // ========== æ˜¾ç¤ºæ§åˆ¶æ–¹æ³•ï¼ˆä¾›æŒ‰é’® OnClick æŒ‡å‘ï¼‰ ==========
 
     /// <summary>
-    /// ÏÔÊ¾±³°üÃæ°å£¨¹©°´Å¥»ò½Å±¾µ÷ÓÃ£©¡£
+    /// æ˜¾ç¤ºèƒŒåŒ…é¢æ¿ï¼ˆä¾›æŒ‰é’®æˆ–è„šæœ¬è°ƒç”¨ï¼‰ã€‚
     /// </summary>
     public void Show()
     {
@@ -231,13 +231,13 @@ public class BagUI : MonoBehaviour
         bagRoot.SetActive(true);
         isOpen = true;
 
-        // ÏÔÊ¾Ê±È·±£²¼¾ÖÕıÈ·
+        // æ˜¾ç¤ºæ—¶ç¡®ä¿å¸ƒå±€æ­£ç¡®
         if (gridLayout == null)
             LayoutManual();
     }
 
     /// <summary>
-    /// Òş²Ø±³°üÃæ°å£¨¹©°´Å¥»ò½Å±¾µ÷ÓÃ£©¡£
+    /// éšè—èƒŒåŒ…é¢æ¿ï¼ˆä¾›æŒ‰é’®æˆ–è„šæœ¬è°ƒç”¨ï¼‰ã€‚
     /// </summary>
     public void Hide()
     {
@@ -248,7 +248,7 @@ public class BagUI : MonoBehaviour
     }
 
     /// <summary>
-    /// ÇĞ»»ÏÔÊ¾×´Ì¬£¨¿ÉÑ¡£©¡£
+    /// åˆ‡æ¢æ˜¾ç¤ºçŠ¶æ€ï¼ˆå¯é€‰ï¼‰ã€‚
     /// </summary>
     public void Toggle()
     {

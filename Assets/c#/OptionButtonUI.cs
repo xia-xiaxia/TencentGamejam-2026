@@ -10,79 +10,81 @@ public class OptionButtonUI : MonoBehaviour
     public Button mainButton;        // 按钮组件，用于控制是否可点击
     public GameObject lockIcon;      // 锁头图标，当选项锁定时显示
 
-    // 缓存以便订阅/取消订阅
-    private OptionModel boundModel;
-    private Action<string> boundOnSelect;
+    private OptionData boundOption;
+    private Action<OptionData> boundOnSelect;
+    private bool isInteractable = true;
+
+    private void Awake()
+    {
+        EnsureBindings();
+    }
+
+    private void OnValidate()
+    {
+        EnsureBindings();
+    }
 
     /// <summary>
-    /// 【核心方法】由 UI 层调用，将数据“画”在按钮上并订阅 OptionModel 的变化
+    /// 根据 Base_Data 的 OptionData 渲染按钮。
     /// </summary>
-    /// <param name="data">包含文字、是否解锁等信息的数据模型</param>
-    /// <param name="onSelect">点击按钮后的回调动作，传回该选项的 ID</param>
-    public void Render(OptionModel data, Action<string> onSelect)
+    public void Render(OptionData data, bool interactable, Action<OptionData> onSelect)
     {
-        // 取消旧订阅
-        if (boundModel != null)
-        {
-            boundModel.OnChanged -= OnModelChanged;
-        }
-
-        boundModel = data;
+        EnsureBindings();
+        boundOption = data;
+        isInteractable = interactable;
         boundOnSelect = onSelect;
-
-        // 订阅新模型的变化（如果有）
-        if (boundModel != null)
-        {
-            boundModel.OnChanged += OnModelChanged;
-        }
-
-        // 首次应用模型到 UI
         ApplyModelToUI();
     }
 
-    private void OnModelChanged(OptionModel model)
+    private void EnsureBindings()
     {
-        // 当模型变化时更新 UI（来自同一线程）
-        ApplyModelToUI();
+        if (mainButton == null)
+        {
+            mainButton = GetComponent<Button>();
+        }
+
+        if (btnText == null)
+        {
+            btnText = GetComponentInChildren<TextMeshProUGUI>(true);
+        }
+
+        if (lockIcon == null)
+        {
+            Transform lockTransform = transform.Find("LockIcon");
+            if (lockTransform != null)
+            {
+                lockIcon = lockTransform.gameObject;
+            }
+        }
     }
 
     private void ApplyModelToUI()
     {
-        if (boundModel == null)
+        if (boundOption == null)
         {
-            // 清理显示为默认
             if (btnText != null) btnText.text = string.Empty;
             if (mainButton != null) mainButton.onClick.RemoveAllListeners();
             if (lockIcon != null) lockIcon.SetActive(false);
             return;
         }
 
-        // 1. 设置显示的文字
         if (btnText != null)
-            btnText.text = boundModel.Text ?? string.Empty;
+            btnText.text = boundOption.Text ?? string.Empty;
 
-        // 2. 处理“解锁/锁定”逻辑
         if (mainButton != null)
-            mainButton.interactable = boundModel.IsUnlocked;
+            mainButton.interactable = isInteractable;
 
         if (lockIcon != null)
-            lockIcon.SetActive(!boundModel.IsUnlocked);
+            lockIcon.SetActive(!isInteractable);
 
-        // 3. 处理点击事件（先清除之前的监听器，防止重复触发）
         if (mainButton != null)
         {
             mainButton.onClick.RemoveAllListeners();
-            mainButton.onClick.AddListener(() => boundOnSelect?.Invoke(boundModel.TargetEventId));
+            mainButton.onClick.AddListener(() => boundOnSelect?.Invoke(boundOption));
         }
-    }
-
-    private void OnDestroy()
-    {
-        // 取消订阅，防止内存泄漏或回调到已销毁对象
-        if (boundModel != null)
+        else
         {
-            boundModel.OnChanged -= OnModelChanged;
-            boundModel = null;
+            Debug.LogWarning("OptionButtonUI 未找到 Button 组件，无法绑定点击事件。", this);
         }
     }
 }

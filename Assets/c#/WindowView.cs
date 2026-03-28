@@ -14,29 +14,25 @@ public class WindowView : MonoBehaviour
     [Header("选项生成（与 UIManager 配置一致）")]
     public Transform optionsParent;     // 存放选项的容器
     public GameObject optionPrefab;     // 预制体
-    public void Render(RoundModel model, Action<string> onOptionClick)
+
+    public void Render(StoryEventData node, List<OptionData> visibleOptions, Action<OptionData> onOptionClick)
     {
-        if (model == null)
+        if (node == null)
         {
-            Debug.LogWarning("WindowView.Render: model 为 null，跳过渲染。", this);
+            ClearOptions();
+            if (contentText != null)
+            {
+                contentText.text = string.Empty;
+            }
             return;
         }
 
-        // 文本与图片更新
         if (contentText != null)
-            contentText.text = model.Content ?? string.Empty;
+            contentText.text = node.Text ?? string.Empty;
 
-        if (backgroundImage != null && model.BgSprite != null)
-            backgroundImage.sprite = model.BgSprite;
-
-        if (windowImage != null && model.WindowSprite != null)
-            windowImage.sprite = model.WindowSprite;
-
-        // 清理旧选项
         ClearOptions();
 
-        // 生成新选项
-        if (model.Options == null || model.Options.Count == 0)
+        if (visibleOptions == null || visibleOptions.Count == 0)
             return;
 
         if (optionPrefab == null || optionsParent == null)
@@ -45,8 +41,9 @@ public class WindowView : MonoBehaviour
             return;
         }
 
-        foreach (var opt in model.Options)
+        for (int i = 0; i < visibleOptions.Count; i++)
         {
+            OptionData opt = visibleOptions[i];
             if (opt == null) continue;
 
             GameObject go = Instantiate(optionPrefab, optionsParent);
@@ -60,8 +57,7 @@ public class WindowView : MonoBehaviour
                 continue;
             }
 
-            // 使用已有的 OptionButtonUI.Render（会自动 RemoveAllListeners / 添加新监听）
-            btn.Render(opt, onOptionClick);
+            btn.Render(opt, true, onOptionClick);
         }
     }
 

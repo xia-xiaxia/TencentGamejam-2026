@@ -86,6 +86,23 @@ public class StoryRuntimeDebugWindow : MonoBehaviour
         DrawStringList(board.GetActiveStatusSummaries(), "(none)");
 
         GUILayout.Space(8f);
+        GUILayout.Label("Curren bag items:");
+        if (character != null && character.bag != null)        {
+            for (int i = 0; i < character.bag.Count; i++)
+            {
+                ItemData item = character.bag[i];
+                if (item != null)
+                {
+                    GUILayout.Label("- " + (string.IsNullOrEmpty(item.name) ? item.id : item.name));
+                }
+            }
+        }
+        else
+        {
+            GUILayout.Label("(none)");
+        }
+
+        GUILayout.Space(8f);
         GUILayout.Label("Visible Options:");
         List<OptionData> visibleOptions = board.GetVisibleOptions();
         if (visibleOptions.Count == 0)

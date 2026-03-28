@@ -2,6 +2,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class EventUIManager : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class EventUIManager : MonoBehaviour
 
     private IStoryRuntime storyRuntime;
     private Coroutine bindCoroutine;
+    private Button[] optionButtons;
 
     private void Awake()
     {
@@ -53,6 +55,13 @@ public class EventUIManager : MonoBehaviour
 
     private void OnEnable()
     {
+        if (EventSystem.current == null)
+        {
+            Debug.LogWarning("EventUIManager 未检测到 EventSystem，UI 按钮将无法点击。", this);
+        }
+
+        BindOptionButtons();
+
         if (bindCoroutine != null)
         {
             StopCoroutine(bindCoroutine);
@@ -143,24 +152,60 @@ public class EventUIManager : MonoBehaviour
 
     private void BindOptionButtons()
     {
+        if (OptionButton == null)
+        {
+            Debug.LogWarning("EventUIManager OptionButton 数组为空，无法绑定点击。", this);
+            return;
+        }
+
+        if (optionButtons == null || optionButtons.Length != OptionButton.Length)
+        {
+            optionButtons = new Button[OptionButton.Length];
+        }
+
         for (int i = 0; i < OptionButton.Length; i++)
         {
-            GameObject buttonObject = OptionButton[i];
-            if (buttonObject == null)
+            GameObject optionRoot = OptionButton[i];
+            if (optionRoot == null)
             {
+                Debug.LogWarning("EventUIManager 选项对象为空，无法绑定点击: index=" + i, this);
                 continue;
             }
 
-            Button button = buttonObject.GetComponent<Button>();
+            Button button = FindBestButton(optionRoot);
             if (button == null)
             {
+                Debug.LogWarning("EventUIManager 选项对象未找到 Button 组件，无法绑定点击: index=" + i, this);
                 continue;
             }
+
+            optionButtons[i] = button;
 
             int capturedIndex = i;
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => OnClickOption(capturedIndex));
+            Debug.Log("EventUIManager 绑定点击: index=" + i + ", button=" + button.name, this);
         }
+    }
+
+    private static Button FindBestButton(GameObject optionRoot)
+    {
+        if (optionRoot == null)
+        {
+            return null;
+        }
+
+        Button[] allButtons = optionRoot.GetComponentsInChildren<Button>(true);
+        for (int i = 0; i < allButtons.Length; i++)
+        {
+            Button b = allButtons[i];
+            if (b != null && b.gameObject != optionRoot)
+            {
+                return b;
+            }
+        }
+
+        return optionRoot.GetComponent<Button>();
     }
 
     private void RefreshFromCurrentNode()
@@ -222,6 +267,10 @@ public class EventUIManager : MonoBehaviour
 
     private void RefreshOptions()
     {
+        // 每次刷新重新扫描并绑定，避免运行时层级变化导致缓存失效。
+        BindOptionButtons();
+        Debug.LogWarning("EventUIManager RefreshOptions 执行。", this);
+
         for (int i = 0; i < OptionButton.Length; i++)
         {
             SetOptionVisible(i, false);
@@ -237,10 +286,55 @@ public class EventUIManager : MonoBehaviour
         for (int i = 0; i < optionCount; i++)
         {
             SetOptionVisible(i, true);
+            EnsureOptionClickable(i);
             if (optionTexts != null && i < optionTexts.Length && optionTexts[i] != null)
             {
                 optionTexts[i].text = visibleOptions[i] != null ? (visibleOptions[i].Text ?? string.Empty) : string.Empty;
             }
+        }
+    }
+
+    private void EnsureOptionClickable(int index)
+    {
+        if (index < 0 || OptionButton == null || index >= OptionButton.Length)
+        {
+            return;
+        }
+
+        Button button = optionButtons != null && index < optionButtons.Length ? optionButtons[index] : null;
+        if (button == null)
+        {
+            return;
+        }
+
+        button.enabled = true;
+        button.interactable = true;
+
+        Graphic targetGraphic = button.targetGraphic;
+        if (targetGraphic != null)
+        {
+            targetGraphic.raycastTarget = true;
+        }
+
+        CanvasGroup group = button.GetComponentInParent<CanvasGroup>(true);
+        if (group != null)
+        {
+            group.blocksRaycasts = true;
+            group.interactable = true;
+        }
+
+        CanvasGroup[] groups = button.GetComponentsInParent<CanvasGroup>(true);
+        for (int i = 0; i < groups.Length; i++)
+        {
+            CanvasGroup g = groups[i];
+            if (g == null)
+            {
+                continue;
+            }
+
+            g.blocksRaycasts = true;
+            g.interactable = true;
+            g.alpha = Mathf.Max(g.alpha, 0.01f);
         }
     }
 
@@ -267,8 +361,11 @@ public class EventUIManager : MonoBehaviour
 
     public void OnClickOption(int visibleOptionIndex)
     {
+        Debug.LogWarning("EventUIManager 收到点击: index=" + visibleOptionIndex, this);
+
         if (!ResolveStoryRuntime())
         {
+            Debug.LogWarning("EventUIManager 点击失败：storyRuntime 不可用。", this);
             return;
         }
 

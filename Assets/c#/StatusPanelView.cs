@@ -6,16 +6,63 @@ public class StatusPanelView : MonoBehaviour
 {
     public TextMeshProUGUI buffListText; // 用一个长文本显示所有 Buff
 
-    public void Initialize(PlayerModel model)
+    public void Initialize()
     {
-        model.OnBuffsChanged += RefreshBuffs;
-        RefreshBuffs(model.Buffs);
+        BindBackBoardEvents();
+        RefreshBuffs();
     }
 
-    private void RefreshBuffs(List<string> buffs)
+    private void OnEnable()
     {
-        // 将 Buff 列表转为换行字符串
-        buffListText.text = string.Join("\n", buffs);
-        if (buffs.Count == 0) buffListText.text = "暂无异常状态";
+        BindBackBoardEvents();
+        RefreshBuffs();
+    }
+
+    private void OnDisable()
+    {
+        UnbindBackBoardEvents();
+    }
+
+    private void RefreshBuffs()
+    {
+        if (buffListText == null)
+        {
+            return;
+        }
+
+        if (BackBoard.Instance == null)
+        {
+            buffListText.text = "暂无异常状态";
+            return;
+        }
+
+        List<string> buffs = BackBoard.Instance.GetActiveStatusSummaries();
+        buffListText.text = buffs != null && buffs.Count > 0 ? string.Join("\n", buffs) : "暂无异常状态";
+    }
+
+    private void BindBackBoardEvents()
+    {
+        if (BackBoard.Instance == null)
+        {
+            return;
+        }
+
+        BackBoard.Instance.OnNodeChanged -= HandleNodeChanged;
+        BackBoard.Instance.OnNodeChanged += HandleNodeChanged;
+    }
+
+    private void UnbindBackBoardEvents()
+    {
+        if (BackBoard.Instance == null)
+        {
+            return;
+        }
+
+        BackBoard.Instance.OnNodeChanged -= HandleNodeChanged;
+    }
+
+    private void HandleNodeChanged(StoryEventData _)
+    {
+        RefreshBuffs();
     }
 }

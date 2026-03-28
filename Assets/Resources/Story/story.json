@@ -1,45 +1,27 @@
 {
     "events": [
         {
-            "id": "S001",
-            "Text": "你再次在封闭的房间中醒来",
+            "id": "Start",
+            "Text": "开始游戏",
             "effectDatas": [
                 {
-                    "targetKey": "sanity",
+                    "targetKey": "health",
                     "type": "Set",
-                    "floatValue": 100.0,
+                    "floatValue": 5.0,
+                    "stringValue": ""
+                },
+                {
+                    "targetKey": "inventory",
+                    "type": "Clear",
+                    "floatValue": 0.0,
                     "stringValue": ""
                 }
             ],
-            "image": "story/room",
+            "image": "",
             "options": [
                 {
-                    "Text": "搜索房间",
-                    "nextNodeId": "S002",
-                    "requiredItemId": "",
-                    "requiredUnlockedNodeId": "",
-                    "consumeItemId": "",
-                    "effects": []
-                },
-                {
-                    "Text": "翻找床下",
-                    "nextNodeId": "S010",
-                    "requiredItemId": "",
-                    "requiredUnlockedNodeId": "",
-                    "consumeItemId": "",
-                    "effects": []
-                },
-                {
-                    "Text": "进入隐藏通道",
-                    "nextNodeId": "S007",
-                    "requiredItemId": "",
-                    "requiredUnlockedNodeId": "S007",
-                    "consumeItemId": "",
-                    "effects": []
-                },
-                {
-                    "Text": "查看神龛",
-                    "nextNodeId": "S004",
+                    "Text": "开始游戏",
+                    "nextNodeId": "A0",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
                     "consumeItemId": "",
@@ -48,148 +30,176 @@
             ]
         },
         {
-            "id": "S002",
-            "Text": "飞镖陷阱擦伤了你，导致持续流血",
+            "id": "A0",
+            "Text": "你从燃烧的飞机残骸中醒来，身上多处受伤，血流不止。",
             "effectDatas": [
                 {
                     "targetKey": "bleed",
                     "type": "ApplyStatus",
-                    "floatValue": -6.0,
-                    "stringValue": "3"
-                }
-            ],
-            "image": "story/key",
-            "options": [
-                {
-                    "Text": "使用止血草药",
-                    "nextNodeId": "S001",
-                    "requiredItemId": "",
-                    "requiredUnlockedNodeId": "",
-                    "consumeItemId": "",
-                    "effects": [
-                        {
-                            "targetKey": "bleed",
-                            "type": "RemoveStatus",
-                            "floatValue": 0.0,
-                            "stringValue": ""
-                        }
-                    ]
-                },
-                {
-                    "Text": "返回房间",
-                    "nextNodeId": "S001",
-                    "requiredItemId": "",
-                    "requiredUnlockedNodeId": "",
-                    "consumeItemId": "",
-                    "effects": []
-                }
-            ]
-        },
-        {
-            "id": "S010",
-            "Text": "你在床下发现了一把生锈的钥匙",
-            "effectDatas": [],
-            "image": "story/room",
-            "options": [
-                {
-                    "Text": "捡起钥匙",
-                    "nextNodeId": "S001",
-                    "requiredItemId": "",
-                    "requiredUnlockedNodeId": "",
-                    "consumeItemId": "",
-                    "effects": []
-                }
-            ]
-        },
-        {
-            "id": "S003",
-            "Text": "你逃出了遗迹。演示结束",
-            "effectDatas": [],
-            "image": "story/exit",
-            "options": []
-        },
-        {
-            "id": "S004",
-            "Text": "古老神龛发出低沉的嗡鸣",
-            "effectDatas": [],
-            "image": "story/room",
-            "options": [
-                {
-                    "Text": "激活符文祭坛",
-                    "nextNodeId": "S001",
-                    "requiredItemId": "",
-                    "requiredUnlockedNodeId": "",
-                    "consumeItemId": "",
-                    "effects": [
-                        {
-                            "targetKey": "S007",
-                            "type": "UnlockNode",
-                            "floatValue": 0.0,
-                            "stringValue": ""
-                        },
-                        {
-                            "targetKey": "sanity",
-                            "type": "Add",
-                            "floatValue": 5.0,
-                            "stringValue": ""
-                        }
-                    ]
-                },
-                {
-                    "Text": "离开神龛",
-                    "nextNodeId": "S001",
-                    "requiredItemId": "",
-                    "requiredUnlockedNodeId": "",
-                    "consumeItemId": "",
-                    "effects": []
-                },
-                {
-                    "Text": "用旧钥匙打开锈门",
-                    "nextNodeId": "S003",
-                    "requiredItemId": "I001",
-                    "requiredUnlockedNodeId": "",
-                    "consumeItemId": "I001",
-                    "effects": []
-                }
-            ]
-        },
-        {
-            "id": "S007",
-            "Text": "祭坛下方开启了一条隐藏通道",
-            "effectDatas": [
-                {
-                    "targetKey": "sanity",
-                    "type": "Subtract",
-                    "floatValue": 5.0,
+                    "floatValue": 0.0,
                     "stringValue": ""
                 }
             ],
-            "image": "story/key",
+            "image": "",
             "options": [
                 {
-                    "Text": "从秘密通道逃离",
-                    "nextNodeId": "S003",
+                    "Text": "爬出飞机残骸",
+                    "nextNodeId": "A1",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "",
+                    "consumeItemId": "",
+                    "effects": []
+                },
+                {
+                    "Text": "检查行李箱",
+                    "nextNodeId": "A2",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "A3",
+                    "consumeItemId": "",
+                    "effects": []
+                },
+                {
+                    "Text": "翻看旁边的尸体",
+                    "nextNodeId": "A3",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
                     "consumeItemId": "",
                     "effects": [
                         {
-                            "targetKey": "sanity",
-                            "type": "Add",
-                            "floatValue": 20.0,
+                            "targetKey": "A3",
+                            "type": "UnlockNode",
+                            "floatValue": 0.0,
                             "stringValue": ""
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "A1",
+            "Text": "从扭曲金属中挣脱，手臂被锐片划伤，你失血过多而死。",
+            "effectDatas": [
+                {
+                    "targetKey": "health",
+                    "type": "Set",
+                    "floatValue": 0.0,
+                    "stringValue": ""
+                }
+            ],
+            "image": "",
+            "options": [
+                {
+                    "Text": "重新开始",
+                    "nextNodeId": "A0",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "",
+                    "consumeItemId": "",
+                    "effects": [
+                        {
+                            "targetKey": "data",
+                            "type": "Reset",
+                            "floatValue": 0.0,
+                            "stringValue": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "A2",
+            "Text": "你用死者的出生日期解开了行李箱的密码锁，用绷带简单包扎了伤口，并拿走了行李箱中的破布。前方有三条岔路。",
+            "effectDatas": [
+                {
+                    "targetKey": "health",
+                    "type": "Add",
+                    "floatValue": 5.0,
+                    "stringValue": ""
                 },
                 {
-                    "Text": "返回房间",
-                    "nextNodeId": "S001",
+                    "targetKey": "item",
+                    "type": "Add",
+                    "floatValue": 0.0,
+                    "stringValue": "破布"
+                }
+            ],
+            "image": "=DISPIMG(\"ID_B8147EBDA0474381888737563C9AA86B\",1)",
+            "options": [
+                {
+                    "Text": "向西走",
+                    "nextNodeId": "B0",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "",
+                    "consumeItemId": "",
+                    "effects": []
+                },
+                {
+                    "Text": "向北走",
+                    "nextNodeId": "C0",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "",
+                    "consumeItemId": "",
+                    "effects": []
+                },
+                {
+                    "Text": "向东走",
+                    "nextNodeId": "D0",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
                     "consumeItemId": "",
                     "effects": []
                 }
             ]
+        },
+        {
+            "id": "A3",
+            "Text": "乘客已无气息，口袋滑落染血身份证。你看清了死者的出生期，但你已经失血过多。",
+            "effectDatas": [
+                {
+                    "targetKey": "health",
+                    "type": "Set",
+                    "floatValue": 0.0,
+                    "stringValue": ""
+                }
+            ],
+            "image": "",
+            "options": [
+                {
+                    "Text": "重新开始",
+                    "nextNodeId": "A0",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "",
+                    "consumeItemId": "",
+                    "effects": [
+                        {
+                            "targetKey": "data",
+                            "type": "Reset",
+                            "floatValue": 0.0,
+                            "stringValue": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "B0",
+            "Text": "你鼠掉了哦",
+            "effectDatas": [],
+            "image": "",
+            "options": []
+        },
+        {
+            "id": "C0",
+            "Text": "你还是鼠掉咯",
+            "effectDatas": [],
+            "image": "",
+            "options": []
+        },
+        {
+            "id": "D0",
+            "Text": "你鼠了好多次了",
+            "effectDatas": [],
+            "image": "",
+            "options": []
         }
     ],
     "characters": [
@@ -199,31 +209,7 @@
             "description": "主要角色",
             "image": "characters/hero",
             "health": 100.0,
-            "bag": [
-                {
-                    "id": "I002",
-                    "name": "绷带",
-                    "description": "可用于恢复状态",
-                    "image": "items/bandage",
-                    "useOption": []
-                }
-            ]
-        },
-        {
-            "id": "C002",
-            "name": "向导",
-            "description": "引导你的 NPC",
-            "image": "characters/npc_a",
-            "health": 80.0,
-            "bag": [
-                {
-                    "id": "I101",
-                    "name": "地图",
-                    "description": "一张旧城地图",
-                    "image": "items/map",
-                    "useOption": []
-                }
-            ]
+            "bag": []
         }
     ]
 }
