@@ -95,6 +95,7 @@ public partial class BackBoard : MonoBehaviour, IStoryRuntime
         valueService.Clear();
         statusService.Clear();
         storyService.BuildEventMap(storyDatabase != null ? storyDatabase.events : null, this);
+        storyService.LoadUnlockProgress(this);
         characterService.BuildCharacterMap(storyDatabase != null ? storyDatabase.characters : null, this);
 
         if (storyDatabase == null)

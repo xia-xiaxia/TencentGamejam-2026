@@ -48,6 +48,16 @@ public class StoryRuntimeDebugWindow : MonoBehaviour
 
         scrollPos = GUILayout.BeginScrollView(scrollPos);
 
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Replay: Back To Start", GUILayout.Width(200f)))
+        {
+            board.ReplayFromStartNodeKeepUnlocked();
+        }
+        GUILayout.Label("(Unlocked nodes are kept)");
+        GUILayout.EndHorizontal();
+
+        GUILayout.Space(8f);
+
         CharacterData character = board.GetCurrentCharacter();
         string characterId = character != null ? character.id : "(none)";
 
@@ -58,6 +68,10 @@ public class StoryRuntimeDebugWindow : MonoBehaviour
         GUILayout.Space(8f);
         GUILayout.Label("Unlocked Nodes:");
         DrawStringList(board.GetUnlockedNodeIds(), "(empty)");
+
+        GUILayout.Space(8f);
+        GUILayout.Label("Unlocked Options:");
+        DrawStringList(board.GetUnlockedOptionKeys(), "(empty)");
 
         GUILayout.Space(8f);
         GUILayout.Label("Active Status:");

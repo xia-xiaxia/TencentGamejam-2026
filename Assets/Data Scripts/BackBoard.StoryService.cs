@@ -7,8 +7,18 @@ using UnityEngine;
 /// </summary>
 public sealed class BackBoardStoryService
 {
+    private const string UnlockProgressSaveKey = "BackBoard.UnlockProgress";
+
     private readonly Dictionary<string, StoryEventData> eventMap = new Dictionary<string, StoryEventData>();
     private readonly HashSet<string> unlockedNodeIds = new HashSet<string>();
+    private readonly HashSet<string> unlockedOptionKeys = new HashSet<string>();
+
+    [Serializable]
+    private sealed class UnlockProgressData
+    {
+        public List<string> unlockedNodeIds = new List<string>();
+        public List<string> unlockedOptionKeys = new List<string>();
+    }
 
     /// <summary>
     /// 当前节点 id。
@@ -44,6 +54,7 @@ public sealed class BackBoardStoryService
     {
         eventMap.Clear();
         unlockedNodeIds.Clear();
+        unlockedOptionKeys.Clear();
         CurrentNodeId = null;
 
         if (events == null)
@@ -126,6 +137,139 @@ public sealed class BackBoardStoryService
         List<string> result = new List<string>(unlockedNodeIds);
         result.Sort(StringComparer.Ordinal);
         return result;
+    }
+
+    public string BuildOptionKey(string nodeId, int optionIndex)
+    {
+        if (string.IsNullOrEmpty(nodeId) || optionIndex < 0)
+        {
+            return string.Empty;
+        }
+
+        return nodeId + "#" + optionIndex;
+    }
+
+    public bool IsOptionUnlocked(string optionKey)
+    {
+        if (string.IsNullOrEmpty(optionKey))
+        {
+            return false;
+        }
+
+        return unlockedOptionKeys.Contains(optionKey);
+    }
+
+    public void UnlockOption(string optionKey)
+    {
+        if (string.IsNullOrEmpty(optionKey))
+        {
+            return;
+        }
+
+        unlockedOptionKeys.Add(optionKey);
+    }
+
+    public List<string> GetUnlockedOptionKeys()
+    {
+        List<string> result = new List<string>(unlockedOptionKeys);
+        result.Sort(StringComparer.Ordinal);
+        return result;
+    }
+
+    public void SaveUnlockProgress()
+    {
+        UnlockProgressData data = new UnlockProgressData();
+        data.unlockedNodeIds.AddRange(unlockedNodeIds);
+        data.unlockedOptionKeys.AddRange(unlockedOptionKeys);
+
+        string json = JsonUtility.ToJson(data);
+        PlayerPrefs.SetString(UnlockProgressSaveKey, json);
+        PlayerPrefs.Save();
+    }
+
+    public void LoadUnlockProgress(UnityEngine.Object logContext)
+    {
+        if (!PlayerPrefs.HasKey(UnlockProgressSaveKey))
+        {
+            return;
+        }
+
+        string json = PlayerPrefs.GetString(UnlockProgressSaveKey, string.Empty);
+        if (string.IsNullOrEmpty(json))
+        {
+            return;
+        }
+
+        UnlockProgressData data;
+        try
+        {
+            data = JsonUtility.FromJson<UnlockProgressData>(json);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning("读取剧情解锁存档失败: " + ex.Message, logContext);
+            return;
+        }
+
+        if (data == null)
+        {
+            return;
+        }
+
+        if (data.unlockedNodeIds != null)
+        {
+            for (int i = 0; i < data.unlockedNodeIds.Count; i++)
+            {
+                string nodeId = data.unlockedNodeIds[i];
+                if (!string.IsNullOrEmpty(nodeId) && eventMap.ContainsKey(nodeId))
+                {
+                    unlockedNodeIds.Add(nodeId);
+                }
+            }
+        }
+
+        if (data.unlockedOptionKeys != null)
+        {
+            for (int i = 0; i < data.unlockedOptionKeys.Count; i++)
+            {
+                string optionKey = data.unlockedOptionKeys[i];
+                if (IsValidOptionKey(optionKey))
+                {
+                    unlockedOptionKeys.Add(optionKey);
+                }
+            }
+        }
+    }
+
+    private bool IsValidOptionKey(string optionKey)
+    {
+        if (string.IsNullOrEmpty(optionKey))
+        {
+            return false;
+        }
+
+        int sep = optionKey.LastIndexOf('#');
+        if (sep <= 0 || sep >= optionKey.Length - 1)
+        {
+            return false;
+        }
+
+        string nodeId = optionKey.Substring(0, sep);
+        string optionIndexText = optionKey.Substring(sep + 1);
+
+        int optionIndex;
+        if (!int.TryParse(optionIndexText, out optionIndex) || optionIndex < 0)
+        {
+            return false;
+        }
+
+        StoryEventData node;
+        if (!eventMap.TryGetValue(nodeId, out node) || node == null || node.options == null)
+        {
+            return false;
+        }
+
+        return optionIndex < node.options.Count;
     }
 
     /// <summary>

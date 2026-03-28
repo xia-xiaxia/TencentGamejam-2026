@@ -4,6 +4,38 @@ using UnityEngine;
 public partial class BackBoard
 {
     /// <summary>
+    /// 重玩：回到起始节点，但保留已解锁节点与选项解锁状态。
+    /// </summary>
+    public bool ReplayFromStartNodeKeepUnlocked()
+    {
+        string nodeId;
+        if (!TryGetStartNodeId(out nodeId))
+        {
+            Debug.LogWarning("Replay 失败：没有可用的开始节点。", this);
+            return false;
+        }
+
+        // 重玩时重置玩家运行态：清空状态、回满生命、清空当前角色背包。
+        statusService.Clear();
+        SetCurrentHealth(GetCurrentMaxHealth());
+
+        List<ItemData> bag = GetBag(currentCharacterId);
+        if (bag != null && bag.Count > 0)
+        {
+            bag.Clear();
+            NotifyBlackboardChanged("bag:" + currentCharacterId);
+        }
+
+        if (!EnterNode(nodeId))
+        {
+            return false;
+        }
+
+        storyService.SaveUnlockProgress();
+        return true;
+    }
+
+    /// <summary>
     /// 进入指定剧情节点并触发节点效果与节点切换事件。
     /// </summary>
     public bool EnterNode(string nodeId)
@@ -82,7 +114,7 @@ public partial class BackBoard
         for (int i = 0; i < node.options.Count; i++)
         {
             OptionData option = node.options[i];
-            if (CanShowOption(option))
+            if (CanShowOptionInternal(node, i, option, true))
             {
                 visibleOptions.Add(option);
             }
@@ -100,18 +132,51 @@ public partial class BackBoard
         {
             return false;
         }
+
+        StoryEventData node = CurrentNode;
+        if (node == null || node.options == null)
+        {
+            return false;
+        }
+
+        int optionIndex = node.options.IndexOf(option);
+        if (optionIndex < 0)
+        {
+            return false;
+        }
+
+        return CanShowOptionInternal(node, optionIndex, option, true);
+    }
+
+    private bool CanShowOptionInternal(StoryEventData node, int optionIndex, OptionData option, bool autoUnlockWhenVisible)
+    {
+        if (node == null || option == null || optionIndex < 0)
+        {
+            return false;
+        }
+
+        string optionKey = storyService.BuildOptionKey(node.id, optionIndex);
+        if (storyService.IsOptionUnlocked(optionKey))
+        {
+            return true;
+        }
         
         if (!string.IsNullOrEmpty(option.requiredUnlockedNodeId) && !storyService.IsNodeUnlocked(option.requiredUnlockedNodeId))
         {
             return false;
         }
 
-        if (string.IsNullOrEmpty(option.requiredItemId))
+        if (!string.IsNullOrEmpty(option.requiredItemId) && !HasItem(currentCharacterId, option.requiredItemId))
         {
-            return true;
+            return false;
         }
 
-        return HasItem(currentCharacterId, option.requiredItemId);
+        if (autoUnlockWhenVisible)
+        {
+            storyService.UnlockOption(optionKey);
+        }
+
+        return true;
     }
 
     /// <summary>
