@@ -1,7 +1,0 @@
-id,Text,image
-S001,你再次在封闭的房间中醒来,story/room
-S002,飞镖陷阱擦伤了你，导致持续流血,story/key
-S010,你在床下发现了一把生锈的钥匙,story/room
-S003,你逃出了遗迹。演示结束,story/exit
-S004,古老神龛发出低沉的嗡鸣,story/room
-S007,祭坛下方开启了一条隐藏通道,story/key
