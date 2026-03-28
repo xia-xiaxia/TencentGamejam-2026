@@ -1,6 +1,6 @@
 id,Text,image
-S001,You wake up in the sealed room again,story/room
-S002,A dart trap grazes you and causes bleeding,story/key
-S003,You escaped the ruins. Demo end,story/exit
-S004,An ancient shrine hums with power,story/room
-S007,A hidden tunnel opens beneath the altar,story/key
+S001,你再次在封闭的房间中醒来,story/room
+S002,飞镖陷阱擦伤了你，导致持续流血,story/key
+S003,你逃出了遗迹。演示结束,story/exit
+S004,古老神龛发出低沉的嗡鸣,story/room
+S007,祭坛下方开启了一条隐藏通道,story/key

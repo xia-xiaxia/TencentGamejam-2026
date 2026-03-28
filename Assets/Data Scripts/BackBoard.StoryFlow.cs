@@ -4,6 +4,24 @@ using UnityEngine;
 public partial class BackBoard
 {
     /// <summary>
+    /// 完全重新开始：重置玩家状态与全部解锁进度，回到初始节点。
+    /// </summary>
+    public bool RestartFromScratch()
+    {
+        storyService.ResetUnlockProgress();
+        BuildDatabase();
+
+        string nodeId;
+        if (!TryGetStartNodeId(out nodeId))
+        {
+            Debug.LogWarning("RestartFromScratch 失败：没有可用的开始节点。", this);
+            return false;
+        }
+
+        return EnterNode(nodeId);
+    }
+
+    /// <summary>
     /// 重玩：回到起始节点，但保留已解锁节点与选项解锁状态。
     /// </summary>
     public bool ReplayFromStartNodeKeepUnlocked()

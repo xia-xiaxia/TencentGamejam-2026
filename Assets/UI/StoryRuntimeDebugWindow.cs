@@ -56,6 +56,14 @@ public class StoryRuntimeDebugWindow : MonoBehaviour
         GUILayout.Label("(Unlocked nodes are kept)");
         GUILayout.EndHorizontal();
 
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Restart: From Scratch", GUILayout.Width(200f)))
+        {
+            board.RestartFromScratch();
+        }
+        GUILayout.Label("(Reset player state + all unlocks)");
+        GUILayout.EndHorizontal();
+
         GUILayout.Space(8f);
 
         CharacterData character = board.GetCurrentCharacter();

@@ -2,7 +2,7 @@
     "events": [
         {
             "id": "S001",
-            "Text": "You wake up in the sealed room again",
+            "Text": "你再次在封闭的房间中醒来",
             "effectDatas": [
                 {
                     "targetKey": "sanity",
@@ -14,7 +14,7 @@
             "image": "story/room",
             "options": [
                 {
-                    "Text": "Search the room",
+                    "Text": "搜索房间",
                     "nextNodeId": "S002",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
@@ -22,7 +22,7 @@
                     "effects": []
                 },
                 {
-                    "Text": "Unlock the rusty door",
+                    "Text": "用旧钥匙打开锈门",
                     "nextNodeId": "S003",
                     "requiredItemId": "I001",
                     "requiredUnlockedNodeId": "",
@@ -30,7 +30,7 @@
                     "effects": []
                 },
                 {
-                    "Text": "Enter the hidden tunnel",
+                    "Text": "进入隐藏通道",
                     "nextNodeId": "S007",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "S007",
@@ -38,7 +38,7 @@
                     "effects": []
                 },
                 {
-                    "Text": "Inspect the shrine",
+                    "Text": "查看神龛",
                     "nextNodeId": "S004",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
@@ -49,7 +49,7 @@
         },
         {
             "id": "S002",
-            "Text": "A dart trap grazes you and causes bleeding",
+            "Text": "飞镖陷阱擦伤了你，导致持续流血",
             "effectDatas": [
                 {
                     "targetKey": "bleed",
@@ -61,7 +61,7 @@
             "image": "story/key",
             "options": [
                 {
-                    "Text": "Take antidote herb",
+                    "Text": "使用止血草药",
                     "nextNodeId": "S001",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
@@ -76,7 +76,7 @@
                     ]
                 },
                 {
-                    "Text": "Go back to the room",
+                    "Text": "返回房间",
                     "nextNodeId": "S001",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
@@ -87,19 +87,19 @@
         },
         {
             "id": "S003",
-            "Text": "You escaped the ruins. Demo end",
+            "Text": "你逃出了遗迹。演示结束",
             "effectDatas": [],
             "image": "story/exit",
             "options": []
         },
         {
             "id": "S004",
-            "Text": "An ancient shrine hums with power",
+            "Text": "古老神龛发出低沉的嗡鸣",
             "effectDatas": [],
             "image": "story/room",
             "options": [
                 {
-                    "Text": "Activate the rune altar",
+                    "Text": "激活符文祭坛",
                     "nextNodeId": "S001",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
@@ -120,7 +120,7 @@
                     ]
                 },
                 {
-                    "Text": "Leave shrine",
+                    "Text": "离开神龛",
                     "nextNodeId": "S001",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
@@ -131,7 +131,7 @@
         },
         {
             "id": "S007",
-            "Text": "A hidden tunnel opens beneath the altar",
+            "Text": "祭坛下方开启了一条隐藏通道",
             "effectDatas": [
                 {
                     "targetKey": "sanity",
@@ -143,7 +143,7 @@
             "image": "story/key",
             "options": [
                 {
-                    "Text": "Escape from secret route",
+                    "Text": "从秘密通道逃离",
                     "nextNodeId": "S003",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
@@ -158,7 +158,7 @@
                     ]
                 },
                 {
-                    "Text": "Return to room",
+                    "Text": "返回房间",
                     "nextNodeId": "S001",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
@@ -171,22 +171,22 @@
     "characters": [
         {
             "id": "C001",
-            "name": "Hero",
-            "description": "Main character",
+            "name": "主角",
+            "description": "主要角色",
             "image": "characters/hero",
             "health": 100.0,
             "bag": [
                 {
                     "id": "I001",
-                    "name": "Old Key",
-                    "description": "A rusty key",
+                    "name": "旧钥匙",
+                    "description": "一把生锈的钥匙",
                     "image": "items/old_key",
                     "useOption": []
                 },
                 {
                     "id": "I002",
-                    "name": "Bandage",
-                    "description": "Can recover status",
+                    "name": "绷带",
+                    "description": "可用于恢复状态",
                     "image": "items/bandage",
                     "useOption": []
                 }
@@ -194,15 +194,15 @@
         },
         {
             "id": "C002",
-            "name": "NPC_A",
-            "description": "Guide NPC",
+            "name": "向导",
+            "description": "引导你的 NPC",
             "image": "characters/npc_a",
             "health": 80.0,
             "bag": [
                 {
                     "id": "I101",
-                    "name": "Map",
-                    "description": "Old city map",
+                    "name": "地图",
+                    "description": "一张旧城地图",
                     "image": "items/map",
                     "useOption": []
                 }

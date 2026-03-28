@@ -187,6 +187,22 @@ public sealed class BackBoardStoryService
         PlayerPrefs.Save();
     }
 
+    /// <summary>
+    /// 清空所有解锁进度，并删除本地存档键。
+    /// </summary>
+    public void ResetUnlockProgress()
+    {
+        unlockedNodeIds.Clear();
+        unlockedOptionKeys.Clear();
+        CurrentNodeId = null;
+
+        if (PlayerPrefs.HasKey(UnlockProgressSaveKey))
+        {
+            PlayerPrefs.DeleteKey(UnlockProgressSaveKey);
+            PlayerPrefs.Save();
+        }
+    }
+
     public void LoadUnlockProgress(UnityEngine.Object logContext)
     {
         if (!PlayerPrefs.HasKey(UnlockProgressSaveKey))
