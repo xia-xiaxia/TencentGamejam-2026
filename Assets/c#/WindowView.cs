@@ -13,12 +13,7 @@ public class WindowView : MonoBehaviour
 
     [Header("选项生成（与 UIManager 配置一致）")]
     public Transform optionsParent;     // 存放选项的容器
-    public GameObject optionPrefab;     // 预制体（必须含 OptionButtonUI）
-
-    /// <summary>
-    /// 渲染回合数据：更新图片、文本，并使用已有的 OptionButtonUI.Render 生成按钮
-    /// 兼容 UIManager 的结构与 OptionButtonUI 的 Render 签名。
-    /// </summary>
+    public GameObject optionPrefab;     // 预制体
     public void Render(RoundModel model, Action<string> onOptionClick)
     {
         if (model == null)
@@ -27,7 +22,7 @@ public class WindowView : MonoBehaviour
             return;
         }
 
-        // 文本与图片更新（均做 null 检查）
+        // 文本与图片更新
         if (contentText != null)
             contentText.text = model.Content ?? string.Empty;
 
@@ -37,7 +32,7 @@ public class WindowView : MonoBehaviour
         if (windowImage != null && model.WindowSprite != null)
             windowImage.sprite = model.WindowSprite;
 
-        // 清理旧选项（倒序销毁更安全）
+        // 清理旧选项
         ClearOptions();
 
         // 生成新选项
