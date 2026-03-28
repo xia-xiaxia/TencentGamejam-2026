@@ -104,6 +104,14 @@ public sealed class BackBoardStoryService
     }
 
     /// <summary>
+    /// 清空当前节点，表示剧情运行时已退出节点态。
+    /// </summary>
+    public void ClearCurrentNode()
+    {
+        CurrentNodeId = null;
+    }
+
+    /// <summary>
     /// 判断某节点是否已解锁（已访问或被显式解锁）。
     /// </summary>
     public bool IsNodeUnlocked(string nodeId)

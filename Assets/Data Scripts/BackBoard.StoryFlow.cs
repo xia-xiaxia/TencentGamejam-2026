@@ -4,6 +4,30 @@ using UnityEngine;
 public partial class BackBoard
 {
     /// <summary>
+    /// 进入游戏结束状态：清理节点与状态效果，并通知 UI 退出当前事件展示。
+    /// </summary>
+    public bool EndGame(string reason = "你鼠掉了")
+    {
+        if (IsGameEnded)
+        {
+            return false;
+        }
+
+        IsGameEnded = true;
+        statusService.Clear();
+        storyService.ClearCurrentNode();
+
+        if (OnNodeChanged != null)
+        {
+            OnNodeChanged(null);
+        }
+
+        Debug.Log(string.IsNullOrEmpty(reason) ? "Game Ended." : ("Game Ended: " + reason), this);
+        RestartFromScratch();
+        return true;
+    }
+
+    /// <summary>
     /// 完全重新开始：重置玩家状态与全部解锁进度，回到初始节点。
     /// </summary>
     public bool RestartFromScratch()
@@ -63,6 +87,8 @@ public partial class BackBoard
         {
             return false;
         }
+
+        IsGameEnded = false;
 
         TickStatusEffects();
 

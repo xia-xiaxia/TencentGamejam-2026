@@ -22,11 +22,11 @@
                     "effects": []
                 },
                 {
-                    "Text": "用旧钥匙打开锈门",
-                    "nextNodeId": "S003",
-                    "requiredItemId": "I001",
+                    "Text": "翻找床下",
+                    "nextNodeId": "S010",
+                    "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
-                    "consumeItemId": "I001",
+                    "consumeItemId": "",
                     "effects": []
                 },
                 {
@@ -86,6 +86,22 @@
             ]
         },
         {
+            "id": "S010",
+            "Text": "你在床下发现了一把生锈的钥匙",
+            "effectDatas": [],
+            "image": "story/room",
+            "options": [
+                {
+                    "Text": "捡起钥匙",
+                    "nextNodeId": "S001",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "",
+                    "consumeItemId": "",
+                    "effects": []
+                }
+            ]
+        },
+        {
             "id": "S003",
             "Text": "你逃出了遗迹。演示结束",
             "effectDatas": [],
@@ -125,6 +141,14 @@
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
                     "consumeItemId": "",
+                    "effects": []
+                },
+                {
+                    "Text": "用旧钥匙打开锈门",
+                    "nextNodeId": "S003",
+                    "requiredItemId": "I001",
+                    "requiredUnlockedNodeId": "",
+                    "consumeItemId": "I001",
                     "effects": []
                 }
             ]
@@ -176,13 +200,6 @@
             "image": "characters/hero",
             "health": 100.0,
             "bag": [
-                {
-                    "id": "I001",
-                    "name": "旧钥匙",
-                    "description": "一把生锈的钥匙",
-                    "image": "items/old_key",
-                    "useOption": []
-                },
                 {
                     "id": "I002",
                     "name": "绷带",

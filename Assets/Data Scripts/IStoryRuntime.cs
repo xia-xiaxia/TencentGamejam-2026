@@ -31,4 +31,9 @@ public interface IStoryRuntime
     /// 按可见选项索引执行一次选择。
     /// </summary>
     bool ChooseOption(int optionIndex);
+
+    /// <summary>
+    /// 进入游戏结束状态。
+    /// </summary>
+    bool EndGame(string reason = "");
 }

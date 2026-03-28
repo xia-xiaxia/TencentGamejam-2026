@@ -41,6 +41,11 @@ public partial class BackBoard : MonoBehaviour, IStoryRuntime
         }
     }
 
+    /// <summary>
+    /// 当前是否处于游戏结束状态。
+    /// </summary>
+    public bool IsGameEnded { get; private set; }
+
     public event Action<StoryEventData> OnNodeChanged;
     public event Action<string> OnBlackboardValueChanged;
     public event Action<CharacterData> OnCurrentCharacterChanged;
@@ -94,6 +99,7 @@ public partial class BackBoard : MonoBehaviour, IStoryRuntime
 
         valueService.Clear();
         statusService.Clear();
+        IsGameEnded = false;
         storyService.BuildEventMap(storyDatabase != null ? storyDatabase.events : null, this);
         storyService.LoadUnlockProgress(this);
         characterService.BuildCharacterMap(storyDatabase != null ? storyDatabase.characters : null, this);
