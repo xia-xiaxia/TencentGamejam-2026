@@ -1,0 +1,102 @@
+{
+    "events": [
+        {
+            "id": "S001",
+            "Text": "You wake up in a strange room",
+            "effectDatas": [
+                {
+                    "targetKey": "sanity",
+                    "type": "Set",
+                    "floatValue": 100.0,
+                    "stringValue": ""
+                }
+            ],
+            "image": "story/room",
+            "options": [
+                {
+                    "Text": "Look around",
+                    "nextNodeId": "S002",
+                    "effects": []
+                },
+                {
+                    "Text": "Open the door",
+                    "nextNodeId": "S003",
+                    "effects": []
+                }
+            ]
+        },
+        {
+            "id": "S002",
+            "Text": "You found a key",
+            "effectDatas": [
+                {
+                    "targetKey": "hasKey",
+                    "type": "Set",
+                    "floatValue": 0.0,
+                    "stringValue": "true"
+                }
+            ],
+            "image": "story/key",
+            "options": [
+                {
+                    "Text": "Take the key",
+                    "nextNodeId": "S003",
+                    "effects": [
+                        {
+                            "targetKey": "sanity",
+                            "type": "Subtract",
+                            "floatValue": 10.0,
+                            "stringValue": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "S003",
+            "Text": "You leave the room",
+            "effectDatas": [],
+            "image": "story/exit",
+            "options": []
+        }
+    ],
+    "characters": [
+        {
+            "id": "C001",
+            "name": "Hero",
+            "description": "Main character",
+            "image": "characters/hero",
+            "bag": [
+                {
+                    "id": "I001",
+                    "name": "Old Key",
+                    "description": "A rusty key",
+                    "image": "items/old_key",
+                    "useOption": []
+                },
+                {
+                    "id": "I002",
+                    "name": "Bandage",
+                    "description": "Can recover status",
+                    "image": "items/bandage",
+                    "useOption": []
+                }
+            ]
+        },
+        {
+            "id": "C002",
+            "name": "NPC_A",
+            "description": "Guide NPC",
+            "image": "characters/npc_a",
+            "bag": [
+                {
+                    "id": "I101",
+                    "name": "Map",
+                    "description": "Old city map",
+                    "image": "items/map",
+                    "useOption": []
+                }
+            ]
+        }
+    ]
+}

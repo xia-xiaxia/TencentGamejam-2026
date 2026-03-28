@@ -1,0 +1,4 @@
+characterId,itemId,name,description,image
+C001,I001,Old Key,A rusty key,items/old_key
+C001,I002,Bandage,Can recover status,items/bandage
+C002,I101,Map,Old city map,items/map
