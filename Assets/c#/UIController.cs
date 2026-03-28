@@ -3,10 +3,10 @@ using UnityEngine.EventSystems;
 
 public class UIController : MonoBehaviour
 {
-    [Header("Ä¿±ê UI")]
-    public RectTransform targetRect; // ÍÏÈëÄãµÄ MainPanel
+    [Header("ç›®æ ‡ UI")]
+    public RectTransform targetRect; // æ‹–å…¥ä½ çš„ MainPanel
 
-    [Header("Ëõ·Å²ÎÊı")]
+    [Header("ç¼©æ”¾å‚æ•°")]
     public float zoomSpeed = 0.1f;
     public float minScale = 0.5f;
     public float maxScale = 3.0f;
@@ -20,36 +20,36 @@ public class UIController : MonoBehaviour
         HandleDrag();
     }
 
-    // 1. Ëõ·ÅÂß¼­£ºÒÔÊó±êÖ¸ÕëÎªÖĞĞÄ
+    // 1. ç¼©æ”¾é€»è¾‘ï¼šä»¥é¼ æ ‡æŒ‡é’ˆä¸ºä¸­å¿ƒ
     private void HandleZoom()
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         if (Mathf.Abs(scroll) > 0.01f)
         {
-            // ¼ÇÂ¼Ëõ·ÅÇ°µÄÊó±êÏà¶Ô×ø±ê
+            // è®°å½•ç¼©æ”¾å‰çš„é¼ æ ‡ç›¸å¯¹åæ ‡
             Vector3 mouseWorldPosBefore = Input.mousePosition;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(targetRect, mouseWorldPosBefore, null, out Vector2 localPointBefore);
 
-            // Ö´ĞĞËõ·Å
+            // æ‰§è¡Œç¼©æ”¾
             Vector3 newScale = targetRect.localScale + Vector3.one * scroll * zoomSpeed;
             newScale.x = Mathf.Clamp(newScale.x, minScale, maxScale);
             newScale.y = Mathf.Clamp(newScale.y, minScale, maxScale);
             targetRect.localScale = newScale;
 
-            // ²¹³¥Î»ÒÆ£º±£³ÖÊó±êÖ¸ÏòµÄµãÎ»ÖÃ²»±ä
+            // è¡¥å¿ä½ç§»ï¼šä¿æŒé¼ æ ‡æŒ‡å‘çš„ç‚¹ä½ç½®ä¸å˜
             RectTransformUtility.ScreenPointToLocalPointInRectangle(targetRect, mouseWorldPosBefore, null, out Vector2 localPointAfter);
             Vector3 shift = (localPointAfter - localPointBefore) * targetRect.localScale.x;
             targetRect.localPosition += shift;
         }
     }
 
-    // 2. ÍÏ¶¯Âß¼­£º×ó¼ü³¤°´ÍÏ×§
+    // 2. æ‹–åŠ¨é€»è¾‘ï¼šå·¦é”®é•¿æŒ‰æ‹–æ‹½
     private void HandleDrag()
     {
-        // Ö»ÓĞµã»÷ÔÚ UI ÉÏ»òÕıÔÚÍÏ×§Ê±²Å´¦Àí
+        // åªæœ‰ç‚¹å‡»åœ¨ UI ä¸Šæˆ–æ­£åœ¨æ‹–æ‹½æ—¶æ‰å¤„ç†
         if (Input.GetMouseButtonDown(0))
         {
-            // ¼ì²éÊó±êÊÇ·ñµãÔÚ targetRect (±³¾°) ÉÏ
+            // æ£€æŸ¥é¼ æ ‡æ˜¯å¦ç‚¹åœ¨ targetRect (èƒŒæ™¯) ä¸Š
             if (EventSystem.current.IsPointerOverGameObject())
             {
                 isDragging = true;
@@ -67,7 +67,7 @@ public class UIController : MonoBehaviour
             Vector2 currentMousePosition = Input.mousePosition;
             Vector2 diff = currentMousePosition - lastMousePosition;
 
-            // ÒÆ¶¯Ãæ°å
+            // ç§»åŠ¨é¢æ¿
             targetRect.position += (Vector3)diff;
             lastMousePosition = currentMousePosition;
         }

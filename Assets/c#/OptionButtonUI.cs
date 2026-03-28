@@ -5,39 +5,84 @@ using System;
 
 public class OptionButtonUI : MonoBehaviour
 {
-    [Header("UI ×é¼şÒıÓÃ")]
-    public TextMeshProUGUI btnText;  // °´Å¥ÏÔÊ¾µÄÎÄ×Ö
-    public Button mainButton;        // °´Å¥×é¼ş£¬ÓÃÓÚ¿ØÖÆÊÇ·ñ¿Éµã»÷
-    public GameObject lockIcon;      // ËøÍ·Í¼±ê£¬µ±Ñ¡ÏîËø¶¨Ê±ÏÔÊ¾
+    [Header("UI ç»„ä»¶å¼•ç”¨")]
+    public TextMeshProUGUI btnText;  // æŒ‰é’®æ˜¾ç¤ºçš„æ–‡å­—
+    public Button mainButton;        // æŒ‰é’®ç»„ä»¶ï¼Œç”¨äºæ§åˆ¶æ˜¯å¦å¯ç‚¹å‡»
+    public GameObject lockIcon;      // é”å¤´å›¾æ ‡ï¼Œå½“é€‰é¡¹é”å®šæ—¶æ˜¾ç¤º
+
+    // ç¼“å­˜ä»¥ä¾¿è®¢é˜…/å–æ¶ˆè®¢é˜…
+    private OptionModel boundModel;
+    private Action<string> boundOnSelect;
 
     /// <summary>
-    /// ¡¾ºËĞÄ·½·¨¡¿ÓÉ UIManager µ÷ÓÃ£¬½«Êı¾İ¡°»­¡±ÔÚ°´Å¥ÉÏ
+    /// ã€æ ¸å¿ƒæ–¹æ³•ã€‘ç”± UI å±‚è°ƒç”¨ï¼Œå°†æ•°æ®â€œç”»â€åœ¨æŒ‰é’®ä¸Šå¹¶è®¢é˜… OptionModel çš„å˜åŒ–
     /// </summary>
-    /// <param name="data">°üº¬ÎÄ×Ö¡¢ÊÇ·ñ½âËøµÈĞÅÏ¢µÄÊı¾İÄ£ĞÍ</param>
-    /// <param name="onSelect">µã»÷°´Å¥ºóµÄ»Øµ÷¶¯×÷£¬´«»Ø¸ÃÑ¡ÏîµÄ ID</param>
+    /// <param name="data">åŒ…å«æ–‡å­—ã€æ˜¯å¦è§£é”ç­‰ä¿¡æ¯çš„æ•°æ®æ¨¡å‹</param>
+    /// <param name="onSelect">ç‚¹å‡»æŒ‰é’®åçš„å›è°ƒåŠ¨ä½œï¼Œä¼ å›è¯¥é€‰é¡¹çš„ ID</param>
     public void Render(OptionModel data, Action<string> onSelect)
     {
-        // 1. ÉèÖÃÏÔÊ¾µÄÎÄ×Ö
-        btnText.text = data.Text;
+        // å–æ¶ˆæ—§è®¢é˜…
+        if (boundModel != null)
+        {
+            boundModel.OnChanged -= OnModelChanged;
+        }
 
-        // 2. ´¦Àí¡°½âËø/Ëø¶¨¡±Âß¼­
-        // Èç¹û IsUnlocked Îª false£¬°´Å¥½«±äÎª²»¿É½»»¥×´Ì¬£¨±ä»Ò£©
-        mainButton.interactable = data.IsUnlocked;
+        boundModel = data;
+        boundOnSelect = onSelect;
 
-        // Èç¹ûÓĞËøÍ·Í¼±ê£¬¸ù¾İ½âËø×´Ì¬ÏÔÊ¾»òÒş²Ø
+        // è®¢é˜…æ–°æ¨¡å‹çš„å˜åŒ–ï¼ˆå¦‚æœæœ‰ï¼‰
+        if (boundModel != null)
+        {
+            boundModel.OnChanged += OnModelChanged;
+        }
+
+        // é¦–æ¬¡åº”ç”¨æ¨¡å‹åˆ° UI
+        ApplyModelToUI();
+    }
+
+    private void OnModelChanged(OptionModel model)
+    {
+        // å½“æ¨¡å‹å˜åŒ–æ—¶æ›´æ–° UIï¼ˆæ¥è‡ªåŒä¸€çº¿ç¨‹ï¼‰
+        ApplyModelToUI();
+    }
+
+    private void ApplyModelToUI()
+    {
+        if (boundModel == null)
+        {
+            // æ¸…ç†æ˜¾ç¤ºä¸ºé»˜è®¤
+            if (btnText != null) btnText.text = string.Empty;
+            if (mainButton != null) mainButton.onClick.RemoveAllListeners();
+            if (lockIcon != null) lockIcon.SetActive(false);
+            return;
+        }
+
+        // 1. è®¾ç½®æ˜¾ç¤ºçš„æ–‡å­—
+        if (btnText != null)
+            btnText.text = boundModel.Text ?? string.Empty;
+
+        // 2. å¤„ç†â€œè§£é”/é”å®šâ€é€»è¾‘
+        if (mainButton != null)
+            mainButton.interactable = boundModel.IsUnlocked;
+
         if (lockIcon != null)
-            lockIcon.SetActive(!data.IsUnlocked);
+            lockIcon.SetActive(!boundModel.IsUnlocked);
 
-        // 3. ´¦Àíµã»÷ÊÂ¼ş
-        // ÏÈÇå³ıÖ®Ç°µÄ¼àÌıÆ÷£¬·ÀÖ¹ÖØ¸´´¥·¢
-        mainButton.onClick.RemoveAllListeners();
-        // Ìí¼ÓĞÂµÄ¼àÌıÆ÷£ºµã»÷Ê±Ö´ĞĞ onSelect ¶¯×÷£¬²¢´øÉÏÕâ¸öÑ¡ÏîµÄÄ¿±êÊÂ¼ş ID
-        mainButton.onClick.AddListener(() => onSelect?.Invoke(data.TargetEventId));
+        // 3. å¤„ç†ç‚¹å‡»äº‹ä»¶ï¼ˆå…ˆæ¸…é™¤ä¹‹å‰çš„ç›‘å¬å™¨ï¼Œé˜²æ­¢é‡å¤è§¦å‘ï¼‰
+        if (mainButton != null)
+        {
+            mainButton.onClick.RemoveAllListeners();
+            mainButton.onClick.AddListener(() => boundOnSelect?.Invoke(boundModel.TargetEventId));
+        }
+    }
 
-        /* ¡¾ÃÀÊõÔ¤ÁôÇø¡¿
-           Äã¿ÉÒÔÔÚÕâÀï¼ÓµãĞ¡¶¯»­£¬±ÈÈç£º
-           transform.localScale = Vector3.zero;
-           transform.DOScale(Vector3.one, 0.3f); // °´Å¥µ¯³öĞ§¹û
-        */
+    private void OnDestroy()
+    {
+        // å–æ¶ˆè®¢é˜…ï¼Œé˜²æ­¢å†…å­˜æ³„æ¼æˆ–å›è°ƒåˆ°å·²é”€æ¯å¯¹è±¡
+        if (boundModel != null)
+        {
+            boundModel.OnChanged -= OnModelChanged;
+            boundModel = null;
+        }
     }
 }

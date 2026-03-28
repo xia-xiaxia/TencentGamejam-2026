@@ -1,19 +1,45 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-// µ¥¸öÑ¡ÏîµÄÊı¾İÄ£ĞÍ
+// å•ä¸ªé€‰é¡¹çš„æ•°æ®æ¨¡å‹
 public class OptionModel
 {
-    public string Text;           // Ñ¡ÏîÏÔÊ¾µÄÎÄ×Ö
-    public bool IsUnlocked;       // ¸ÃÑ¡Ïîµ±Ç°ÊÇ·ñÂú×ã½âËøÌõ¼ş
-    public string TargetEventId;  // µã»÷ºóÒªÌø×ªµ½µÄÏÂÒ»¸öÊÂ¼ş ID
+    public string Text;           // é€‰é¡¹æ˜¾ç¤ºçš„æ–‡å­—
+    public bool IsUnlocked;       // è¯¥é€‰é¡¹å½“å‰æ˜¯å¦æ»¡è¶³è§£é”æ¡ä»¶
+    public string TargetEventId;  // ç‚¹å‡»åè¦è·³è½¬åˆ°çš„ä¸‹ä¸€ä¸ªäº‹ä»¶ ID
+
+    // è®¢é˜…ç‚¹ï¼šå½“ OptionModel æ•°æ®è¢«ä¿®æ”¹æ—¶é€šçŸ¥è®¢é˜…è€…ï¼ˆä¼ å›è‡ªèº«ï¼‰
+    public Action<OptionModel> OnChanged;
+
+    // é€šçŸ¥æ–¹æ³•ï¼ˆå¤–éƒ¨åœ¨ä¿®æ”¹å­—æ®µååº”è°ƒç”¨ï¼Œæˆ–è€…ä½¿ç”¨ä¸‹é¢çš„ SetX æ–¹æ³•ï¼‰
+    public void NotifyChanged()
+    {
+        OnChanged?.Invoke(this);
+    }
+}
+    // æ•´ä¸ªå›åˆçš„æ•°æ®æ¨¡å‹
+    public class RoundModel
+{
+    public string Content;              // å›åˆæè¿°æ–‡æœ¬
+    public Sprite BgSprite;             // æœ¬å›åˆçš„èƒŒæ™¯å›¾
+    public Sprite WindowSprite;         // æœ¬å›åˆçš„å¯¹è¯æ¡†çš®è‚¤
+    public List<OptionModel> Options;   // æœ¬å›åˆæ‹¥æœ‰çš„æ‰€æœ‰é€‰é¡¹åˆ—è¡¨
+}
+public class PlayerModel
+{
+    public int HP;
+    public int MaxHP;
+    public List<string> Buffs; // å­˜å‚¨å½“å‰æ‰€æœ‰ Buff çš„åç§°æˆ– ID
+
+    // è§‚å¯Ÿè€…æ¨¡å¼ï¼šå½“è¡€é‡æˆ– Buff æ”¹å˜æ—¶è§¦å‘
+    public Action<int> OnHPChanged;
+    public Action<List<string>> OnBuffsChanged;
 }
 
-// Õû¸ö»ØºÏµÄÊı¾İÄ£ĞÍ
-public class RoundModel
+// èƒŒåŒ…ç‰©å“æ•°æ®
+public class InventoryModel
 {
-    public string Content;              // »ØºÏÃèÊöÎÄ±¾
-    public Sprite BgSprite;             // ±¾»ØºÏµÄ±³¾°Í¼
-    public Sprite WindowSprite;         // ±¾»ØºÏµÄ¶Ô»°¿òÆ¤·ô
-    public List<OptionModel> Options;   // ±¾»ØºÏÓµÓĞµÄËùÓĞÑ¡ÏîÁĞ±í
+    public List<string> ItemNames; // ç®€æ˜“ç‰ˆï¼šåªå­˜åå­—
+    public Action<List<string>> OnItemsChanged;
 }

@@ -5,51 +5,62 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    // µ¥ÀıÄ£Ê½£ºÈÃ³ÌĞò A »ò Controller ËæÊ±ÄÜÍ¨¹ı UIManager.Instance ÕÒµ½Ëü
+    // å•ä¾‹æ¨¡å¼ï¼šè®©ç¨‹åº A æˆ– Controller éšæ—¶èƒ½é€šè¿‡ UIManager.Instance æ‰¾åˆ°å®ƒ
     public static UIManager Instance;
 
-    [Header("ÎÄ±¾ÓëÈİÆ÷ÒıÓÃ")]
-    public TextMeshProUGUI eventContentText; // ÊÂ¼şÃèÊöµÄÕıÎÄ
-    public Transform optionsParent;          // ´æ·ÅÑ¡Ïî°´Å¥µÄ¸¸½Úµã (´ø VerticalLayoutGroup)
+    [Header("æ–‡æœ¬ä¸å®¹å™¨å¼•ç”¨")]
+    public TextMeshProUGUI eventContentText; // äº‹ä»¶æè¿°çš„æ­£æ–‡
+    public Transform optionsParent;          // å­˜æ”¾é€‰é¡¹æŒ‰é’®çš„çˆ¶èŠ‚ç‚¹ (å¸¦ VerticalLayoutGroup)
 
-    [Header("»·¾³Óë´°¿ÚÒıÓÃ")]
-    public Image backgroundImage;            // È«ÆÁ±³¾°Í¼
-    public Image windowImage;                // ÊÂ¼şµ¯´°µÄµ×¿òÍ¼
+    [Header("ç¯å¢ƒä¸çª—å£å¼•ç”¨")]
+    public Image backgroundImage;            // å…¨å±èƒŒæ™¯å›¾
+    public Image windowImage;                // äº‹ä»¶å¼¹çª—çš„åº•æ¡†å›¾
 
-    [Header("Ô¤ÖÆÌå")]
-    public GameObject optionPrefab;          // ¸Õ²Å×öºÃµÄ Option_Button_Prefab
-
+    [Header("é¢„åˆ¶ä½“")]
+    public GameObject optionPrefab;          // åˆšæ‰åšå¥½çš„ Option_Button_Prefab
+    [Header("Views")]
+    public HPBarView hpBar;
+    public StatusPanelView statusPanel;
+    public InventoryPanelView inventoryPanel;
     private void Awake() => Instance = this;
 
     /// <summary>
-    /// ¡¾ºËĞÄ½Ó¿Ú¡¿µ±¡°»ØºÏÊı¾İ¡±·¢Éú±ä»¯Ê±£¬Controller »áµ÷ÓÃ´Ë·½·¨
+    /// ã€æ ¸å¿ƒæ¥å£ã€‘å½“â€œå›åˆæ•°æ®â€å‘ç”Ÿå˜åŒ–æ—¶ï¼ŒController ä¼šè°ƒç”¨æ­¤æ–¹æ³•
     /// </summary>
-    /// <param name="model">³ÌĞò A ´«À´µÄÍêÕû»ØºÏÊı¾İ°ü</param>
-    /// <param name="onOptionClick">µ±Íæ¼Òµã»÷Ä³¸öÑ¡ÏîÊ±£¬UI ²ãÍ¨ÖªÂß¼­²ãµÄ·½·¨</param>
+    /// <param name="model">ç¨‹åº A ä¼ æ¥çš„å®Œæ•´å›åˆæ•°æ®åŒ…</param>
+    /// <param name="onOptionClick">å½“ç©å®¶ç‚¹å‡»æŸä¸ªé€‰é¡¹æ—¶ï¼ŒUI å±‚é€šçŸ¥é€»è¾‘å±‚çš„æ–¹æ³•</param>
     public void OnRoundDataChanged(RoundModel model, System.Action<string> onOptionClick)
     {
-        // 1. Ë¢ĞÂÎÄ±¾ÄÚÈİ
+        // 1. åˆ·æ–°æ–‡æœ¬å†…å®¹
         eventContentText.text = model.Content;
 
-        // 2. Ë¢ĞÂ±³¾°Óë´°¿ÚÆ¤·ô£¨Èç¹ûÊı¾İÀïÌá¹©ÁËĞÂµÄ Sprite£©
+        // 2. åˆ·æ–°èƒŒæ™¯ä¸çª—å£çš®è‚¤ï¼ˆå¦‚æœæ•°æ®é‡Œæä¾›äº†æ–°çš„ Spriteï¼‰
         if (model.BgSprite != null) backgroundImage.sprite = model.BgSprite;
         if (model.WindowSprite != null) windowImage.sprite = model.WindowSprite;
 
-        // 3. ÇåÀí¾ÉµÄÑ¡Ïî°´Å¥
-        // ±éÀúËùÓĞ×ÓÎïÌå²¢Ïú»Ù
+        // 3. æ¸…ç†æ—§çš„é€‰é¡¹æŒ‰é’®
+        // éå†æ‰€æœ‰å­ç‰©ä½“å¹¶é”€æ¯   
+
         foreach (Transform child in optionsParent)
             Destroy(child.gameObject);
 
-        // 4. ¸ù¾İÊı¾İÄ£ĞÍÉú³ÉĞÂµÄÑ¡Ïî°´Å¥
+        // 4. æ ¹æ®æ•°æ®æ¨¡å‹ç”Ÿæˆæ–°çš„é€‰é¡¹æŒ‰é’®
         foreach (var optData in model.Options)
         {
-            // ÊµÀı»¯Ô¤ÖÆÌå
+            // å®ä¾‹åŒ–é¢„åˆ¶ä½“
             GameObject go = Instantiate(optionPrefab, optionsParent);
-            // »ñÈ¡°´Å¥ÉíÉÏµÄ½Å±¾²¢Ö´ĞĞäÖÈ¾Âß¼­
+            // è·å–æŒ‰é’®èº«ä¸Šçš„è„šæœ¬å¹¶æ‰§è¡Œæ¸²æŸ“é€»è¾‘
             OptionButtonUI btnScript = go.GetComponent<OptionButtonUI>();
 
-            // ½«µ¥¸öÑ¡ÏîµÄÊı¾İºÍ¡°µã»÷»Øµ÷¡±´«¸ø°´Å¥
+            // å°†å•ä¸ªé€‰é¡¹çš„æ•°æ®å’Œâ€œç‚¹å‡»å›è°ƒâ€ä¼ ç»™æŒ‰é’®
             btnScript.Render(optData, onOptionClick);
         }
+    }
+    //åˆ·æ–°çŠ¶æ€
+    public void Setup(PlayerModel pModel, InventoryModel iModel)
+    {
+        hpBar.Initialize(pModel);
+        statusPanel.Initialize(pModel);
+        inventoryPanel.Initialize(iModel);
     }
 }
