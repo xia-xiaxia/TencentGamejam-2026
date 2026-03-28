@@ -6,47 +6,44 @@ using TMPro;
 
 public class WindowView : MonoBehaviour
 {
-    [Header("UI ÒıÓÃ£¨Óë UIManager ×Ö¶ÎÒ»ÖÂ£¬·½±ãÌæ»»£©")]
-    public Image backgroundImage;       // È«ÆÁ»ò½Úµã±³¾°
-    public Image windowImage;           // ´°¿Ú¿òÍ¼
-    public TextMeshProUGUI contentText; // ÊÂ¼şÕıÎÄ
+    [Header("UI å¼•ç”¨ï¼ˆä¸ UIManager å­—æ®µä¸€è‡´ï¼Œæ–¹ä¾¿æ›¿æ¢ï¼‰")]
+    public Image backgroundImage;       // å…¨å±æˆ–èŠ‚ç‚¹èƒŒæ™¯
+    public Image windowImage;           // çª—å£æ¡†å›¾
+    public TextMeshProUGUI contentText; // äº‹ä»¶æ­£æ–‡
 
-    [Header("Ñ¡ÏîÉú³É£¨Óë UIManager ÅäÖÃÒ»ÖÂ£©")]
-    public Transform optionsParent;     // ´æ·ÅÑ¡ÏîµÄÈİÆ÷
-    public GameObject optionPrefab;     // Ô¤ÖÆÌå
-    public void Render(RoundModel model, Action<string> onOptionClick)
+    [Header("é€‰é¡¹ç”Ÿæˆï¼ˆä¸ UIManager é…ç½®ä¸€è‡´ï¼‰")]
+    public Transform optionsParent;     // å­˜æ”¾é€‰é¡¹çš„å®¹å™¨
+    public GameObject optionPrefab;     // é¢„åˆ¶ä½“
+
+    public void Render(StoryEventData node, List<OptionData> visibleOptions, Action<OptionData> onOptionClick)
     {
-        if (model == null)
+        if (node == null)
         {
-            Debug.LogWarning("WindowView.Render: model Îª null£¬Ìø¹ıäÖÈ¾¡£", this);
+            ClearOptions();
+            if (contentText != null)
+            {
+                contentText.text = string.Empty;
+            }
             return;
         }
 
-        // ÎÄ±¾ÓëÍ¼Æ¬¸üĞÂ
         if (contentText != null)
-            contentText.text = model.Content ?? string.Empty;
+            contentText.text = node.Text ?? string.Empty;
 
-        if (backgroundImage != null && model.BgSprite != null)
-            backgroundImage.sprite = model.BgSprite;
-
-        if (windowImage != null && model.WindowSprite != null)
-            windowImage.sprite = model.WindowSprite;
-
-        // ÇåÀí¾ÉÑ¡Ïî
         ClearOptions();
 
-        // Éú³ÉĞÂÑ¡Ïî
-        if (model.Options == null || model.Options.Count == 0)
+        if (visibleOptions == null || visibleOptions.Count == 0)
             return;
 
         if (optionPrefab == null || optionsParent == null)
         {
-            Debug.LogWarning("WindowView.Render: optionPrefab »ò optionsParent Î´°ó¶¨£¬ÎŞ·¨Éú³ÉÑ¡Ïî¡£", this);
+            Debug.LogWarning("WindowView.Render: optionPrefab æˆ– optionsParent æœªç»‘å®šï¼Œæ— æ³•ç”Ÿæˆé€‰é¡¹ã€‚", this);
             return;
         }
 
-        foreach (var opt in model.Options)
+        for (int i = 0; i < visibleOptions.Count; i++)
         {
+            OptionData opt = visibleOptions[i];
             if (opt == null) continue;
 
             GameObject go = Instantiate(optionPrefab, optionsParent);
@@ -55,18 +52,17 @@ public class WindowView : MonoBehaviour
             OptionButtonUI btn = go.GetComponent<OptionButtonUI>();
             if (btn == null)
             {
-                Debug.LogWarning("WindowView: optionPrefab È±ÉÙ OptionButtonUI ×é¼ş¡£", this);
+                Debug.LogWarning("WindowView: optionPrefab ç¼ºå°‘ OptionButtonUI ç»„ä»¶ã€‚", this);
                 Destroy(go);
                 continue;
             }
 
-            // Ê¹ÓÃÒÑÓĞµÄ OptionButtonUI.Render£¨»á×Ô¶¯ RemoveAllListeners / Ìí¼ÓĞÂ¼àÌı£©
-            btn.Render(opt, onOptionClick);
+            btn.Render(opt, true, onOptionClick);
         }
     }
 
     /// <summary>
-    /// Çå¿ÕÈİÆ÷ÖĞÒÑÓĞÑ¡Ïî£¨¹©ÆäËûÁ÷³Ì¸´ÓÃ£©
+    /// æ¸…ç©ºå®¹å™¨ä¸­å·²æœ‰é€‰é¡¹ï¼ˆä¾›å…¶ä»–æµç¨‹å¤ç”¨ï¼‰
     /// </summary>
     public void ClearOptions()
     {
@@ -79,5 +75,5 @@ public class WindowView : MonoBehaviour
         }
     }
 
-    // Èô½« WindowView ÓÃ×÷ÊÂ¼ş¶©ÔÄµÄÊÓÍ¼£¬¿ÉÔÚ´Ë»º´æ model ²¢ÔÚ OnDestroy ÖĞÈ¡Ïû¶©ÔÄ£¨ÀàËÆ HPBarView µÄ×ö·¨£©¡£
+    // è‹¥å°† WindowView ç”¨ä½œäº‹ä»¶è®¢é˜…çš„è§†å›¾ï¼Œå¯åœ¨æ­¤ç¼“å­˜ model å¹¶åœ¨ OnDestroy ä¸­å–æ¶ˆè®¢é˜…ï¼ˆç±»ä¼¼ HPBarView çš„åšæ³•ï¼‰ã€‚
 }

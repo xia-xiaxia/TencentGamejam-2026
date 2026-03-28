@@ -1,45 +1,27 @@
 {
     "events": [
         {
-            "id": "S001",
-            "Text": "You wake up in the sealed room again",
+            "id": "Start",
+            "Text": "开始游戏",
             "effectDatas": [
                 {
-                    "targetKey": "sanity",
+                    "targetKey": "health",
                     "type": "Set",
-                    "floatValue": 100.0,
+                    "floatValue": 5.0,
+                    "stringValue": ""
+                },
+                {
+                    "targetKey": "inventory",
+                    "type": "Clear",
+                    "floatValue": 0.0,
                     "stringValue": ""
                 }
             ],
-            "image": "story/room",
+            "image": "",
             "options": [
                 {
-                    "Text": "Search the room",
-                    "nextNodeId": "S002",
-                    "requiredItemId": "",
-                    "requiredUnlockedNodeId": "",
-                    "consumeItemId": "",
-                    "effects": []
-                },
-                {
-                    "Text": "Unlock the rusty door",
-                    "nextNodeId": "S003",
-                    "requiredItemId": "I001",
-                    "requiredUnlockedNodeId": "",
-                    "consumeItemId": "I001",
-                    "effects": []
-                },
-                {
-                    "Text": "Enter the hidden tunnel",
-                    "nextNodeId": "S007",
-                    "requiredItemId": "",
-                    "requiredUnlockedNodeId": "S007",
-                    "consumeItemId": "",
-                    "effects": []
-                },
-                {
-                    "Text": "Inspect the shrine",
-                    "nextNodeId": "S004",
+                    "Text": "开始游戏",
+                    "nextNodeId": "A0",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
                     "consumeItemId": "",
@@ -48,165 +30,186 @@
             ]
         },
         {
-            "id": "S002",
-            "Text": "A dart trap grazes you and causes bleeding",
+            "id": "A0",
+            "Text": "你从燃烧的飞机残骸中醒来，身上多处受伤，血流不止。",
             "effectDatas": [
                 {
                     "targetKey": "bleed",
                     "type": "ApplyStatus",
-                    "floatValue": -6.0,
-                    "stringValue": "3"
-                }
-            ],
-            "image": "story/key",
-            "options": [
-                {
-                    "Text": "Take antidote herb",
-                    "nextNodeId": "S001",
-                    "requiredItemId": "",
-                    "requiredUnlockedNodeId": "",
-                    "consumeItemId": "",
-                    "effects": [
-                        {
-                            "targetKey": "bleed",
-                            "type": "RemoveStatus",
-                            "floatValue": 0.0,
-                            "stringValue": ""
-                        }
-                    ]
-                },
-                {
-                    "Text": "Go back to the room",
-                    "nextNodeId": "S001",
-                    "requiredItemId": "",
-                    "requiredUnlockedNodeId": "",
-                    "consumeItemId": "",
-                    "effects": []
-                }
-            ]
-        },
-        {
-            "id": "S003",
-            "Text": "You escaped the ruins. Demo end",
-            "effectDatas": [],
-            "image": "story/exit",
-            "options": []
-        },
-        {
-            "id": "S004",
-            "Text": "An ancient shrine hums with power",
-            "effectDatas": [],
-            "image": "story/room",
-            "options": [
-                {
-                    "Text": "Activate the rune altar",
-                    "nextNodeId": "S001",
-                    "requiredItemId": "",
-                    "requiredUnlockedNodeId": "",
-                    "consumeItemId": "",
-                    "effects": [
-                        {
-                            "targetKey": "S007",
-                            "type": "UnlockNode",
-                            "floatValue": 0.0,
-                            "stringValue": ""
-                        },
-                        {
-                            "targetKey": "sanity",
-                            "type": "Add",
-                            "floatValue": 5.0,
-                            "stringValue": ""
-                        }
-                    ]
-                },
-                {
-                    "Text": "Leave shrine",
-                    "nextNodeId": "S001",
-                    "requiredItemId": "",
-                    "requiredUnlockedNodeId": "",
-                    "consumeItemId": "",
-                    "effects": []
-                }
-            ]
-        },
-        {
-            "id": "S007",
-            "Text": "A hidden tunnel opens beneath the altar",
-            "effectDatas": [
-                {
-                    "targetKey": "sanity",
-                    "type": "Subtract",
-                    "floatValue": 5.0,
+                    "floatValue": 0.0,
                     "stringValue": ""
                 }
             ],
-            "image": "story/key",
+            "image": "",
             "options": [
                 {
-                    "Text": "Escape from secret route",
-                    "nextNodeId": "S003",
+                    "Text": "爬出飞机残骸",
+                    "nextNodeId": "A1",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "",
+                    "consumeItemId": "",
+                    "effects": []
+                },
+                {
+                    "Text": "检查行李箱",
+                    "nextNodeId": "A2",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "A3",
+                    "consumeItemId": "",
+                    "effects": []
+                },
+                {
+                    "Text": "翻看旁边的尸体",
+                    "nextNodeId": "A3",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
                     "consumeItemId": "",
                     "effects": [
                         {
-                            "targetKey": "sanity",
-                            "type": "Add",
-                            "floatValue": 20.0,
+                            "targetKey": "A3",
+                            "type": "UnlockNode",
+                            "floatValue": 0.0,
                             "stringValue": ""
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "A1",
+            "Text": "从扭曲金属中挣脱，手臂被锐片划伤，你失血过多而死。",
+            "effectDatas": [
+                {
+                    "targetKey": "health",
+                    "type": "Set",
+                    "floatValue": 0.0,
+                    "stringValue": ""
+                }
+            ],
+            "image": "",
+            "options": [
+                {
+                    "Text": "重新开始",
+                    "nextNodeId": "A0",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "",
+                    "consumeItemId": "",
+                    "effects": [
+                        {
+                            "targetKey": "data",
+                            "type": "Reset",
+                            "floatValue": 0.0,
+                            "stringValue": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "A2",
+            "Text": "你用死者的出生日期解开了行李箱的密码锁，用绷带简单包扎了伤口，并拿走了行李箱中的破布。前方有三条岔路。",
+            "effectDatas": [
+                {
+                    "targetKey": "health",
+                    "type": "Add",
+                    "floatValue": 5.0,
+                    "stringValue": ""
                 },
                 {
-                    "Text": "Return to room",
-                    "nextNodeId": "S001",
+                    "targetKey": "item",
+                    "type": "Add",
+                    "floatValue": 0.0,
+                    "stringValue": "破布"
+                }
+            ],
+            "image": "=DISPIMG(\"ID_B8147EBDA0474381888737563C9AA86B\",1)",
+            "options": [
+                {
+                    "Text": "向西走",
+                    "nextNodeId": "B0",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "",
+                    "consumeItemId": "",
+                    "effects": []
+                },
+                {
+                    "Text": "向北走",
+                    "nextNodeId": "C0",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "",
+                    "consumeItemId": "",
+                    "effects": []
+                },
+                {
+                    "Text": "向东走",
+                    "nextNodeId": "D0",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
                     "consumeItemId": "",
                     "effects": []
                 }
             ]
+        },
+        {
+            "id": "A3",
+            "Text": "乘客已无气息，口袋滑落染血身份证。你看清了死者的出生期，但你已经失血过多。",
+            "effectDatas": [
+                {
+                    "targetKey": "health",
+                    "type": "Set",
+                    "floatValue": 0.0,
+                    "stringValue": ""
+                }
+            ],
+            "image": "",
+            "options": [
+                {
+                    "Text": "重新开始",
+                    "nextNodeId": "A0",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "",
+                    "consumeItemId": "",
+                    "effects": [
+                        {
+                            "targetKey": "data",
+                            "type": "Reset",
+                            "floatValue": 0.0,
+                            "stringValue": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "B0",
+            "Text": "你鼠掉了哦",
+            "effectDatas": [],
+            "image": "",
+            "options": []
+        },
+        {
+            "id": "C0",
+            "Text": "你还是鼠掉咯",
+            "effectDatas": [],
+            "image": "",
+            "options": []
+        },
+        {
+            "id": "D0",
+            "Text": "你鼠了好多次了",
+            "effectDatas": [],
+            "image": "",
+            "options": []
         }
     ],
     "characters": [
         {
             "id": "C001",
-            "name": "Hero",
-            "description": "Main character",
+            "name": "主角",
+            "description": "主要角色",
             "image": "characters/hero",
             "health": 100.0,
-            "bag": [
-                {
-                    "id": "I001",
-                    "name": "Old Key",
-                    "description": "A rusty key",
-                    "image": "items/old_key",
-                    "useOption": []
-                },
-                {
-                    "id": "I002",
-                    "name": "Bandage",
-                    "description": "Can recover status",
-                    "image": "items/bandage",
-                    "useOption": []
-                }
-            ]
-        },
-        {
-            "id": "C002",
-            "name": "NPC_A",
-            "description": "Guide NPC",
-            "image": "characters/npc_a",
-            "health": 80.0,
-            "bag": [
-                {
-                    "id": "I101",
-                    "name": "Map",
-                    "description": "Old city map",
-                    "image": "items/map",
-                    "useOption": []
-                }
-            ]
+            "bag": []
         }
     ]
 }

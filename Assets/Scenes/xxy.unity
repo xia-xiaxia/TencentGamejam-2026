@@ -1740,6 +1740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5041fde6bb97fc64d93119a8d4988baf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  storyRuntimeSource: {fileID: 0}
   eventContentText: {fileID: 0}
   optionsParent: {fileID: 1262223088}
   backgroundImage: {fileID: 1726347776}
@@ -4876,7 +4877,7 @@ MonoBehaviour:
   detailPanel: {fileID: 1951405203}
   detailText: {fileID: 1504119957}
   eventNodes:
-  - nodeId: Start
+  - nodeId: 0
     nodeObj: {fileID: 1472273860}
     detailDesc: 
   - nodeId: A0
@@ -4890,6 +4891,9 @@ MonoBehaviour:
     detailDesc: 
   - nodeId: A3
     nodeObj: {fileID: 1962190480}
+    detailDesc: 
+  - nodeId: B0
+    nodeObj: {fileID: 1833449653}
     detailDesc: 
   - nodeId: B1
     nodeObj: {fileID: 259110957}
@@ -5158,7 +5162,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1349064033
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5516,7 +5520,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1463520720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8228,9 +8232,9 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 179856838}
   - {fileID: 2070667851}
   - {fileID: 736775588}
   - {fileID: 1463520723}
   - {fileID: 435962099}
   - {fileID: 1276704081}
+  - {fileID: 179856838}

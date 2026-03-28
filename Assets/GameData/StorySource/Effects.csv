@@ -1,8 +1,0 @@
-ownerType,ownerId,targetKey,type,floatValue,stringValue
-Event,S001,sanity,Set,100,
-Event,S002,bleed,ApplyStatus,-6,3
-Event,S007,sanity,Subtract,5,
-Option,O005,bleed,RemoveStatus,0,
-Option,O007,S007,UnlockNode,0,
-Option,O007,sanity,Add,5,
-Option,O009,sanity,Add,20,

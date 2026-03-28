@@ -8,35 +8,89 @@ public class HPBarView : MonoBehaviour
     public TextMeshProUGUI hpText;
     public Sprite[] hpSprites = new Sprite[5]; // 预设不同血量阶段的图片
 
-    private PlayerModel model;
-
-    public void Initialize(PlayerModel playerModel)
+    public void Initialize()
     {
-        if (playerModel == null) return;
-
-        // 防止重复订阅：先取消旧的订阅
-        if (model != null)
-        {
-            model.OnHPChanged -= Refresh;
-        }
-
-        model = playerModel;
-        model.OnHPChanged += Refresh;
-        Refresh(model.HP); // 初始化显示
+        BindBackBoardEvents();
+        Refresh();
     }
 
-    private void Refresh(int current)
+    private void OnEnable()
     {
-        hpText.text = $"{current}";
-        // 美术预留可以更改 Image
+        BindBackBoardEvents();
+        Refresh();
     }
 
-    // 在对象销毁时取消订阅（防止内存泄漏）
-    private void OnDestroy()
+    private void OnDisable()
     {
-        if (model != null)
+        UnbindBackBoardEvents();
+    }
+
+    private void Refresh()
+    {
+        if (BackBoard.Instance == null)
         {
-            model.OnHPChanged -= Refresh;
+            if (hpText != null)
+            {
+                hpText.text = "0/0";
+            }
+
+            if (hpImage != null)
+            {
+                hpImage.fillAmount = 0f;
+            }
+
+            return;
         }
+
+        float current = BackBoard.Instance.GetCurrentHealth();
+        float max = BackBoard.Instance.GetCurrentMaxHealth();
+        float ratio = max > 0f ? current / max : 0f;
+
+        if (hpText != null)
+        {
+            hpText.text = current.ToString("0") + "/" + max.ToString("0");
+        }
+
+        if (hpImage != null)
+        {
+            hpImage.fillAmount = Mathf.Clamp01(ratio);
+        }
+    }
+
+    private void BindBackBoardEvents()
+    {
+        if (BackBoard.Instance == null)
+        {
+            return;
+        }
+
+        BackBoard.Instance.OnBlackboardValueChanged -= HandleBlackboardValueChanged;
+        BackBoard.Instance.OnBlackboardValueChanged += HandleBlackboardValueChanged;
+        BackBoard.Instance.OnCurrentCharacterChanged -= HandleCurrentCharacterChanged;
+        BackBoard.Instance.OnCurrentCharacterChanged += HandleCurrentCharacterChanged;
+    }
+
+    private void UnbindBackBoardEvents()
+    {
+        if (BackBoard.Instance == null)
+        {
+            return;
+        }
+
+        BackBoard.Instance.OnBlackboardValueChanged -= HandleBlackboardValueChanged;
+        BackBoard.Instance.OnCurrentCharacterChanged -= HandleCurrentCharacterChanged;
+    }
+
+    private void HandleBlackboardValueChanged(string key)
+    {
+        if (key == BackBoard.CurrentHealthKey || key == BackBoard.LegacyHealthKey)
+        {
+            Refresh();
+        }
+    }
+
+    private void HandleCurrentCharacterChanged(CharacterData _)
+    {
+        Refresh();
     }
 }
