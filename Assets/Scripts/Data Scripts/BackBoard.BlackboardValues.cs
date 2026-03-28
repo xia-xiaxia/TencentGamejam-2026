@@ -30,6 +30,11 @@ public partial class BackBoard
             return;
         }
 
+        if (TryHandleInventoryEffect(effect))
+        {
+            return;
+        }
+
         EffectType effectType;
         if (!TryParseEffectType(effect.type, out effectType))
         {
@@ -165,6 +170,100 @@ public partial class BackBoard
         }
 
         return Enum.TryParse(effectTypeString, true, out effectType);
+    }
+
+    private bool TryHandleInventoryEffect(EffectData effect)
+    {
+        string key = effect.targetKey?.Trim();
+        if (string.IsNullOrEmpty(key))
+        {
+            return false;
+        }
+
+        if (string.Equals(key, "item", StringComparison.OrdinalIgnoreCase))
+        {
+            HandleAddItemEffect(effect);
+            return true;
+        }
+
+        if (string.Equals(key, "inventory", StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(key, "bag", StringComparison.OrdinalIgnoreCase))
+        {
+            if (string.Equals(effect.type, "Clear", StringComparison.OrdinalIgnoreCase))
+            {
+                ClearBag(currentCharacterId);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void HandleAddItemEffect(EffectData effect)
+    {
+        if (string.IsNullOrEmpty(currentCharacterId))
+        {
+            return;
+        }
+
+        ItemData item = CreateItemFromDescriptor(effect.stringValue);
+        if (item == null)
+        {
+            Debug.LogWarning("Bag 添加效果缺少有效描述: " + effect.stringValue, this);
+            return;
+        }
+
+        if (!AddItemToBag(currentCharacterId, item))
+        {
+            Debug.LogWarning("Bag 已包含相同 id 的道具或角色不存在: " + item.id, this);
+        }
+    }
+
+    private static ItemData CreateItemFromDescriptor(string descriptor)
+    {
+        if (string.IsNullOrWhiteSpace(descriptor))
+        {
+            return null;
+        }
+
+        string[] parts = descriptor.Split(new[] { '|' }, 4);
+        string id = parts[0].Trim();
+        if (string.IsNullOrEmpty(id))
+        {
+            return null;
+        }
+
+        string name = id;
+        string description = string.Empty;
+        string image = string.Empty;
+
+        if (parts.Length > 1)
+        {
+            string part = parts[1].Trim();
+            if (!string.IsNullOrEmpty(part))
+            {
+                name = part;
+            }
+        }
+
+        if (parts.Length > 2)
+        {
+            description = parts[2].Trim();
+        }
+
+        if (parts.Length > 3)
+        {
+            image = parts[3].Trim();
+        }
+
+        return new ItemData
+        {
+            id = id,
+            name = name,
+            description = description,
+            image = image,
+            useOption = new List<OptionData>()
+        };
     }
 
     private void NotifyBlackboardChanged(string key)

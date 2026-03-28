@@ -29,6 +29,7 @@ public class BagUI : MonoBehaviour
     [Header("行为设置")]
     public int itemsPerRow = 5;      // 每行数量（固定为 5）
     public int maxItems = 15;        // 最大物品数量（固定为 15）
+    public string bagRefreshPrefix = "bag:";  // 全量刷新事件前缀，格式例："bag:CHARACTER_ID"
     public string addPrefix = "bag.add:";     // 黑板事件 add 前缀，格式例： "bag.add:ITEM_ID"
     public string removePrefix = "bag.remove:"; // 黑板事件 remove 前缀，格式例： "bag.remove:ITEM_ID"
 
@@ -61,6 +62,8 @@ public class BagUI : MonoBehaviour
         {
             BackBoard.Instance.OnBlackboardValueChanged += HandleBlackboardChanged;
         }
+
+        RefreshFromCurrentBag();
     }
 
     private void OnDisable()
@@ -81,6 +84,13 @@ public class BagUI : MonoBehaviour
     {
         if (string.IsNullOrEmpty(key)) return;
 
+        // full refresh
+        if (!string.IsNullOrEmpty(bagRefreshPrefix) && key.StartsWith(bagRefreshPrefix, StringComparison.Ordinal))
+        {
+            RefreshFromCurrentBag();
+            return;
+        }
+
         // add
         if (!string.IsNullOrEmpty(addPrefix) && key.StartsWith(addPrefix, StringComparison.Ordinal))
         {
@@ -97,6 +107,38 @@ public class BagUI : MonoBehaviour
             if (!string.IsNullOrEmpty(id))
                 RemoveItemById(id);
             return;
+        }
+    }
+
+    private void RefreshFromCurrentBag()
+    {
+        if (contentParent == null)
+        {
+            return;
+        }
+
+        ClearAll();
+
+        if (BackBoard.Instance == null)
+        {
+            return;
+        }
+
+        CharacterData character = BackBoard.Instance.GetCurrentCharacter();
+        if (character == null || character.bag == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < character.bag.Count; i++)
+        {
+            ItemData item = character.bag[i];
+            if (item == null || string.IsNullOrEmpty(item.id))
+            {
+                continue;
+            }
+
+            AddItemById(item.id);
         }
     }
 

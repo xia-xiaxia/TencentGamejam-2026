@@ -156,6 +156,26 @@ public sealed class BackBoardCharacterService
     }
 
     /// <summary>
+    /// 清空角色背包。
+    /// </summary>
+    public bool ClearBag(string characterId)
+    {
+        List<ItemData> bag = GetBag(characterId);
+        if (bag == null)
+        {
+            return false;
+        }
+
+        if (bag.Count == 0)
+        {
+            return true;
+        }
+
+        bag.Clear();
+        return true;
+    }
+
+    /// <summary>
     /// 判断背包中是否包含指定道具。
     /// </summary>
     public bool HasItem(string characterId, string itemId)

@@ -61,12 +61,7 @@ public partial class BackBoard
         statusService.Clear();
         SetCurrentHealth(GetCurrentMaxHealth());
 
-        List<ItemData> bag = GetBag(currentCharacterId);
-        if (bag != null && bag.Count > 0)
-        {
-            bag.Clear();
-            NotifyBlackboardChanged("bag.add:" + currentCharacterId);
-        }
+        ClearBag(currentCharacterId);
 
         if (!EnterNode(nodeId))
         {
