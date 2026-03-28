@@ -90,6 +90,9 @@ public static partial class StoryCsvImporter
             {
                 Text = row.Text,
                 nextNodeId = row.NextNodeId,
+                requiredItemId = row.RequiredItemId,
+                requiredUnlockedNodeId = row.RequiredUnlockedNodeId,
+                consumeItemId = row.ConsumeItemId,
                 effects = new List<EffectData>()
             };
 
@@ -133,6 +136,7 @@ public static partial class StoryCsvImporter
                 name = row.Name,
                 description = row.Description,
                 image = row.Image,
+                health = row.Health,
                 bag = new List<ItemData>()
             };
 

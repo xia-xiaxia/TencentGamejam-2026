@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public partial class BackBoard : MonoBehaviour
+public partial class BackBoard : MonoBehaviour, IStoryRuntime
 {
     [Header("Data Source")]
     [SerializeField] private TextAsset storyJson;
@@ -12,28 +12,32 @@ public partial class BackBoard : MonoBehaviour
     [SerializeField] private string startNodeId;
     [SerializeField] private string currentCharacterId;
 
-    private readonly Dictionary<string, StoryEventData> eventMap = new Dictionary<string, StoryEventData>();
-    private readonly Dictionary<string, CharacterData> characterMap = new Dictionary<string, CharacterData>();
-    private readonly Dictionary<string, float> floatBoard = new Dictionary<string, float>();
-    private readonly Dictionary<string, string> stringBoard = new Dictionary<string, string>();
+    private readonly BackBoardStoryService storyService = new BackBoardStoryService();
+    private readonly BackBoardCharacterService characterService = new BackBoardCharacterService();
+    private readonly BackBoardValueService valueService = new BackBoardValueService();
+    private readonly BackBoardStatusService statusService = new BackBoardStatusService();
 
-    public string CurrentNodeId { get; private set; }
+    public static BackBoard Instance { get; private set; }
+
+    /// <summary>
+    /// 当前剧情节点 id。
+    /// </summary>
+    public string CurrentNodeId
+    {
+        get
+        {
+            return storyService.CurrentNodeId;
+        }
+    }
+
+    /// <summary>
+    /// 当前剧情节点数据。
+    /// </summary>
     public StoryEventData CurrentNode
     {
         get
         {
-            if (string.IsNullOrEmpty(CurrentNodeId))
-            {
-                return null;
-            }
-
-            StoryEventData node;
-            if (eventMap.TryGetValue(CurrentNodeId, out node))
-            {
-                return node;
-            }
-
-            return null;
+            return storyService.CurrentNode;
         }
     }
 
@@ -41,6 +45,26 @@ public partial class BackBoard : MonoBehaviour
     public event Action<string> OnBlackboardValueChanged;
     public event Action<CharacterData> OnCurrentCharacterChanged;
 
+    /// <summary>
+    /// 初始化全局单例引用。
+    /// </summary>
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            return;
+        }
+
+        if (Instance != this)
+        {
+            Debug.LogWarning("BackBoard 存在多个实例，这可能会导致数据混乱。", this);
+        }
+    }
+
+    /// <summary>
+    /// 启动时装载数据库并进入起始节点。
+    /// </summary>
     private void Start()
     {
         BuildDatabase();
@@ -53,6 +77,9 @@ public partial class BackBoard : MonoBehaviour
         EnterNode(nodeId);
     }
 
+    /// <summary>
+    /// 从配置数据重建剧情、角色与黑板状态。
+    /// </summary>
     public void BuildDatabase()
     {
         if (storyJson == null && !string.IsNullOrEmpty(storyJsonResourcePath))
@@ -65,71 +92,22 @@ public partial class BackBoard : MonoBehaviour
             storyDatabase = JsonUtility.FromJson<StoryDatabase>(storyJson.text);
         }
 
-        eventMap.Clear();
-        characterMap.Clear();
+        valueService.Clear();
+        statusService.Clear();
+        storyService.BuildEventMap(storyDatabase != null ? storyDatabase.events : null, this);
+        characterService.BuildCharacterMap(storyDatabase != null ? storyDatabase.characters : null, this);
+
         if (storyDatabase == null)
         {
+            currentCharacterId = string.Empty;
             return;
         }
 
-        if (storyDatabase.events != null)
+        currentCharacterId = characterService.ResolveCurrentCharacterId(currentCharacterId);
+
+        if (!string.IsNullOrEmpty(currentCharacterId))
         {
-            for (int i = 0; i < storyDatabase.events.Count; i++)
-            {
-                StoryEventData evt = storyDatabase.events[i];
-                if (evt == null || string.IsNullOrEmpty(evt.id))
-                {
-                    continue;
-                }
-
-                if (eventMap.ContainsKey(evt.id))
-                {
-                    Debug.LogWarning("BackBoard 检测到重复节点 id: " + evt.id, this);
-                    continue;
-                }
-
-                eventMap.Add(evt.id, evt);
-            }
-        }
-
-        if (storyDatabase.characters == null)
-        {
-            return;
-        }
-
-        for (int i = 0; i < storyDatabase.characters.Count; i++)
-        {
-            CharacterData character = storyDatabase.characters[i];
-            if (character == null || string.IsNullOrEmpty(character.id))
-            {
-                continue;
-            }
-
-            if (characterMap.ContainsKey(character.id))
-            {
-                Debug.LogWarning("BackBoard 检测到重复角色 id: " + character.id, this);
-                continue;
-            }
-
-            if (character.bag == null)
-            {
-                character.bag = new List<ItemData>();
-            }
-
-            characterMap.Add(character.id, character);
-        }
-
-        if (string.IsNullOrEmpty(currentCharacterId) && storyDatabase.characters != null && storyDatabase.characters.Count > 0)
-        {
-            for (int i = 0; i < storyDatabase.characters.Count; i++)
-            {
-                CharacterData character = storyDatabase.characters[i];
-                if (character != null && !string.IsNullOrEmpty(character.id))
-                {
-                    currentCharacterId = character.id;
-                    break;
-                }
-            }
+            InitializeCurrentCharacterHealth();
         }
     }
 }

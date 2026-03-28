@@ -13,6 +13,9 @@ public static partial class StoryCsvImporter
         public string EventId;
         public string Text;
         public string NextNodeId;
+        public string RequiredItemId;
+        public string RequiredUnlockedNodeId;
+        public string ConsumeItemId;
         public int Order;
     }
 
@@ -32,6 +35,7 @@ public static partial class StoryCsvImporter
         public string Name;
         public string Description;
         public string Image;
+        public float Health;
     }
 
     private class BagItemRow
