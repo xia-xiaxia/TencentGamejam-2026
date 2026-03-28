@@ -2,7 +2,7 @@
     "events": [
         {
             "id": "S001",
-            "Text": "You wake up in a strange room",
+            "Text": "You wake up in the sealed room again",
             "effectDatas": [
                 {
                     "targetKey": "sanity",
@@ -14,56 +14,158 @@
             "image": "story/room",
             "options": [
                 {
-                    "Text": "Look around",
+                    "Text": "Search the room",
                     "nextNodeId": "S002",
                     "requiredItemId": "",
+                    "requiredUnlockedNodeId": "",
                     "consumeItemId": "",
                     "effects": []
                 },
                 {
-                    "Text": "Open the door",
+                    "Text": "Unlock the rusty door",
                     "nextNodeId": "S003",
                     "requiredItemId": "I001",
+                    "requiredUnlockedNodeId": "",
                     "consumeItemId": "I001",
+                    "effects": []
+                },
+                {
+                    "Text": "Enter the hidden tunnel",
+                    "nextNodeId": "S007",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "S007",
+                    "consumeItemId": "",
+                    "effects": []
+                },
+                {
+                    "Text": "Inspect the shrine",
+                    "nextNodeId": "S004",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "",
+                    "consumeItemId": "",
                     "effects": []
                 }
             ]
         },
         {
             "id": "S002",
-            "Text": "You found a key",
+            "Text": "A dart trap grazes you and causes bleeding",
             "effectDatas": [
                 {
-                    "targetKey": "hasKey",
-                    "type": "Set",
-                    "floatValue": 0.0,
-                    "stringValue": "true"
+                    "targetKey": "bleed",
+                    "type": "ApplyStatus",
+                    "floatValue": -6.0,
+                    "stringValue": "3"
                 }
             ],
             "image": "story/key",
             "options": [
                 {
-                    "Text": "Take the key",
-                    "nextNodeId": "S003",
+                    "Text": "Take antidote herb",
+                    "nextNodeId": "S001",
                     "requiredItemId": "",
+                    "requiredUnlockedNodeId": "",
                     "consumeItemId": "",
                     "effects": [
                         {
-                            "targetKey": "sanity",
-                            "type": "Subtract",
-                            "floatValue": 10.0,
+                            "targetKey": "bleed",
+                            "type": "RemoveStatus",
+                            "floatValue": 0.0,
                             "stringValue": ""
                         }
                     ]
+                },
+                {
+                    "Text": "Go back to the room",
+                    "nextNodeId": "S001",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "",
+                    "consumeItemId": "",
+                    "effects": []
                 }
             ]
         },
         {
             "id": "S003",
-            "Text": "You leave the room",
+            "Text": "You escaped the ruins. Demo end",
             "effectDatas": [],
             "image": "story/exit",
             "options": []
+        },
+        {
+            "id": "S004",
+            "Text": "An ancient shrine hums with power",
+            "effectDatas": [],
+            "image": "story/room",
+            "options": [
+                {
+                    "Text": "Activate the rune altar",
+                    "nextNodeId": "S001",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "",
+                    "consumeItemId": "",
+                    "effects": [
+                        {
+                            "targetKey": "S007",
+                            "type": "UnlockNode",
+                            "floatValue": 0.0,
+                            "stringValue": ""
+                        },
+                        {
+                            "targetKey": "sanity",
+                            "type": "Add",
+                            "floatValue": 5.0,
+                            "stringValue": ""
+                        }
+                    ]
+                },
+                {
+                    "Text": "Leave shrine",
+                    "nextNodeId": "S001",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "",
+                    "consumeItemId": "",
+                    "effects": []
+                }
+            ]
+        },
+        {
+            "id": "S007",
+            "Text": "A hidden tunnel opens beneath the altar",
+            "effectDatas": [
+                {
+                    "targetKey": "sanity",
+                    "type": "Subtract",
+                    "floatValue": 5.0,
+                    "stringValue": ""
+                }
+            ],
+            "image": "story/key",
+            "options": [
+                {
+                    "Text": "Escape from secret route",
+                    "nextNodeId": "S003",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "",
+                    "consumeItemId": "",
+                    "effects": [
+                        {
+                            "targetKey": "sanity",
+                            "type": "Add",
+                            "floatValue": 20.0,
+                            "stringValue": ""
+                        }
+                    ]
+                },
+                {
+                    "Text": "Return to room",
+                    "nextNodeId": "S001",
+                    "requiredItemId": "",
+                    "requiredUnlockedNodeId": "",
+                    "consumeItemId": "",
+                    "effects": []
+                }
+            ]
         }
     ],
     "characters": [

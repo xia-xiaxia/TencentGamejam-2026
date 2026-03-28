@@ -1,4 +1,11 @@
 optionId,eventId,order,Text,nextNodeId,requiredItemId,requiredUnlockedNodeId,consumeItemId
-O001,S001,0,Look around,S002,,,
-O002,S001,1,Open the door,S003,I001,,I001
-O003,S002,0,Take the key,S003,,,
+O001,S001,0,Search the room,S002,,,
+O002,S001,1,Unlock the rusty door,S003,I001,,I001
+O003,S001,2,Enter the hidden tunnel,S007,,S007,
+O004,S001,3,Inspect the shrine,S004,,,
+O005,S002,0,Take antidote herb,S001,,,
+O006,S002,1,Go back to the room,S001,,,
+O007,S004,0,Activate the rune altar,S001,,,
+O008,S004,1,Leave shrine,S001,,,
+O009,S007,0,Escape from secret route,S003,,,
+O010,S007,1,Return to room,S001,,,

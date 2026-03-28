@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 
 /// <summary>
 /// 负责管理可跨回合生效的全局状态。
@@ -12,6 +13,28 @@ public sealed class BackBoardStatusService
     }
 
     private readonly Dictionary<string, StatusRuntime> statusMap = new Dictionary<string, StatusRuntime>();
+
+    /// <summary>
+    /// 获取当前生效状态的调试摘要文本。
+    /// </summary>
+    public List<string> GetActiveStatusSummaries()
+    {
+        List<string> result = new List<string>();
+        foreach (KeyValuePair<string, StatusRuntime> pair in statusMap)
+        {
+            StatusRuntime runtime = pair.Value;
+            if (runtime == null)
+            {
+                continue;
+            }
+
+            string turns = runtime.RemainingTurns > 0 ? runtime.RemainingTurns.ToString() : "INF";
+            result.Add(pair.Key + " | hp/turn=" + runtime.HealthDeltaPerTurn.ToString("0.##") + " | turns=" + turns);
+        }
+
+        result.Sort(StringComparer.Ordinal);
+        return result;
+    }
 
     /// <summary>
     /// 添加或覆盖一个状态。

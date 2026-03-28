@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -39,7 +40,7 @@ public sealed class BackBoardStoryService
     /// <summary>
     /// 使用事件列表重建节点索引。
     /// </summary>
-    public void BuildEventMap(List<StoryEventData> events, Object logContext)
+    public void BuildEventMap(List<StoryEventData> events, UnityEngine.Object logContext)
     {
         eventMap.Clear();
         unlockedNodeIds.Clear();
@@ -71,7 +72,7 @@ public sealed class BackBoardStoryService
     /// <summary>
     /// 尝试切换到指定节点。
     /// </summary>
-    public bool TryEnterNode(string nodeId, Object logContext, out StoryEventData node)
+    public bool TryEnterNode(string nodeId, UnityEngine.Object logContext, out StoryEventData node)
     {
         node = null;
         if (string.IsNullOrEmpty(nodeId))
@@ -115,6 +116,16 @@ public sealed class BackBoardStoryService
         }
 
         unlockedNodeIds.Add(nodeId);
+    }
+
+    /// <summary>
+    /// 获取已解锁节点 id 列表（用于调试展示）。
+    /// </summary>
+    public List<string> GetUnlockedNodeIds()
+    {
+        List<string> result = new List<string>(unlockedNodeIds);
+        result.Sort(StringComparer.Ordinal);
+        return result;
     }
 
     /// <summary>
