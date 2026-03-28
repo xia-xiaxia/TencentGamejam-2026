@@ -1,0 +1,4 @@
+ownerType,ownerId,targetKey,type,floatValue,stringValue
+Event,S001,sanity,Set,100,
+Event,S002,hasKey,Set,0,true
+Option,O003,sanity,Subtract,10,

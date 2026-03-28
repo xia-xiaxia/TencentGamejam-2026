@@ -1,0 +1,4 @@
+id,Text,image
+S001,You wake up in a strange room,story/room
+S002,You found a key,story/key
+S003,You leave the room,story/exit
