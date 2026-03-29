@@ -13,13 +13,12 @@ public class EventTreeUI : MonoBehaviour
     [Header("=== 节点配置  ===")]
     public EventNode[] eventNodes;
 
-    public Dictionary<string, EventNode> nodeDict;
-
     [Header("=== 连线配置 ===")]
     public EventLine[] eventLines;
 
     // 当前进度（字符串ID）
     private string currentEventId = "0";
+    private StoryEventData currentNode;
     private string lastClickId = "";
 
     private HashSet<string> unlockedIds = new HashSet<string>(System.StringComparer.Ordinal);
@@ -86,13 +85,12 @@ public class EventTreeUI : MonoBehaviour
         foreach (var node in eventNodes)
         {
             if (node == null || string.IsNullOrEmpty(node.nodeId)) continue;
-            if (nodeDict == null) nodeDict = new Dictionary<string, EventNode>(System.StringComparer.Ordinal);
-            nodeDict[node.nodeId] = node;
         }
         // 再次保证初始显示正确（BackBoard 可能在 Start 里触发第一次 OnNodeChanged）
         if (BackBoard.Instance != null)
         {
             currentEventId = BackBoard.Instance.CurrentNodeId ?? currentEventId;
+            
             UpdateUnlockedFromBackboard();
         }
         RefreshTreeUI();
@@ -114,10 +112,8 @@ public class EventTreeUI : MonoBehaviour
         if (BackBoard.Instance != null)
         {
             currentEventId = BackBoard.Instance.CurrentNodeId ?? currentEventId;
+            currentNode = node ?? (BackBoard.Instance.CurrentNode);
             UpdateUnlockedFromBackboard();
-        }
-        if(nodeDict.ContainsKey(node.id)) {
-            nodeDict[node.id].detailDesc = node.Text; // 自动同步文本
         }
         lastClickId = "";
         if (detailPanel != null) detailPanel.SetActive(false);
