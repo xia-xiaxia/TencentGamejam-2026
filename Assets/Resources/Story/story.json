@@ -119,7 +119,7 @@
                     "targetKey": "item",
                     "type": "Add",
                     "floatValue": 0.0,
-                    "stringValue": "破布"
+                    "stringValue": "bag.add:破布"
                 }
             ],
             "image": "=DISPIMG(\"ID_B8147EBDA0474381888737563C9AA86B\",1)",

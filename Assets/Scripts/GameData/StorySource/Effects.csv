@@ -6,6 +6,6 @@ Option,O_A0_2,A3,UnlockNode,0,
 Event,A1,health,Set,0,
 Option,O_A1_0,data,Reset,0,
 Event,A2,health,Add,5,
-Event,A2,item,Add,0,破布
+Event,A2,item,Add,0,bag.add:破布
 Event,A3,health,Set,0,
 Option,O_A3_0,data,Reset,0,

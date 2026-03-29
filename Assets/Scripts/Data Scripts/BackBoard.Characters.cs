@@ -142,6 +142,10 @@ public partial class BackBoard
         }
 
         NotifyBlackboardChanged("bag:" + characterId);
+        if (item != null && !string.IsNullOrEmpty(item.id))
+        {
+            NotifyBlackboardChanged("bag.add:" + item.id);
+        }
         return true;
     }
 
@@ -154,9 +158,27 @@ public partial class BackBoard
         if (removed)
         {
             NotifyBlackboardChanged("bag:" + characterId);
+            if (!string.IsNullOrEmpty(itemId))
+            {
+                NotifyBlackboardChanged("bag.remove:" + itemId);
+            }
         }
 
         return removed;
+    }
+
+    /// <summary>
+    /// 清空角色背包。
+    /// </summary>
+    public bool ClearBag(string characterId)
+    {
+        if (!characterService.ClearBag(characterId))
+        {
+            return false;
+        }
+
+        NotifyBlackboardChanged("bag:" + characterId);
+        return true;
     }
 
     /// <summary>

@@ -23,8 +23,7 @@ public partial class BackBoard
         }
 
         Debug.Log(string.IsNullOrEmpty(reason) ? "Game Ended." : ("Game Ended: " + reason), this);
-        RestartFromScratch();
-        return true;
+        return ReplayFromStartNodeKeepUnlocked();
     }
 
     /// <summary>
@@ -61,12 +60,8 @@ public partial class BackBoard
         statusService.Clear();
         SetCurrentHealth(GetCurrentMaxHealth());
 
-        List<ItemData> bag = GetBag(currentCharacterId);
-        if (bag != null && bag.Count > 0)
-        {
-            bag.Clear();
-            NotifyBlackboardChanged("bag.add:" + currentCharacterId);
-        }
+        ClearBag(currentCharacterId);
+        storyService.ResetCurrentLifeProgress();
 
         if (!EnterNode(nodeId))
         {
@@ -121,9 +116,9 @@ public partial class BackBoard
             return false;
         }
 
-        if (!CanShowOption(option))
+        if (!IsOptionUnlocked(optionIndex))
         {
-            Debug.LogWarning("ChooseOption 失败：选项条件未满足。", this);
+            Debug.LogWarning("ChooseOption 失败：选项尚未解锁。", this);
             return false;
         }
 
@@ -144,7 +139,7 @@ public partial class BackBoard
     }
 
     /// <summary>
-    /// 获取当前节点可显示的选项列表。
+    /// 获取当前节点用于展示的选项列表（包含未解锁项）。
     /// </summary>
     public List<OptionData> GetVisibleOptions()
     {
@@ -158,13 +153,30 @@ public partial class BackBoard
         for (int i = 0; i < node.options.Count; i++)
         {
             OptionData option = node.options[i];
-            if (CanShowOptionInternal(node, i, option, true))
-            {
-                visibleOptions.Add(option);
-            }
+            visibleOptions.Add(option);
         }
 
         return visibleOptions;
+    }
+
+    /// <summary>
+    /// 判断当前节点中指定索引的选项是否已解锁可点击。
+    /// </summary>
+    public bool IsOptionUnlocked(int optionIndex)
+    {
+        StoryEventData node = CurrentNode;
+        if (node == null || node.options == null)
+        {
+            return false;
+        }
+
+        if (optionIndex < 0 || optionIndex >= node.options.Count)
+        {
+            return false;
+        }
+
+        OptionData option = node.options[optionIndex];
+        return IsOptionUnlockedInternal(node, optionIndex, option, true);
     }
 
     /// <summary>
@@ -189,10 +201,10 @@ public partial class BackBoard
             return false;
         }
 
-        return CanShowOptionInternal(node, optionIndex, option, true);
+        return IsOptionUnlockedInternal(node, optionIndex, option, true);
     }
 
-    private bool CanShowOptionInternal(StoryEventData node, int optionIndex, OptionData option, bool autoUnlockWhenVisible)
+    private bool IsOptionUnlockedInternal(StoryEventData node, int optionIndex, OptionData option, bool autoUnlockWhenAvailable)
     {
         if (node == null || option == null || optionIndex < 0)
         {
@@ -202,9 +214,35 @@ public partial class BackBoard
         string optionKey = storyService.BuildOptionKey(node.id, optionIndex);
         if (storyService.IsOptionUnlocked(optionKey))
         {
+            // 依赖前置节点的选项，必须按本条命节点记录实时判断，不能被历史解锁状态短路。
+            if (!string.IsNullOrEmpty(option.requiredUnlockedNodeId))
+            {
+                return storyService.IsNodeUnlocked(option.requiredUnlockedNodeId);
+            }
+
             return true;
         }
-        
+
+        if (!IsOptionUnlockConditionMet(option))
+        {
+            return false;
+        }
+
+        if (autoUnlockWhenAvailable)
+        {
+            storyService.UnlockOption(optionKey);
+        }
+
+        return true;
+    }
+
+    private bool IsOptionUnlockConditionMet(OptionData option)
+    {
+        if (option == null)
+        {
+            return false;
+        }
+
         if (!string.IsNullOrEmpty(option.requiredUnlockedNodeId) && !storyService.IsNodeUnlocked(option.requiredUnlockedNodeId))
         {
             return false;
@@ -213,11 +251,6 @@ public partial class BackBoard
         if (!string.IsNullOrEmpty(option.requiredItemId) && !HasItem(currentCharacterId, option.requiredItemId))
         {
             return false;
-        }
-
-        if (autoUnlockWhenVisible)
-        {
-            storyService.UnlockOption(optionKey);
         }
 
         return true;

@@ -28,6 +28,7 @@ public class OptionData
     public string nextNodeId;
     public string requiredItemId;
     public string requiredUnlockedNodeId;
+    public string unlockConditionText;
     public string consumeItemId;
     public List<EffectData> effects;
 

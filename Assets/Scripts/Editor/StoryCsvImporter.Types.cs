@@ -15,6 +15,7 @@ public static partial class StoryCsvImporter
         public string NextNodeId;
         public string RequiredItemId;
         public string RequiredUnlockedNodeId;
+        public string UnlockConditionText;
         public string ConsumeItemId;
         public int Order;
     }
