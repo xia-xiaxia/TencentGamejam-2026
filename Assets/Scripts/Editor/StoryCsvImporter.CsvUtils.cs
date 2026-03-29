@@ -13,17 +13,22 @@ public static partial class StoryCsvImporter
             throw new FileNotFoundException("CSV file not found", path);
         }
 
-        string[] lines = File.ReadAllLines(path, Encoding.UTF8);
-        if (lines.Length == 0)
+        List<List<string>> records = ParseCsvRecords(File.ReadAllText(path, Encoding.UTF8));
+        if (records.Count == 0)
         {
             throw new Exception("CSV file is empty: " + path);
         }
 
-        List<string> header = ParseCsvLine(lines[0]);
+        List<string> header = records[0];
         Dictionary<string, int> indexMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         for (int i = 0; i < header.Count; i++)
         {
             string key = header[i].Trim();
+            if (i == 0)
+            {
+                key = key.TrimStart('\uFEFF');
+            }
+
             if (!indexMap.ContainsKey(key))
             {
                 indexMap.Add(key, i);
@@ -39,15 +44,24 @@ public static partial class StoryCsvImporter
         }
 
         List<Dictionary<string, string>> rows = new List<Dictionary<string, string>>();
-        for (int lineIndex = 1; lineIndex < lines.Length; lineIndex++)
+        for (int recordIndex = 1; recordIndex < records.Count; recordIndex++)
         {
-            string line = lines[lineIndex];
-            if (string.IsNullOrWhiteSpace(line))
+            List<string> values = records[recordIndex];
+            bool hasAnyValue = false;
+            for (int i = 0; i < values.Count; i++)
+            {
+                if (!string.IsNullOrWhiteSpace(values[i]))
+                {
+                    hasAnyValue = true;
+                    break;
+                }
+            }
+
+            if (!hasAnyValue)
             {
                 continue;
             }
 
-            List<string> values = ParseCsvLine(line);
             Dictionary<string, string> row = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (KeyValuePair<string, int> pair in indexMap)
             {
@@ -61,20 +75,21 @@ public static partial class StoryCsvImporter
         return rows;
     }
 
-    private static List<string> ParseCsvLine(string line)
+    private static List<List<string>> ParseCsvRecords(string content)
     {
-        List<string> values = new List<string>();
-        StringBuilder current = new StringBuilder();
+        List<List<string>> records = new List<List<string>>();
+        List<string> currentRecord = new List<string>();
+        StringBuilder currentField = new StringBuilder();
         bool inQuotes = false;
 
-        for (int i = 0; i < line.Length; i++)
+        for (int i = 0; i < content.Length; i++)
         {
-            char c = line[i];
+            char c = content[i];
             if (c == '"')
             {
-                if (inQuotes && i + 1 < line.Length && line[i + 1] == '"')
+                if (inQuotes && i + 1 < content.Length && content[i + 1] == '"')
                 {
-                    current.Append('"');
+                    currentField.Append('"');
                     i++;
                 }
                 else
@@ -84,17 +99,41 @@ public static partial class StoryCsvImporter
             }
             else if (c == ',' && !inQuotes)
             {
-                values.Add(current.ToString());
-                current.Length = 0;
+                currentRecord.Add(currentField.ToString());
+                currentField.Length = 0;
+            }
+            else if ((c == '\n' || c == '\r') && !inQuotes)
+            {
+                if (c == '\r' && i + 1 < content.Length && content[i + 1] == '\n')
+                {
+                    i++;
+                }
+
+                currentRecord.Add(currentField.ToString());
+                currentField.Length = 0;
+
+                records.Add(currentRecord);
+                currentRecord = new List<string>();
             }
             else
             {
-                current.Append(c);
+                currentField.Append(c);
             }
         }
 
-        values.Add(current.ToString());
-        return values;
+        if (inQuotes)
+        {
+            throw new Exception("CSV parse error: unmatched quote.");
+        }
+
+        bool hasTrailingData = currentField.Length > 0 || currentRecord.Count > 0;
+        if (hasTrailingData)
+        {
+            currentRecord.Add(currentField.ToString());
+            records.Add(currentRecord);
+        }
+
+        return records;
     }
 
     private static string Get(Dictionary<string, string> row, string key)

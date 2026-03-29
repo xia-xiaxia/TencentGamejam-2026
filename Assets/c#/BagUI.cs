@@ -147,14 +147,15 @@ public class BagUI : MonoBehaviour
     /// </summary>
     public bool AddItemById(string id)
     {
-        if (string.IsNullOrEmpty(id) || contentParent == null) return false;
-        if (spawned.ContainsKey(id)) return false;
+        string normalizedId = NormalizeItemId(id);
+        if (string.IsNullOrEmpty(normalizedId) || contentParent == null) return false;
+        if (spawned.ContainsKey(normalizedId)) return false;
         if (spawned.Count >= Math.Min(maxItems, 15)) return false; // 强制不超过 15
 
-        ItemEntry entry = itemPrefabs.Find(e => string.Equals(e.id, id, StringComparison.Ordinal));
+        ItemEntry entry = itemPrefabs.Find(e => string.Equals(e.id, normalizedId, StringComparison.Ordinal));
         if (entry == null || entry.prefab == null)
         {
-            Debug.LogWarning($"BagUI: 未找到 id={id} 的物品预制体。", this);
+            Debug.LogWarning($"BagUI: 未找到 id={id} (normalized={normalizedId}) 的物品预制体。", this);
             return false;
         }
 
@@ -162,7 +163,7 @@ public class BagUI : MonoBehaviour
         if (go == null) return false;
 
         go.transform.localScale = Vector3.one;
-        spawned[id] = go;
+        spawned[normalizedId] = go;
 
         // 若没有 GridLayoutGroup，则手动定位
         if (gridLayout == null)
@@ -178,15 +179,16 @@ public class BagUI : MonoBehaviour
     /// </summary>
     public bool RemoveItemById(string id)
     {
-        if (string.IsNullOrEmpty(id)) return false;
+        string normalizedId = NormalizeItemId(id);
+        if (string.IsNullOrEmpty(normalizedId)) return false;
 
         GameObject go;
-        if (!spawned.TryGetValue(id, out go) || go == null)
+        if (!spawned.TryGetValue(normalizedId, out go) || go == null)
         {
             return false;
         }
 
-        spawned.Remove(id);
+        spawned.Remove(normalizedId);
         Destroy(go);
 
         // 重新布局
@@ -259,6 +261,37 @@ public class BagUI : MonoBehaviour
     public List<string> GetCurrentItemIds()
     {
         return new List<string>(spawned.Keys);
+    }
+
+    /// <summary>
+    /// 统一物品 id：兼容传入 bag.add:/bag.remove: 前缀的键。
+    /// </summary>
+    private string NormalizeItemId(string id)
+    {
+        if (string.IsNullOrEmpty(id))
+        {
+            return string.Empty;
+        }
+
+        string value = id.Trim();
+        if (value.StartsWith("bag.add:", StringComparison.Ordinal))
+        {
+            value = value.Substring("bag.add:".Length);
+        }
+        else if (value.StartsWith("bag.remove:", StringComparison.Ordinal))
+        {
+            value = value.Substring("bag.remove:".Length);
+        }
+        else if (!string.IsNullOrEmpty(addPrefix) && value.StartsWith(addPrefix, StringComparison.Ordinal))
+        {
+            value = value.Substring(addPrefix.Length);
+        }
+        else if (!string.IsNullOrEmpty(removePrefix) && value.StartsWith(removePrefix, StringComparison.Ordinal))
+        {
+            value = value.Substring(removePrefix.Length);
+        }
+
+        return value.Trim();
     }
 
     // ========== 显示控制方法（供按钮 OnClick 指向） ==========
