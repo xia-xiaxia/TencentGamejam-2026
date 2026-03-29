@@ -92,6 +92,7 @@ public static partial class StoryCsvImporter
                 nextNodeId = row.NextNodeId,
                 requiredItemId = row.RequiredItemId,
                 requiredUnlockedNodeId = row.RequiredUnlockedNodeId,
+                unlockConditionText = row.UnlockConditionText,
                 consumeItemId = row.ConsumeItemId,
                 effects = new List<EffectData>()
             };

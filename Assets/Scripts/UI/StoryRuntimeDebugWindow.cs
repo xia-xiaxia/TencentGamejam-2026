@@ -74,8 +74,16 @@ public class StoryRuntimeDebugWindow : MonoBehaviour
         GUILayout.Label("Health: " + board.GetCurrentHealth().ToString("0.##") + " / " + board.GetCurrentMaxHealth().ToString("0.##"));
 
         GUILayout.Space(8f);
-        GUILayout.Label("Unlocked Nodes:");
-        DrawStringList(board.GetUnlockedNodeIds(), "(empty)");
+        GUILayout.Label("All Nodes:");
+        DrawStringList(board.GetAllNodeIds(), "(empty)");
+
+        GUILayout.Space(8f);
+        GUILayout.Label("Played Nodes (Whole Game):");
+        DrawStringList(board.GetPlayedNodeIds(), "(empty)");
+
+        GUILayout.Space(8f);
+        GUILayout.Label("Visited Nodes (Current Life):");
+        DrawStringList(board.GetCurrentLifeNodeIds(), "(empty)");
 
         GUILayout.Space(8f);
         GUILayout.Label("Unlocked Options:");

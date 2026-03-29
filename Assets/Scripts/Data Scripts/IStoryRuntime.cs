@@ -18,9 +18,24 @@ public interface IStoryRuntime
     StoryEventData CurrentNode { get; }
 
     /// <summary>
-    /// 获取当前节点可显示的选项列表。
+    /// 获取当前节点用于展示的选项列表。
     /// </summary>
     List<OptionData> GetVisibleOptions();
+
+    /// <summary>
+    /// 判断当前节点中指定索引的选项是否已解锁可点击。
+    /// </summary>
+    bool IsOptionUnlocked(int optionIndex);
+
+    /// <summary>
+    /// 获取整局累计玩过的节点 id 列表。
+    /// </summary>
+    List<string> GetPlayedNodeIds();
+
+    /// <summary>
+    /// 获取本条命经过的节点 id 列表。
+    /// </summary>
+    List<string> GetCurrentLifeNodeIds();
 
     /// <summary>
     /// 获取当前节点图片资源。

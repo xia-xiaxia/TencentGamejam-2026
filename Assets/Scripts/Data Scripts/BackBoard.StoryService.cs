@@ -10,12 +10,15 @@ public sealed class BackBoardStoryService
     private const string UnlockProgressSaveKey = "BackBoard.UnlockProgress";
 
     private readonly Dictionary<string, StoryEventData> eventMap = new Dictionary<string, StoryEventData>();
-    private readonly HashSet<string> unlockedNodeIds = new HashSet<string>();
+    private readonly HashSet<string> allNodeIds = new HashSet<string>();
+    private readonly HashSet<string> playedNodeIds = new HashSet<string>();
+    private readonly HashSet<string> currentLifeNodeIds = new HashSet<string>();
     private readonly HashSet<string> unlockedOptionKeys = new HashSet<string>();
 
     [Serializable]
     private sealed class UnlockProgressData
     {
+        // 历史兼容字段名：沿用 unlockedNodeIds，语义为整局累计玩过节点。
         public List<string> unlockedNodeIds = new List<string>();
         public List<string> unlockedOptionKeys = new List<string>();
     }
@@ -53,7 +56,9 @@ public sealed class BackBoardStoryService
     public void BuildEventMap(List<StoryEventData> events, UnityEngine.Object logContext)
     {
         eventMap.Clear();
-        unlockedNodeIds.Clear();
+        allNodeIds.Clear();
+        playedNodeIds.Clear();
+        currentLifeNodeIds.Clear();
         unlockedOptionKeys.Clear();
         CurrentNodeId = null;
 
@@ -77,6 +82,7 @@ public sealed class BackBoardStoryService
             }
 
             eventMap.Add(evt.id, evt);
+            allNodeIds.Add(evt.id);
         }
     }
 
@@ -99,7 +105,8 @@ public sealed class BackBoardStoryService
         }
 
         CurrentNodeId = nodeId;
-        unlockedNodeIds.Add(nodeId);
+        playedNodeIds.Add(nodeId);
+        currentLifeNodeIds.Add(nodeId);
         return true;
     }
 
@@ -121,7 +128,7 @@ public sealed class BackBoardStoryService
             return false;
         }
 
-        return unlockedNodeIds.Contains(nodeId);
+        return currentLifeNodeIds.Contains(nodeId);
     }
 
     /// <summary>
@@ -134,7 +141,13 @@ public sealed class BackBoardStoryService
             return;
         }
 
-        unlockedNodeIds.Add(nodeId);
+        if (!allNodeIds.Contains(nodeId))
+        {
+            return;
+        }
+
+        playedNodeIds.Add(nodeId);
+        currentLifeNodeIds.Add(nodeId);
     }
 
     /// <summary>
@@ -142,7 +155,28 @@ public sealed class BackBoardStoryService
     /// </summary>
     public List<string> GetUnlockedNodeIds()
     {
-        List<string> result = new List<string>(unlockedNodeIds);
+        List<string> result = new List<string>(playedNodeIds);
+        result.Sort(StringComparer.Ordinal);
+        return result;
+    }
+
+    public List<string> GetAllNodeIds()
+    {
+        List<string> result = new List<string>(allNodeIds);
+        result.Sort(StringComparer.Ordinal);
+        return result;
+    }
+
+    public List<string> GetPlayedNodeIds()
+    {
+        List<string> result = new List<string>(playedNodeIds);
+        result.Sort(StringComparer.Ordinal);
+        return result;
+    }
+
+    public List<string> GetCurrentLifeNodeIds()
+    {
+        List<string> result = new List<string>(currentLifeNodeIds);
         result.Sort(StringComparer.Ordinal);
         return result;
     }
@@ -187,7 +221,7 @@ public sealed class BackBoardStoryService
     public void SaveUnlockProgress()
     {
         UnlockProgressData data = new UnlockProgressData();
-        data.unlockedNodeIds.AddRange(unlockedNodeIds);
+        data.unlockedNodeIds.AddRange(playedNodeIds);
         data.unlockedOptionKeys.AddRange(unlockedOptionKeys);
 
         string json = JsonUtility.ToJson(data);
@@ -200,7 +234,8 @@ public sealed class BackBoardStoryService
     /// </summary>
     public void ResetUnlockProgress()
     {
-        unlockedNodeIds.Clear();
+        playedNodeIds.Clear();
+        currentLifeNodeIds.Clear();
         unlockedOptionKeys.Clear();
         CurrentNodeId = null;
 
@@ -209,6 +244,15 @@ public sealed class BackBoardStoryService
             PlayerPrefs.DeleteKey(UnlockProgressSaveKey);
             PlayerPrefs.Save();
         }
+    }
+
+    /// <summary>
+    /// 清空本条命经过的节点记录，但保留整局累计历史。
+    /// </summary>
+    public void ResetCurrentLifeProgress()
+    {
+        currentLifeNodeIds.Clear();
+        CurrentNodeId = null;
     }
 
     public void LoadUnlockProgress(UnityEngine.Object logContext)
@@ -247,7 +291,7 @@ public sealed class BackBoardStoryService
                 string nodeId = data.unlockedNodeIds[i];
                 if (!string.IsNullOrEmpty(nodeId) && eventMap.ContainsKey(nodeId))
                 {
-                    unlockedNodeIds.Add(nodeId);
+                    playedNodeIds.Add(nodeId);
                 }
             }
         }

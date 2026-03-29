@@ -39,6 +39,7 @@ public static partial class StoryCsvImporter
                 NextNodeId = Get(row, "nextNodeId"),
                 RequiredItemId = Get(row, "requiredItemId"),
                 RequiredUnlockedNodeId = Get(row, "requiredUnlockedNodeId"),
+                UnlockConditionText = Get(row, "unlockConditionText"),
                 ConsumeItemId = Get(row, "consumeItemId"),
                 Order = ParseInt(Get(row, "order"), i)
             };

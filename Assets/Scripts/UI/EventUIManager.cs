@@ -180,11 +180,7 @@ public class EventUIManager : MonoBehaviour
             }
 
             optionButtons[i] = button;
-
-            int capturedIndex = i;
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() => OnClickOption(capturedIndex));
-            Debug.Log("EventUIManager 绑定点击: index=" + i + ", button=" + button.name, this);
         }
     }
 
@@ -286,15 +282,39 @@ public class EventUIManager : MonoBehaviour
         for (int i = 0; i < optionCount; i++)
         {
             SetOptionVisible(i, true);
-            EnsureOptionClickable(i);
+            bool isUnlocked = storyRuntime.IsOptionUnlocked(i);
+            EnsureOptionState(i, isUnlocked);
             if (optionTexts != null && i < optionTexts.Length && optionTexts[i] != null)
             {
-                optionTexts[i].text = visibleOptions[i] != null ? (visibleOptions[i].Text ?? string.Empty) : string.Empty;
+                optionTexts[i].text = BuildOptionDisplayText(visibleOptions[i], isUnlocked);
             }
         }
     }
 
-    private void EnsureOptionClickable(int index)
+    private static string BuildOptionDisplayText(OptionData option, bool isUnlocked)
+    {
+        if (option == null)
+        {
+            return string.Empty;
+        }
+
+        string baseText = option.Text ?? string.Empty;
+        bool requiresNodeUnlock = !string.IsNullOrEmpty(option.requiredUnlockedNodeId);
+        if (!requiresNodeUnlock || isUnlocked)
+        {
+            return baseText;
+        }
+
+        string hint = option.unlockConditionText;
+        if (string.IsNullOrEmpty(hint))
+        {
+            hint = "需解锁节点: " + option.requiredUnlockedNodeId;
+        }
+
+        return baseText + "（" + hint + "）";
+    }
+
+    private void EnsureOptionState(int index, bool isUnlocked)
     {
         if (index < 0 || OptionButton == null || index >= OptionButton.Length)
         {
@@ -307,20 +327,27 @@ public class EventUIManager : MonoBehaviour
             return;
         }
 
+        int capturedIndex = index;
+        button.onClick.RemoveAllListeners();
+        if (isUnlocked)
+        {
+            button.onClick.AddListener(() => OnClickOption(capturedIndex));
+        }
+
         button.enabled = true;
-        button.interactable = true;
+        button.interactable = isUnlocked;
 
         Graphic targetGraphic = button.targetGraphic;
         if (targetGraphic != null)
         {
-            targetGraphic.raycastTarget = true;
+            targetGraphic.raycastTarget = isUnlocked;
         }
 
         CanvasGroup group = button.GetComponentInParent<CanvasGroup>(true);
         if (group != null)
         {
-            group.blocksRaycasts = true;
-            group.interactable = true;
+            group.blocksRaycasts = isUnlocked;
+            group.interactable = isUnlocked;
         }
 
         CanvasGroup[] groups = button.GetComponentsInParent<CanvasGroup>(true);
@@ -332,9 +359,9 @@ public class EventUIManager : MonoBehaviour
                 continue;
             }
 
-            g.blocksRaycasts = true;
-            g.interactable = true;
-            g.alpha = Mathf.Max(g.alpha, 0.01f);
+            g.blocksRaycasts = isUnlocked;
+            g.interactable = isUnlocked;
+            g.alpha = isUnlocked ? 1f : 0.55f;
         }
     }
 

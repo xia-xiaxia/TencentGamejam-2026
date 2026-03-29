@@ -160,24 +160,38 @@ public class UIManager : MonoBehaviour
             GameObject go = Instantiate(optionPrefab, optionsParent);
             OptionButtonUI btnScript = go != null ? go.GetComponent<OptionButtonUI>() : null;
             int capturedIndex = i;
+            bool isUnlocked = storyRuntime.IsOptionUnlocked(capturedIndex);
             if (btnScript != null)
             {
-                btnScript.Render(option, true, _ => OnClickOption(capturedIndex));
+                btnScript.Render(option, isUnlocked, isUnlocked ? _ => OnClickOption(capturedIndex) : null);
                 continue;
             }
 
             Button fallbackButton = go != null ? go.GetComponent<Button>() : null;
             if (fallbackButton != null)
             {
-                fallbackButton.interactable = true;
+                fallbackButton.interactable = isUnlocked;
                 fallbackButton.onClick.RemoveAllListeners();
-                fallbackButton.onClick.AddListener(() => OnClickOption(capturedIndex));
+                if (isUnlocked)
+                {
+                    fallbackButton.onClick.AddListener(() => OnClickOption(capturedIndex));
+                }
 
                 TextMeshProUGUI fallbackText = go.GetComponentInChildren<TextMeshProUGUI>(true);
                 if (fallbackText != null)
                 {
-                    fallbackText.text = option.Text ?? string.Empty;
+                    fallbackText.text = BuildOptionDisplayText(option, isUnlocked);
                 }
+
+                CanvasGroup fallbackGroup = go.GetComponent<CanvasGroup>();
+                if (fallbackGroup == null)
+                {
+                    fallbackGroup = go.AddComponent<CanvasGroup>();
+                }
+
+                fallbackGroup.alpha = isUnlocked ? 1f : 0.55f;
+                fallbackGroup.blocksRaycasts = isUnlocked;
+                fallbackGroup.interactable = isUnlocked;
 
                 continue;
             }
@@ -194,5 +208,28 @@ public class UIManager : MonoBehaviour
         }
 
         storyRuntime.ChooseOption(optionIndex);
+    }
+
+    private static string BuildOptionDisplayText(OptionData option, bool isUnlocked)
+    {
+        if (option == null)
+        {
+            return string.Empty;
+        }
+
+        string baseText = option.Text ?? string.Empty;
+        bool requiresNodeUnlock = !string.IsNullOrEmpty(option.requiredUnlockedNodeId);
+        if (!requiresNodeUnlock || isUnlocked)
+        {
+            return baseText;
+        }
+
+        string hint = option.unlockConditionText;
+        if (string.IsNullOrEmpty(hint))
+        {
+            hint = "需解锁节点: " + option.requiredUnlockedNodeId;
+        }
+
+        return baseText + "（" + hint + "）";
     }
 }
