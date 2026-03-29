@@ -223,7 +223,7 @@ public partial class BackBoard
             // 依赖前置节点的选项，必须按本条命节点记录实时判断，不能被历史解锁状态短路。
             if (!string.IsNullOrEmpty(option.requiredUnlockedNodeId))
             {
-                return storyService.IsNodeUnlocked(option.requiredUnlockedNodeId);
+                return IsRequiredUnlockedNodeConditionMet(option.requiredUnlockedNodeId);
             }
 
             return true;
@@ -249,7 +249,7 @@ public partial class BackBoard
             return false;
         }
 
-        if (!string.IsNullOrEmpty(option.requiredUnlockedNodeId) && !storyService.IsNodeUnlocked(option.requiredUnlockedNodeId))
+        if (!IsRequiredUnlockedNodeConditionMet(option.requiredUnlockedNodeId))
         {
             return false;
         }
@@ -260,6 +260,54 @@ public partial class BackBoard
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// 解析并判断前置节点条件：支持 "A|B"（任一满足）和 "A&B"（同时满足）。
+    /// </summary>
+    private bool IsRequiredUnlockedNodeConditionMet(string requiredUnlockedNodeCondition)
+    {
+        if (string.IsNullOrWhiteSpace(requiredUnlockedNodeCondition))
+        {
+            return true;
+        }
+
+        string[] orGroups = requiredUnlockedNodeCondition.Split('|');
+        for (int i = 0; i < orGroups.Length; i++)
+        {
+            string group = orGroups[i];
+            if (string.IsNullOrWhiteSpace(group))
+            {
+                continue;
+            }
+
+            string[] andNodes = group.Split('&');
+            bool hasNode = false;
+            bool allMet = true;
+
+            for (int j = 0; j < andNodes.Length; j++)
+            {
+                string nodeId = andNodes[j].Trim();
+                if (string.IsNullOrEmpty(nodeId))
+                {
+                    continue;
+                }
+
+                hasNode = true;
+                if (!storyService.IsNodeUnlocked(nodeId))
+                {
+                    allMet = false;
+                    break;
+                }
+            }
+
+            if (hasNode && allMet)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
