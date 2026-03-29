@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4522,6 +4522,7 @@ MonoBehaviour:
   spacing: {x: 8, y: 8}
   itemsPerRow: 5
   maxItems: 15
+  bagRefreshPrefix: 'bag:'
   addPrefix: 'bag.add:'
   removePrefix: 'bag.remove:'
   bagRoot: {fileID: 1192292153}
@@ -4883,7 +4884,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1276704076}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b627f7553af97c4a86c2d5dc011f185, type: 3}
   m_Name: 
@@ -4894,13 +4895,13 @@ MonoBehaviour:
   eventNodes:
   - nodeId: 0
     nodeObj: {fileID: 1472273860}
-    detailDesc: 
+    detailDesc: "\u8FD9\u662F\u5F00\u59CB"
   - nodeId: A0
     nodeObj: {fileID: 1504346597}
-    detailDesc: 
+    detailDesc: "\u8FD9\u662Fa0"
   - nodeId: A1
     nodeObj: {fileID: 1175737054}
-    detailDesc: 
+    detailDesc: "\u8FD9\u662Fa1"
   - nodeId: A2
     nodeObj: {fileID: 1790263981}
     detailDesc: 
@@ -5109,7 +5110,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: f5a103d574ee83e47a3bd4fa1abe625d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5896,8 +5897,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 0, y: -11.377502}
+  m_SizeDelta: {x: 160, y: 302.1769}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1504119956
 CanvasRenderer:
@@ -5929,10 +5930,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 24
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -7370,7 +7371,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1951405204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7426,8 +7427,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 392, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 332, y: -79}
+  m_SizeDelta: {x: 275.6545, y: 356.2942}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1962190480
 GameObject:

@@ -24,6 +24,7 @@
                     "nextNodeId": "A0",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
+                    "unlockConditionText": "",
                     "consumeItemId": "",
                     "effects": []
                 }
@@ -47,6 +48,7 @@
                     "nextNodeId": "A1",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
+                    "unlockConditionText": "",
                     "consumeItemId": "",
                     "effects": []
                 },
@@ -55,6 +57,7 @@
                     "nextNodeId": "A2",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "A3",
+                    "unlockConditionText": "(知道行李箱密码)",
                     "consumeItemId": "",
                     "effects": []
                 },
@@ -63,6 +66,7 @@
                     "nextNodeId": "A3",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
+                    "unlockConditionText": "",
                     "consumeItemId": "",
                     "effects": [
                         {
@@ -93,6 +97,7 @@
                     "nextNodeId": "A0",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
+                    "unlockConditionText": "",
                     "consumeItemId": "",
                     "effects": [
                         {
@@ -129,6 +134,7 @@
                     "nextNodeId": "B0",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
+                    "unlockConditionText": "",
                     "consumeItemId": "",
                     "effects": []
                 },
@@ -137,6 +143,7 @@
                     "nextNodeId": "C0",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
+                    "unlockConditionText": "",
                     "consumeItemId": "",
                     "effects": []
                 },
@@ -145,6 +152,7 @@
                     "nextNodeId": "D0",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
+                    "unlockConditionText": "",
                     "consumeItemId": "",
                     "effects": []
                 }
@@ -168,6 +176,7 @@
                     "nextNodeId": "A0",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
+                    "unlockConditionText": "",
                     "consumeItemId": "",
                     "effects": [
                         {
