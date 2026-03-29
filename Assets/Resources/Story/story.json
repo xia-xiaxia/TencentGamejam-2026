@@ -41,7 +41,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "Event/A0_A2行李箱",
             "options": [
                 {
                     "Text": "爬出飞机残骸",
@@ -127,7 +127,7 @@
                     "stringValue": "bag.add:破布"
                 }
             ],
-            "image": "=DISPIMG(\"ID_B8147EBDA0474381888737563C9AA86B\",1)",
+            "image": "Event/A2绷带",
             "options": [
                 {
                     "Text": "向西走",

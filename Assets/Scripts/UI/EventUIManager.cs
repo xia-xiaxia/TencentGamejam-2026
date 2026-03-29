@@ -216,6 +216,7 @@ public class EventUIManager : MonoBehaviour
 
     private void HandleNodeChanged(StoryEventData node)
     {
+        Debug.Log("节点变换：" + (node != null ? node.id : "(null)"));
         if (node == null)
         {
             ClearEventView();
@@ -235,6 +236,8 @@ public class EventUIManager : MonoBehaviour
 
         if (eventImage != null)
         {
+            Debug.Log("更新图片中");
+            Debug.Log("storyruntime is null ? : " + (storyRuntime == null));
             eventImage.sprite = storyRuntime != null ? storyRuntime.GetCurrentNodeSprite() : null;
             eventImage.enabled = eventImage.sprite != null;
         }

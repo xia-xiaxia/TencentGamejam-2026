@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 public partial class BackBoard
@@ -15,15 +16,20 @@ public partial class BackBoard
 
         IsGameEnded = true;
         statusService.Clear();
-        storyService.ClearCurrentNode();
 
+        Debug.Log(string.IsNullOrEmpty(reason) ? "Game Ended." : ("Game Ended: " + reason), this);
+        if (ReplayFromStartNodeKeepUnlocked())
+        {
+            return true;
+        }
+
+        storyService.ClearCurrentNode();
         if (OnNodeChanged != null)
         {
             OnNodeChanged(null);
         }
 
-        Debug.Log(string.IsNullOrEmpty(reason) ? "Game Ended." : ("Game Ended: " + reason), this);
-        return ReplayFromStartNodeKeepUnlocked();
+        return false;
     }
 
     /// <summary>
@@ -280,12 +286,114 @@ public partial class BackBoard
     public Sprite GetCurrentNodeSprite()
     {
         StoryEventData node = CurrentNode;
-        if (node == null || string.IsNullOrEmpty(node.image))
+        if (node == null)
         {
+            Debug.LogWarning("GetCurrentNodeSprite: CurrentNode 为空。", this);
             return null;
         }
 
-        return Resources.Load<Sprite>(node.image);
+        if (string.IsNullOrEmpty(node.image))
+        {
+            Debug.LogWarning("GetCurrentNodeSprite: 节点 " + node.id + " 未配置 image。", this);
+            return null;
+        }
+
+        string imagePath = NormalizeImagePath(node.image);
+
+        Sprite sprite;
+        if (TryLoadSpriteByPath(imagePath, out sprite))
+        {
+            return sprite;
+        }
+
+        string prefixedPath = imagePath;
+        if (!imagePath.StartsWith("Event/"))
+        {
+            StringBuilder spritePath = new StringBuilder(40);
+            spritePath.Append("Event/");
+            spritePath.Append(imagePath);
+            prefixedPath = spritePath.ToString();
+
+            if (TryLoadSpriteByPath(prefixedPath, out sprite))
+            {
+                return sprite;
+            }
+        }
+
+        if (prefixedPath == imagePath)
+        {
+            Debug.LogWarning("GetCurrentNodeSprite: 资源未找到，原始值=" + node.image + "，尝试路径=" + imagePath, this);
+        }
+        else
+        {
+            Debug.LogWarning("GetCurrentNodeSprite: 资源未找到，原始值=" + node.image + "，尝试路径=" + imagePath + " 或 " + prefixedPath, this);
+        }
+
+        return sprite;
+    }
+
+    private static bool TryLoadSpriteByPath(string path, out Sprite sprite)
+    {
+        sprite = null;
+        if (string.IsNullOrEmpty(path))
+        {
+            return false;
+        }
+
+        sprite = Resources.Load<Sprite>(path);
+        if (sprite != null)
+        {
+            return true;
+        }
+
+        Sprite[] sprites = Resources.LoadAll<Sprite>(path);
+        if (sprites != null && sprites.Length > 0)
+        {
+            sprite = sprites[0];
+            return sprite != null;
+        }
+
+        Texture2D texture = Resources.Load<Texture2D>(path);
+        if (texture == null)
+        {
+            return false;
+        }
+
+        Rect rect = new Rect(0f, 0f, texture.width, texture.height);
+        Vector2 pivot = new Vector2(0.5f, 0.5f);
+        sprite = Sprite.Create(texture, rect, pivot, 100f);
+        return sprite != null;
+    }
+
+    private static string NormalizeImagePath(string rawImage)
+    {
+        if (string.IsNullOrEmpty(rawImage))
+        {
+            return string.Empty;
+        }
+
+        string value = rawImage.Trim();
+        const string dispImgPrefix = "=DISPIMG(";
+        if (value.StartsWith(dispImgPrefix))
+        {
+            int firstQuote = value.IndexOf('"');
+            int secondQuote = firstQuote >= 0 ? value.IndexOf('"', firstQuote + 1) : -1;
+            if (firstQuote >= 0 && secondQuote > firstQuote)
+            {
+                value = value.Substring(firstQuote + 1, secondQuote - firstQuote - 1).Trim();
+            }
+        }
+
+        int lastSlash = value.LastIndexOf('/');
+        int lastBackSlash = value.LastIndexOf('\\');
+        int dotIndex = value.LastIndexOf('.');
+        int lastSeparator = lastSlash > lastBackSlash ? lastSlash : lastBackSlash;
+        if (dotIndex > lastSeparator)
+        {
+            value = value.Substring(0, dotIndex);
+        }
+
+        return value;
     }
 
     /// <summary>
