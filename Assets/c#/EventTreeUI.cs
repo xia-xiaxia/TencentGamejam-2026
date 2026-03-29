@@ -17,7 +17,7 @@ public class EventTreeUI : MonoBehaviour
     public EventLine[] eventLines;
 
     // 当前进度（字符串ID）
-    private string currentEventId = "0";
+    private string currentEventId = "A0";
     private StoryEventData currentNode;
     private string lastClickId = "";
 
@@ -186,7 +186,7 @@ public class EventTreeUI : MonoBehaviour
             return unlockedIds.Contains(id);
         }
         if (id == currentEventId) return true;
-        return id == "0";
+        return id == "A0";
     }
 
     void OnNodeClicked(string id)
