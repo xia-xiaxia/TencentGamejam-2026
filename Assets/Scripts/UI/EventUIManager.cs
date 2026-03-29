@@ -18,6 +18,8 @@ public class EventUIManager : MonoBehaviour
     private IStoryRuntime storyRuntime;
     private Coroutine bindCoroutine;
     private Button[] optionButtons;
+    private Vector2 eventImageBaseSize;
+    private bool hasEventImageBaseSize;
 
     private void Awake()
     {
@@ -39,6 +41,13 @@ public class EventUIManager : MonoBehaviour
         if (eventText == null)
         {
             Debug.LogWarning("EventUIManager 未绑定 eventText，事件文字将无法显示。", this);
+        }
+
+        if (eventImage != null)
+        {
+            eventImageBaseSize = eventImage.rectTransform.sizeDelta;
+            hasEventImageBaseSize = true;
+            eventImage.preserveAspect = true;
         }
 
         if (storyRuntimeSource != null)
@@ -236,10 +245,8 @@ public class EventUIManager : MonoBehaviour
 
         if (eventImage != null)
         {
-            Debug.Log("更新图片中");
-            Debug.Log("storyruntime is null ? : " + (storyRuntime == null));
-            eventImage.sprite = storyRuntime != null ? storyRuntime.GetCurrentNodeSprite() : null;
-            eventImage.enabled = eventImage.sprite != null;
+            Sprite sprite = storyRuntime != null ? storyRuntime.GetCurrentNodeSprite() : null;
+            UpdateEventImage(sprite);
         }
 
         RefreshOptions();
@@ -254,8 +261,7 @@ public class EventUIManager : MonoBehaviour
 
         if (eventImage != null)
         {
-            eventImage.sprite = null;
-            eventImage.enabled = false;
+            UpdateEventImage(null);
         }
 
         for (int i = 0; i < OptionButton.Length; i++)
@@ -387,6 +393,60 @@ public class EventUIManager : MonoBehaviour
         {
             eventPanel.SetActive(visible);
         }
+    }
+
+    /// <summary>
+    /// 每次切换节点都按图片比例刷新显示，避免不同资源比例导致拉伸变形。
+    /// </summary>
+    private void UpdateEventImage(Sprite sprite)
+    {
+        if (eventImage == null)
+        {
+            return;
+        }
+
+        eventImage.sprite = sprite;
+        eventImage.enabled = sprite != null;
+        eventImage.preserveAspect = true;
+
+        if (!hasEventImageBaseSize)
+        {
+            eventImageBaseSize = eventImage.rectTransform.sizeDelta;
+            hasEventImageBaseSize = true;
+        }
+
+        if (sprite == null)
+        {
+            eventImage.rectTransform.sizeDelta = eventImageBaseSize;
+            return;
+        }
+
+        ResizeEventImageToAspect(sprite);
+    }
+
+    private void ResizeEventImageToAspect(Sprite sprite)
+    {
+        RectTransform rect = eventImage.rectTransform;
+        if (rect == null || sprite == null)
+        {
+            return;
+        }
+
+        float baseWidth = Mathf.Max(1f, eventImageBaseSize.x);
+        float baseHeight = Mathf.Max(1f, eventImageBaseSize.y);
+        float baseAspect = baseWidth / baseHeight;
+
+        float spriteWidth = Mathf.Max(1f, sprite.rect.width);
+        float spriteHeight = Mathf.Max(1f, sprite.rect.height);
+        float spriteAspect = spriteWidth / spriteHeight;
+
+        if (spriteAspect >= baseAspect)
+        {
+            rect.sizeDelta = new Vector2(baseWidth, baseWidth / spriteAspect);
+            return;
+        }
+
+        rect.sizeDelta = new Vector2(baseHeight * spriteAspect, baseHeight);
     }
 
     public void OnClickOption(int visibleOptionIndex)
