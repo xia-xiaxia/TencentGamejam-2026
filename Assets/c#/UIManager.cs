@@ -118,6 +118,7 @@ public class UIManager : MonoBehaviour
 
     private void HandleNodeChanged(StoryEventData node)
     {
+        Debug.Log("节点变化：" + (node != null ? node.id : "(null)"));
         if (eventContentText != null)
         {
             eventContentText.text = node != null ? (node.Text ?? string.Empty) : string.Empty;
@@ -125,7 +126,7 @@ public class UIManager : MonoBehaviour
 
         if (backgroundImage != null && storyRuntime != null)
         {
-            backgroundImage.sprite = storyRuntime.GetCurrentNodeSprite();
+            backgroundImage.sprite = node != null ? storyRuntime.GetCurrentNodeSprite() : null;
         }
 
         RefreshOptions();
