@@ -8,19 +8,35 @@ public class HPBarView : MonoBehaviour
     public TextMeshProUGUI hpText;
     public Sprite[] hpSprites = new Sprite[5]; // 预设不同血量阶段的图片
 
+    // 是否在文本中显示最大生命值，例如：65/100。
+    public bool showMaxHealthInText = false;
+
+    private BackBoard boundBoard;
+
     public void Initialize()
     {
-        BindBackBoardEvents();
+        TryBindBackBoardEvents();
         Refresh();
     }
 
     private void OnEnable()
     {
-        BindBackBoardEvents();
+        TryBindBackBoardEvents();
         Refresh();
     }
 
+    private void LateUpdate()
+    {
+        // BackBoard 可能晚于 UI 初始化，逐帧尝试绑定并在实例切换时重绑。
+        TryBindBackBoardEvents();
+    }
+
     private void OnDisable()
+    {
+        UnbindBackBoardEvents();
+    }
+
+    private void OnDestroy()
     {
         UnbindBackBoardEvents();
     }
@@ -45,45 +61,80 @@ public class HPBarView : MonoBehaviour
         float current = BackBoard.Instance.GetCurrentHealth();
         float max = BackBoard.Instance.GetCurrentMaxHealth();
         float ratio = max > 0f ? current / max : 0f;
+        float clampedRatio = Mathf.Clamp01(ratio);
 
         if (hpText != null)
         {
-            hpText.text = current.ToString("0") ;
+            hpText.text = showMaxHealthInText
+                ? string.Format("{0:0}/{1:0}", current, max)
+                : current.ToString("0");
         }
 
         if (hpImage != null)
         {
-            hpImage.fillAmount = Mathf.Clamp01(ratio);
+            hpImage.fillAmount = clampedRatio;
+            UpdateHpSprite(clampedRatio);
         }
     }
 
-    private void BindBackBoardEvents()
+    private void UpdateHpSprite(float ratio)
     {
-        if (BackBoard.Instance == null)
+        if (hpImage == null || hpSprites == null || hpSprites.Length == 0)
         {
             return;
         }
 
-        BackBoard.Instance.OnBlackboardValueChanged -= HandleBlackboardValueChanged;
-        BackBoard.Instance.OnBlackboardValueChanged += HandleBlackboardValueChanged;
-        BackBoard.Instance.OnCurrentCharacterChanged -= HandleCurrentCharacterChanged;
-        BackBoard.Instance.OnCurrentCharacterChanged += HandleCurrentCharacterChanged;
+        int count = hpSprites.Length;
+        int index = Mathf.Clamp(Mathf.FloorToInt(ratio * count), 0, count - 1);
+        Sprite stageSprite = hpSprites[index];
+        if (stageSprite != null)
+        {
+            hpImage.sprite = stageSprite;
+        }
+    }
+
+    private void TryBindBackBoardEvents()
+    {
+        BackBoard board = BackBoard.Instance;
+        if (board == null)
+        {
+            return;
+        }
+
+        if (boundBoard == board)
+        {
+            return;
+        }
+
+        UnbindBackBoardEvents();
+
+        boundBoard = board;
+        boundBoard.OnBlackboardValueChanged -= HandleBlackboardValueChanged;
+        boundBoard.OnBlackboardValueChanged += HandleBlackboardValueChanged;
+        boundBoard.OnCurrentCharacterChanged -= HandleCurrentCharacterChanged;
+        boundBoard.OnCurrentCharacterChanged += HandleCurrentCharacterChanged;
+
+        Refresh();
     }
 
     private void UnbindBackBoardEvents()
     {
-        if (BackBoard.Instance == null)
+        if (boundBoard == null)
         {
             return;
         }
 
-        BackBoard.Instance.OnBlackboardValueChanged -= HandleBlackboardValueChanged;
-        BackBoard.Instance.OnCurrentCharacterChanged -= HandleCurrentCharacterChanged;
+        boundBoard.OnBlackboardValueChanged -= HandleBlackboardValueChanged;
+        boundBoard.OnCurrentCharacterChanged -= HandleCurrentCharacterChanged;
+        boundBoard = null;
     }
 
     private void HandleBlackboardValueChanged(string key)
     {
-        if (key == BackBoard.CurrentHealthKey || key == BackBoard.LegacyHealthKey)
+        // 生命值相关 key 变化时刷新；同时对 character.* 做兜底，避免上限改动后不刷新。
+        if (key == BackBoard.CurrentHealthKey ||
+            key == BackBoard.LegacyHealthKey ||
+            (!string.IsNullOrEmpty(key) && key.StartsWith("character.", System.StringComparison.Ordinal)))
         {
             Refresh();
         }
