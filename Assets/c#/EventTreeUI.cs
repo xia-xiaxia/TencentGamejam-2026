@@ -51,8 +51,11 @@ public class EventTreeUI : MonoBehaviour
 
             var btn = node.nodeObj.GetComponent<Button>();
             if (btn == null) btn = node.nodeObj.AddComponent<Button>();
+
+            string clickId = node.nodeId;
             // 防止重复绑定（在编辑器重复进入 Play 时可能重复）
             btn.onClick.RemoveAllListeners();
+            btn.onClick.AddListener(() => OnNodeClicked(clickId));
         }
     }
 
@@ -207,16 +210,16 @@ public class EventTreeUI : MonoBehaviour
             return;
         }
 
-        // 若点击的不是当前节点，则尝试通过 BackBoard 进入该节点（会触发 OnNodeChanged）
-        if (BackBoard.Instance != null && id != currentEventId)
-        {
-            bool entered = BackBoard.Instance.EnterNode(id);
-            if (entered)
-            {
-                // EnterNode 会触发 HandleNodeChanged 并刷新 UI；直接返回以避免重复处理
-                return;
-            }
-        }
+        //// 若点击的不是当前节点，则尝试通过 BackBoard 进入该节点（会触发 OnNodeChanged）
+        //if (BackBoard.Instance != null && id != currentEventId)
+        //{
+        //    bool entered = BackBoard.Instance.EnterNode(id);
+        //    if (entered)
+        //    {
+        //        // EnterNode 会触发 HandleNodeChanged 并刷新 UI；直接返回以避免重复处理
+        //        return;
+        //    }
+        //}
 
         // 显示详情：优先从 BackBoard 的事件表获取文本（自动同步），不存在则使用 inspector 的 detailDesc
         string displayText = node.detailDesc ?? string.Empty;
