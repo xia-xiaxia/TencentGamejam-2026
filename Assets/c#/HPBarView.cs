@@ -31,7 +31,7 @@ public class HPBarView : MonoBehaviour
         {
             if (hpText != null)
             {
-                hpText.text = "0/0";
+                hpText.text = "0";
             }
 
             if (hpImage != null)
@@ -48,7 +48,7 @@ public class HPBarView : MonoBehaviour
 
         if (hpText != null)
         {
-            hpText.text = current.ToString("0") + "/" + max.ToString("0");
+            hpText.text = current.ToString("0") ;
         }
 
         if (hpImage != null)

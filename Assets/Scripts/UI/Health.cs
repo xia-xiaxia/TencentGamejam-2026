@@ -36,10 +36,10 @@ public class Health : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ChangeHealth(5f);
-        }
+        // if (Input.GetKeyDown(KeyCode.Space))
+        // {
+        //     ChangeHealth(5f);
+        // }
     }
 
     private void BindBackBoardEvents()
