@@ -51,11 +51,8 @@ public class EventTreeUI : MonoBehaviour
 
             var btn = node.nodeObj.GetComponent<Button>();
             if (btn == null) btn = node.nodeObj.AddComponent<Button>();
-
-            string clickId = node.nodeId;
             // 防止重复绑定（在编辑器重复进入 Play 时可能重复）
             btn.onClick.RemoveAllListeners();
-            btn.onClick.AddListener(() => OnNodeClicked(clickId));
         }
     }
 
