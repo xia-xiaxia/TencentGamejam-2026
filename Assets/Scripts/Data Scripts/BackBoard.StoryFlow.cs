@@ -326,8 +326,20 @@ public partial class BackBoard
         }
 
         string value = rawImage.Trim();
-        const string dispImgPrefix = "=DISPIMG(";
-        if (value.StartsWith(dispImgPrefix))
+
+        // 一些表格导出会把路径夹杂换行/制表，先清洗成单行路径。
+        value = value
+            .Replace("\r", string.Empty)
+            .Replace("\n", string.Empty)
+            .Replace("\t", string.Empty)
+            .Trim();
+
+        if (value.Length >= 2 && value[0] == '"' && value[value.Length - 1] == '"')
+        {
+            value = value.Substring(1, value.Length - 2).Trim();
+        }
+
+        if (value.StartsWith("=", System.StringComparison.Ordinal))
         {
             int firstQuote = value.IndexOf('"');
             int secondQuote = firstQuote >= 0 ? value.IndexOf('"', firstQuote + 1) : -1;
@@ -336,6 +348,12 @@ public partial class BackBoard
                 value = value.Substring(firstQuote + 1, secondQuote - firstQuote - 1).Trim();
             }
         }
+
+        value = value
+            .Replace("\r", string.Empty)
+            .Replace("\n", string.Empty)
+            .Replace("\t", string.Empty)
+            .Trim();
 
         int lastSlash = value.LastIndexOf('/');
         int lastBackSlash = value.LastIndexOf('\\');

@@ -40,7 +40,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "A0_A2行李箱.png",
             "options": [
                 {
                     "Text": "爬出飞机残骸",
@@ -82,7 +82,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "dead.png",
             "options": [
                 {
                     "Text": "你死了",
@@ -119,7 +119,7 @@
                     "stringValue": "bag.add:破布"
                 }
             ],
-            "image": "",
+            "image": "A2绷带.png",
             "options": [
                 {
                     "Text": "向西走",
@@ -167,7 +167,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "dead.png",
             "options": [
                 {
                     "Text": "你死了",
@@ -191,7 +191,7 @@
             "id": "B0",
             "Text": "你向西走去，无意中走进了蟒蛇的警戒范围。草丛沙沙作响，一条森蚺盘踞着，吐着信子盯着你。",
             "effectDatas": [],
-            "image": "",
+            "image": "B0 蛇.png",
             "options": [
                 {
                     "Text": "站定不动，双眼紧盯森蚺",
@@ -224,7 +224,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "dead.png",
             "options": [
                 {
                     "Text": "你死了",
@@ -248,7 +248,7 @@
             "id": "B2",
             "Text": "你用凶狠的眼神盯住森蚺，它居然落荒而逃。\r\n灌木丛外，一个和你一样的幸存者低声自言自语着，浑身发颤。他没有注意到你。",
             "effectDatas": [],
-            "image": "",
+            "image": "B2C4坏人.png",
             "options": [
                 {
                     "Text": "潜行躲开",
@@ -281,7 +281,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "dead.png",
             "options": [
                 {
                     "Text": "你死了",
@@ -305,7 +305,7 @@
             "id": "B4",
             "Text": "你屏住呼吸，踮着脚离开。没走多远，另一片飞机残骸出现在眼前。\r\n染红的绷带渗出鲜血，你需要迅速找到急救包。",
             "effectDatas": [],
-            "image": "",
+            "image": "B4另一片飞机残骸.png",
             "options": [
                 {
                     "Text": "搜查右边",
@@ -338,7 +338,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "B5B7C2求生手册.png",
             "options": [
                 {
                     "Text": "接受命运",
@@ -362,7 +362,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "dead.png",
             "options": [
                 {
                     "Text": "你死了",
@@ -393,7 +393,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "B5B7C2求生手册.png",
             "options": [
                 {
                     "Text": "接受命运",
@@ -417,7 +417,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "dead.png",
             "options": [
                 {
                     "Text": "你死了",
@@ -441,7 +441,7 @@
             "id": "C0",
             "Text": "你向北方走去，发现一丛色彩鲜艳的浆果。",
             "effectDatas": [],
-            "image": "",
+            "image": "C0浆果 (1).png",
             "options": [
                 {
                     "Text": "摘下拿走",
@@ -490,7 +490,7 @@
             "id": "C1",
             "Text": "拨开浆果丛，前方一片灰白色的毒雾贴在地面上，像死水一样不动。",
             "effectDatas": [],
-            "image": "",
+            "image": "C1毒雾.png",
             "options": [
                 {
                     "Text": "直接穿过毒雾",
@@ -523,7 +523,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "dead.png",
             "options": [
                 {
                     "Text": "你死了",
@@ -554,7 +554,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "B5B7C2求生手册.png",
             "options": [
                 {
                     "Text": "向左走",
@@ -580,7 +580,7 @@
             "id": "C4",
             "Text": "你向左走，一个男人手持棍棒，恶狠狠地盯着你。你很清楚，需要武器才能与之搏斗。",
             "effectDatas": [],
-            "image": "",
+            "image": "B2C4坏人.png",
             "options": [
                 {
                     "Text": "与之交流",
@@ -613,7 +613,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "dead.png",
             "options": [
                 {
                     "Text": "你死了",
@@ -650,7 +650,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "C6电台密码.png",
             "options": [
                 {
                     "Text": "继续",
@@ -674,7 +674,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "dead.png",
             "options": [
                 {
                     "Text": "你死了",
@@ -698,7 +698,7 @@
             "id": "C8",
             "Text": "你向右边走去，一抹鲜艳的颜色引起了你的警觉。\r\n箭毒蛙挡住了你的去路。",
             "effectDatas": [],
-            "image": "",
+            "image": "C8箭毒蛙.png",
             "options": [
                 {
                     "Text": "硬闯",
@@ -731,7 +731,7 @@
             "id": "D0",
             "Text": "你向东走，潺潺的流水声吸引了你的注意。\r\n那是一条小溪。\r\n伤口处隐隐刺痛，仍在不断渗出鲜血，你面临着一个选择。",
             "effectDatas": [],
-            "image": "",
+            "image": "D0水源.png",
             "options": [
                 {
                     "Text": "直接离开",
@@ -780,7 +780,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "dead.png",
             "options": [
                 {
                     "Text": "你死了",
@@ -823,7 +823,7 @@
                     "stringValue": "bag.add:手术刀"
                 }
             ],
-            "image": "",
+            "image": "D2医疗箱_手术刀.png",
             "options": [
                 {
                     "Text": "通向毒雾的大路",
@@ -849,7 +849,7 @@
             "id": "D3",
             "Text": "又是一处分岔路口。",
             "effectDatas": [],
-            "image": "",
+            "image": "D3E2岔路.png",
             "options": [
                 {
                     "Text": "布满荆棘的小路",
@@ -900,7 +900,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "dead.png",
             "options": [
                 {
                     "Text": "你死了",
@@ -924,7 +924,7 @@
             "id": "D5",
             "Text": "穿过树木丛生的小路，一颗高大的树吸引了你的注意。树上挂着一个个饱满的坚果，饱受饥饿折磨的你面临着一个选择。",
             "effectDatas": [],
-            "image": "",
+            "image": "D5树上坚果.png",
             "options": [
                 {
                     "Text": "无视离开",
@@ -957,7 +957,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "dead.png",
             "options": [
                 {
                     "Text": "你死了",
@@ -981,7 +981,7 @@
             "id": "D7",
             "Text": "你绕过坚果树，继续向前走。植被越来越密，树和树挤在一起，藤蔓挂在头顶，遮天蔽日。回头看，来时的路已经分不清是哪条了。",
             "effectDatas": [],
-            "image": "",
+            "image": "D7迷失树林.png",
             "options": [
                 {
                     "Text": "继续",
@@ -1005,7 +1005,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "dead.png",
             "options": [
                 {
                     "Text": "你死了",
@@ -1029,7 +1029,7 @@
             "id": "E0",
             "Text": "灌木后面有个人靠着石头坐着，一条腿伸在面前，裤腿被血浸透了。她抬头看你，随后又无力地低下头去。",
             "effectDatas": [],
-            "image": "",
+            "image": "E0E3好人.png",
             "options": [
                 {
                     "Text": "无视离开",
@@ -1055,7 +1055,7 @@
             "id": "E1",
             "Text": "小心穿过一片片尖刺，你看到面前的荆棘丛里卡着一个反光物件。",
             "effectDatas": [],
-            "image": "",
+            "image": "E1荆棘电池.png",
             "options": [
                 {
                     "Text": "拿",
@@ -1094,7 +1094,7 @@
             "id": "E2",
             "Text": "你来到一处难以分辨位置的树林。",
             "effectDatas": [],
-            "image": "",
+            "image": "D3E2岔路.png",
             "options": [
                 {
                     "Text": "凭直觉向前走去",
@@ -1127,7 +1127,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "E0E3好人.png",
             "options": [
                 {
                     "Text": "听从意见，前往信号塔",
@@ -1160,7 +1160,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "dead.png",
             "options": [
                 {
                     "Text": "你死了",
@@ -1184,7 +1184,7 @@
             "id": "E5",
             "Text": "你成功来到信号塔前。\r\n铁塔立在一片空地上，锈迹爬满了底座。操作台的面板碎了，电池的位置空空如也。电台被一个密码锁锁住。整个装置非常复杂，没有相关知识无法使用。\r\n你很清楚。只要激活这个仪器，你就可以呼叫直升机救援，逃出这个鬼地方。",
             "effectDatas": [],
-            "image": "",
+            "image": "E5信号塔.png",
             "options": [
                 {
                     "Text": "呼叫直升机救援",
@@ -1217,7 +1217,7 @@
                     "stringValue": ""
                 }
             ],
-            "image": "",
+            "image": "dead.png",
             "options": [
                 {
                     "Text": "你死了",
