@@ -91,6 +91,7 @@ GameObject:
   - component: {fileID: 8529280174772082921}
   - component: {fileID: 1530398808565121864}
   - component: {fileID: 2582084146535708250}
+  - component: {fileID: 6308450654442312066}
   m_Layer: 5
   m_Name: Bluebrry
   m_TagString: Untagged
@@ -200,3 +201,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6308450654442312066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7225900589113517078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 721537effa55b014f8ad706a010339a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 
+  itemName: "\u6D46\u679C"
+  itemDescription: 
+  hoverTipText: {fileID: 0}
+  showName: 1
+  showDescription: 1

@@ -36,11 +36,13 @@ public class BagUI : MonoBehaviour
     [Header("显示控制")]
     public GameObject bagRoot;       // 整个背包面板的根（可在 Inspector 指定）；若为空则使用本对象
     public bool startVisible = false; // 启动时是否显示背包
-
+    public TMPro.TextMeshProUGUI ItemText;
+    public Image ItemImage;
     // 运行时数据
     private readonly Dictionary<string, GameObject> spawned = new Dictionary<string, GameObject>(StringComparer.Ordinal);
     private GridLayoutGroup gridLayout;
     private bool isOpen;
+    public static BagUI Instance { get; private set; }
 
     private void Awake()
     {
@@ -53,6 +55,15 @@ public class BagUI : MonoBehaviour
         isOpen = startVisible;
         if (bagRoot != null)
             bagRoot.SetActive(startVisible);
+
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Debug.LogWarning("BagUI: 已存在实例，Awake 中未覆盖。", this);
+        }
     }
 
     private void OnEnable()
