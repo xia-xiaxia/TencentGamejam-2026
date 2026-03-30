@@ -94,11 +94,6 @@ public partial class BackBoard
         float clamped = maxHealth > 0f ? Mathf.Clamp(value, 0f, maxHealth) : Mathf.Max(0f, value);
         SetFloat(CurrentHealthKey, clamped);
         SetFloat(LegacyHealthKey, clamped);
-
-        if (maxHealth > 0f && clamped <= 0f)
-        {
-            EndGame("health depleted");
-        }
     }
 
     /// <summary>

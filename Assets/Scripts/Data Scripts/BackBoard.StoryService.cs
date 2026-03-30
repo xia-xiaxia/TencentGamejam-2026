@@ -119,7 +119,7 @@ public sealed class BackBoardStoryService
     }
 
     /// <summary>
-    /// 判断某节点是否已解锁（已访问或被显式解锁）。
+    /// 判断某节点是否已解锁（按整局累计历史）。
     /// </summary>
     public bool IsNodeUnlocked(string nodeId)
     {
@@ -128,7 +128,7 @@ public sealed class BackBoardStoryService
             return false;
         }
 
-        return currentLifeNodeIds.Contains(nodeId);
+        return playedNodeIds.Contains(nodeId);
     }
 
     /// <summary>

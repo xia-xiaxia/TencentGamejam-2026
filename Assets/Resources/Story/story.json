@@ -2,7 +2,7 @@
     "events": [
         {
             "id": "Start",
-            "Text": "<size=1000%>开始游戏</size>",
+            "Text": "<size=400%>开始游戏</size>",
             "effectDatas": [],
             "image": "",
             "options": [
@@ -54,7 +54,7 @@
                 {
                     "Text": "检查行李箱",
                     "nextNodeId": "A2",
-                    "requiredItemId": "",
+                    "requiredItemId": "行李箱密码",
                     "requiredUnlockedNodeId": "A3",
                     "unlockConditionText": "<color=blue>需要知识：行李箱密码</color>",
                     "consumeItemId": "",
@@ -504,9 +504,9 @@
                 {
                     "Text": "用湿布捂住口鼻穿过",
                     "nextNodeId": "C3",
-                    "requiredItemId": "",
+                    "requiredItemId": "浸湿的破布&求生手册环境篇",
                     "requiredUnlockedNodeId": "D0",
-                    "unlockConditionText": "<color=orange>需要物品：浸湿的破布</color>",
+                    "unlockConditionText": "<color=orange>需要物品：浸湿的破布</color>，<color=blue>需要知识：求生手册环境篇</color>",
                     "consumeItemId": "",
                     "effects": []
                 }
@@ -594,7 +594,7 @@
                 {
                     "Text": "杀了他",
                     "nextNodeId": "C6",
-                    "requiredItemId": "",
+                    "requiredItemId": "手术刀",
                     "requiredUnlockedNodeId": "D2",
                     "unlockConditionText": "<color=orange>需要物品：手术刀</color>",
                     "consumeItemId": "",
@@ -719,7 +719,7 @@
                 {
                     "Text": "用浆果引开",
                     "nextNodeId": "E2",
-                    "requiredItemId": "",
+                    "requiredItemId": "浆果",
                     "requiredUnlockedNodeId": "C0",
                     "unlockConditionText": "<color=orange>需要物品：浆果</color>",
                     "consumeItemId": "",
@@ -1043,7 +1043,7 @@
                 {
                     "Text": "前往救助",
                     "nextNodeId": "E3",
-                    "requiredItemId": "",
+                    "requiredItemId": "求生手册医疗篇",
                     "requiredUnlockedNodeId": "C3",
                     "unlockConditionText": "<color=blue>需要知识：求生手册医疗篇</color>",
                     "consumeItemId": "",
@@ -1189,7 +1189,7 @@
                 {
                     "Text": "呼叫直升机救援",
                     "nextNodeId": "End",
-                    "requiredItemId": "",
+                    "requiredItemId": "电池",
                     "requiredUnlockedNodeId": "C6&B7",
                     "unlockConditionText": "<color=orange>需要物品：电池。</color><color=blue>需要知识：电台密码，求生手册救援篇</color>",
                     "consumeItemId": "",

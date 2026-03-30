@@ -49,6 +49,7 @@ public enum EffectType
     Add,
     Subtract,
     Set,
+    Reset,
     UnlockNode,
     ApplyStatus,
     RemoveStatus

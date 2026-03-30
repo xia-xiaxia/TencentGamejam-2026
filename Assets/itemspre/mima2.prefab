@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemIcon: {fileID: 0}
-  itemName: "\u7535\u53F0\u5BC6\u7801"
+  itemName: "\u77E5\u8BC6\uFF1A\u7535\u53F0\u5BC6\u7801"
   itemDescription: 
   hoverTipText: {fileID: 0}
   showName: 1

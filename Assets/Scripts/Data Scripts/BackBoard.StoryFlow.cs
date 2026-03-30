@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Text;
 using UnityEngine;
 
@@ -30,6 +31,7 @@ public partial class BackBoard
         Debug.Log(string.IsNullOrEmpty(reason) ? "Game Ended." : ("Game Ended: " + reason), this);
         if (ReplayFromStartNodeKeepUnlocked())
         {
+            Debug.Log("nishudiaol");
             return true;
         }
 
@@ -56,7 +58,7 @@ public partial class BackBoard
             Debug.LogWarning("RestartFromScratch 失败：没有可用的开始节点。", this);
             return false;
         }
-
+        Debug.Log("完全重开");
         return EnterNode(nodeId);
     }
 
@@ -77,6 +79,7 @@ public partial class BackBoard
         SetCurrentHealth(GetCurrentMaxHealth());
 
         ClearBagExcept(currentCharacterId, PreservedBagItemIdsOnDeath);
+        Debug.Log("重新开始");
         storyService.ResetCurrentLifeProgress();
 
         if (!EnterNode(nodeId))
@@ -230,13 +233,8 @@ public partial class BackBoard
         string optionKey = storyService.BuildOptionKey(node.id, optionIndex);
         if (storyService.IsOptionUnlocked(optionKey))
         {
-            // 依赖前置节点的选项，必须按本条命节点记录实时判断，不能被历史解锁状态短路。
-            if (!string.IsNullOrEmpty(option.requiredUnlockedNodeId))
-            {
-                return IsRequiredUnlockedNodeConditionMet(option.requiredUnlockedNodeId);
-            }
-
-            return true;
+            // 已解锁选项仍需实时校验门槛条件（节点条件与道具条件）。
+            return IsOptionUnlockConditionMet(option);
         }
 
         if (!IsOptionUnlockConditionMet(option))
@@ -264,12 +262,38 @@ public partial class BackBoard
             return false;
         }
 
-        if (!string.IsNullOrEmpty(option.requiredItemId) && !HasItem(currentCharacterId, option.requiredItemId))
+        string requiredItemId = string.IsNullOrEmpty(option.requiredItemId) ? string.Empty : option.requiredItemId.Trim();
+        if (string.IsNullOrEmpty(requiredItemId))
+        {
+            requiredItemId = InferRequiredItemIdFromUnlockConditionText(option.unlockConditionText);
+        }
+
+        if (!string.IsNullOrEmpty(requiredItemId) && !HasItem(currentCharacterId, requiredItemId))
         {
             return false;
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// 当 requiredItemId 缺失时，尝试从 unlockConditionText 中提取“需要物品：xxx”。
+    /// </summary>
+    private static string InferRequiredItemIdFromUnlockConditionText(string unlockConditionText)
+    {
+        if (string.IsNullOrWhiteSpace(unlockConditionText))
+        {
+            return string.Empty;
+        }
+
+        string text = Regex.Replace(unlockConditionText, "<.*?>", string.Empty).Trim();
+        Match match = Regex.Match(text, "需要物品[:：]\\s*([^，。,.<\\s]+)");
+        if (!match.Success)
+        {
+            return string.Empty;
+        }
+
+        return match.Groups[1].Value.Trim();
     }
 
     /// <summary>

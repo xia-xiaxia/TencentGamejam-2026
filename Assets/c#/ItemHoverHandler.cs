@@ -4,29 +4,29 @@ using TMPro;
 using UnityEngine.UI;
 
 /// <summary>
-/// ±³°üÎïÆ·Ğü¸¡ÌáÊ¾£º
-/// ¸½¼Óµ½¡¾ÎïÆ·Ô¤ÖÆÌå¡¿ÉÏ£¬Êó±êĞü¸¡Ê±ÏÔÊ¾±¾µØÅäÖÃµÄÎÄ±¾
-/// Ä£·Â NodeHoverHandler Ğ´·¨£¬Óë BagUI ÍêÃÀÊÊÅä
+/// èƒŒåŒ…ç‰©å“æ‚¬æµ®æç¤ºï¼š
+/// é™„åŠ åˆ°ã€ç‰©å“é¢„åˆ¶ä½“ã€‘ä¸Šï¼Œé¼ æ ‡æ‚¬æµ®æ—¶æ˜¾ç¤ºæœ¬åœ°é…ç½®çš„æ–‡æœ¬
+/// æ¨¡ä»¿ NodeHoverHandler å†™æ³•ï¼Œä¸ BagUI å®Œç¾é€‚é…
 /// </summary>
 public class ItemHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public Image itemIcon; // ÎïÆ·Í¼±ê£¨¿ÉÑ¡£¬·½±ãÔÚ Inspector Ö±½ÓÅäÖÃ£©
-    [Header("±¾µØÅäÖÃÎïÆ·ĞÅÏ¢£¨Ö±½ÓÔÚÕâÀïĞ´£©")]
-    public string itemName;        // ÎïÆ·Ãû³Æ
-    [TextArea] public string itemDescription; // ÎïÆ·ÃèÊö
+    public Image itemIcon; // ç‰©å“å›¾æ ‡ï¼ˆå¯é€‰ï¼Œæ–¹ä¾¿åœ¨ Inspector ç›´æ¥é…ç½®ï¼‰
+    [Header("æœ¬åœ°é…ç½®ç‰©å“ä¿¡æ¯ï¼ˆç›´æ¥åœ¨è¿™é‡Œå†™ï¼‰")]
+    public string itemName;        // ç‰©å“åç§°
+    [TextArea] public string itemDescription; // ç‰©å“æè¿°
 
-    [Header("ÌáÊ¾ÎÄ±¾ÉèÖÃ")]
-    public TextMeshProUGUI hoverTipText; // ÍÏÈë³¡¾°ÀïµÄÌáÊ¾ÎÄ±¾¿ò
+    [Header("æç¤ºæ–‡æœ¬è®¾ç½®")]
+    public TextMeshProUGUI hoverTipText; // æ‹–å…¥åœºæ™¯é‡Œçš„æç¤ºæ–‡æœ¬æ¡†
     public bool showName = true;
     public bool showDescription = true;
     private void Start()
     {
-        hoverTipText = BagUI.Instance.ItemText; // ´Ó BagUI »ñÈ¡ÌáÊ¾ÎÄ±¾×é¼ş
+        hoverTipText = BagUI.Instance.ItemText; // ä» BagUI è·å–æç¤ºæ–‡æœ¬ç»„ä»¶
         if (hoverTipText != null)
         {
             hoverTipText.gameObject.SetActive(false);
         }
-        itemIcon = BagUI.Instance.ItemImage; // ´Ó BagUI »ñÈ¡ÎïÆ·Í¼±ê×é¼ş
+        itemIcon = BagUI.Instance.ItemImage; // ä» BagUI è·å–ç‰©å“å›¾æ ‡ç»„ä»¶
         if (itemIcon != null)
         {
             itemIcon.gameObject.SetActive(false);
@@ -46,7 +46,7 @@ public class ItemHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerExi
     {
         if (hoverTipText == null) return;
 
-        // Æ´½ÓÒªÏÔÊ¾µÄÎÄ±¾£¨±¾µØÅäÖÃ£©
+        // æ‹¼æ¥è¦æ˜¾ç¤ºçš„æ–‡æœ¬ï¼ˆæœ¬åœ°é…ç½®ï¼‰
         string tip = "";
         if (showName) tip += itemName + "\n";
         if (showDescription) tip += itemDescription;

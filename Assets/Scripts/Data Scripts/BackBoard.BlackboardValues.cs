@@ -44,13 +44,39 @@ public partial class BackBoard
         switch (effectType)
         {
             case EffectType.Add:
-                AddFloat(effect.targetKey, effect.floatValue);
+                if (IsHealthKey(effect.targetKey))
+                {
+                    SetCurrentHealth(GetCurrentHealth() + effect.floatValue);
+                }
+                else
+                {
+                    AddFloat(effect.targetKey, effect.floatValue);
+                }
                 break;
             case EffectType.Subtract:
-                AddFloat(effect.targetKey, -effect.floatValue);
+                if (IsHealthKey(effect.targetKey))
+                {
+                    SetCurrentHealth(GetCurrentHealth() - effect.floatValue);
+                }
+                else
+                {
+                    AddFloat(effect.targetKey, -effect.floatValue);
+                }
                 break;
             case EffectType.Set:
-                if (!string.IsNullOrEmpty(effect.stringValue))
+                if (IsHealthKey(effect.targetKey))
+                {
+                    float healthValue;
+                    if (!string.IsNullOrEmpty(effect.stringValue) && float.TryParse(effect.stringValue, out healthValue))
+                    {
+                        SetCurrentHealth(healthValue);
+                    }
+                    else
+                    {
+                        SetCurrentHealth(effect.floatValue);
+                    }
+                }
+                else if (!string.IsNullOrEmpty(effect.stringValue))
                 {
                     SetString(effect.targetKey, effect.stringValue);
                 }
@@ -58,6 +84,9 @@ public partial class BackBoard
                 {
                     SetFloat(effect.targetKey, effect.floatValue);
                 }
+                break;
+            case EffectType.Reset:
+                HandleResetEffect(effect);
                 break;
             case EffectType.UnlockNode:
                 storyService.UnlockNode(effect.targetKey);
@@ -173,6 +202,31 @@ public partial class BackBoard
         return Enum.TryParse(effectTypeString, true, out effectType);
     }
 
+    private bool IsHealthKey(string key)
+    {
+        if (string.IsNullOrEmpty(key))
+        {
+            return false;
+        }
+
+        return string.Equals(key, LegacyHealthKey, StringComparison.OrdinalIgnoreCase) ||
+               string.Equals(key, CurrentHealthKey, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private void HandleResetEffect(EffectData effect)
+    {
+        if (effect == null)
+        {
+            return;
+        }
+
+        string key = effect.targetKey?.Trim();
+        if (string.Equals(key, "data", StringComparison.OrdinalIgnoreCase))
+        {
+            EndGame("data reset");
+        }
+    }
+
     private bool TryHandleInventoryEffect(EffectData effect)
     {
         string key = effect.targetKey?.Trim();
@@ -241,7 +295,7 @@ public partial class BackBoard
         }
 
         string[] parts = descriptor.Split(new[] { '|' }, 4);
-        string id = parts[0].Trim();
+        string id = NormalizeItemId(parts[0]);
         if (string.IsNullOrEmpty(id))
         {
             return null;
@@ -278,6 +332,26 @@ public partial class BackBoard
             image = image,
             useOption = new List<OptionData>()
         };
+    }
+
+    private static string NormalizeItemId(string rawId)
+    {
+        if (string.IsNullOrWhiteSpace(rawId))
+        {
+            return string.Empty;
+        }
+
+        string value = rawId.Trim();
+        if (value.StartsWith("bag.add:", StringComparison.OrdinalIgnoreCase))
+        {
+            value = value.Substring("bag.add:".Length);
+        }
+        else if (value.StartsWith("bag.remove:", StringComparison.OrdinalIgnoreCase))
+        {
+            value = value.Substring("bag.remove:".Length);
+        }
+
+        return value.Trim();
     }
 
     private void NotifyBlackboardChanged(string key)

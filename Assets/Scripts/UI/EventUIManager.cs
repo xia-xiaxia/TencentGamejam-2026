@@ -330,6 +330,12 @@ public class EventUIManager : MonoBehaviour
             return;
         }
 
+        GameObject optionRoot = OptionButton[index];
+        if (optionRoot == null)
+        {
+            return;
+        }
+
         Button button = optionButtons != null && index < optionButtons.Length ? optionButtons[index] : null;
         if (button == null)
         {
@@ -352,25 +358,47 @@ public class EventUIManager : MonoBehaviour
             targetGraphic.raycastTarget = isUnlocked;
         }
 
-        CanvasGroup group = button.GetComponentInParent<CanvasGroup>(true);
-        if (group != null)
+        // 仅控制当前选项根节点，避免多个选项共用父级 CanvasGroup 时互相覆盖透明度。
+        CanvasGroup optionGroup = optionRoot.GetComponent<CanvasGroup>();
+        if (optionGroup == null)
         {
-            group.blocksRaycasts = isUnlocked;
-            group.interactable = isUnlocked;
+            optionGroup = optionRoot.AddComponent<CanvasGroup>();
         }
 
-        CanvasGroup[] groups = button.GetComponentsInParent<CanvasGroup>(true);
-        for (int i = 0; i < groups.Length; i++)
+        optionGroup.blocksRaycasts = isUnlocked;
+        optionGroup.interactable = isUnlocked;
+        optionGroup.alpha = 1f;
+
+        ApplyOptionVisualAlpha(optionRoot, isUnlocked ? 1f : 0.1f);
+    }
+
+    /// <summary>
+    /// 仅调整选项的非文本可视元素透明度，避免影响文字可读性。
+    /// </summary>
+    private static void ApplyOptionVisualAlpha(GameObject optionRoot, float alpha)
+    {
+        if (optionRoot == null)
         {
-            CanvasGroup g = groups[i];
-            if (g == null)
+            return;
+        }
+
+        Graphic[] graphics = optionRoot.GetComponentsInChildren<Graphic>(true);
+        for (int i = 0; i < graphics.Length; i++)
+        {
+            Graphic graphic = graphics[i];
+            if (graphic == null)
             {
                 continue;
             }
 
-            g.blocksRaycasts = isUnlocked;
-            g.interactable = isUnlocked;
-            g.alpha = isUnlocked ? 1f : 0.55f;
+            if (graphic is TMP_Text)
+            {
+                continue;
+            }
+
+            Color color = graphic.color;
+            color.a = alpha;
+            graphic.color = color;
         }
     }
 

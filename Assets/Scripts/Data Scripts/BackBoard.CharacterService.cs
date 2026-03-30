@@ -136,6 +136,12 @@ public sealed class BackBoardCharacterService
             return false;
         }
 
+        string normalizedItemId = NormalizeItemId(itemId);
+        if (string.IsNullOrEmpty(normalizedItemId))
+        {
+            return false;
+        }
+
         List<ItemData> bag = GetBag(characterId);
         if (bag == null)
         {
@@ -145,7 +151,7 @@ public sealed class BackBoardCharacterService
         for (int i = 0; i < bag.Count; i++)
         {
             ItemData item = bag[i];
-            if (item != null && item.id == itemId)
+            if (item != null && NormalizeItemId(item.id) == normalizedItemId)
             {
                 bag.RemoveAt(i);
                 return true;
@@ -193,6 +199,7 @@ public sealed class BackBoardCharacterService
 
         if (preservedItemIds == null || preservedItemIds.Count == 0)
         {
+            Debug.Log("没有知识");
             bag.Clear();
             return true;
         }
@@ -200,7 +207,7 @@ public sealed class BackBoardCharacterService
         for (int i = bag.Count - 1; i >= 0; i--)
         {
             ItemData item = bag[i];
-            if (item == null || string.IsNullOrEmpty(item.id) || !preservedItemIds.Contains(item.id))
+            if (item == null || string.IsNullOrEmpty(item.id) || !IsPreservedItem(item.id, preservedItemIds))
             {
                 bag.RemoveAt(i);
             }
@@ -209,12 +216,54 @@ public sealed class BackBoardCharacterService
         return true;
     }
 
+    private static bool IsPreservedItem(string itemId, ISet<string> preservedItemIds)
+    {
+        if (string.IsNullOrEmpty(itemId) || preservedItemIds == null || preservedItemIds.Count == 0)
+        {
+            return false;
+        }
+
+        if (preservedItemIds.Contains(itemId))
+        {
+            return true;
+        }
+
+        string normalized = NormalizeItemId(itemId);
+        return !string.IsNullOrEmpty(normalized) && preservedItemIds.Contains(normalized);
+    }
+
+    private static string NormalizeItemId(string rawId)
+    {
+        if (string.IsNullOrWhiteSpace(rawId))
+        {
+            return string.Empty;
+        }
+
+        string value = rawId.Trim();
+        if (value.StartsWith("bag.add:", System.StringComparison.OrdinalIgnoreCase))
+        {
+            value = value.Substring("bag.add:".Length);
+        }
+        else if (value.StartsWith("bag.remove:", System.StringComparison.OrdinalIgnoreCase))
+        {
+            value = value.Substring("bag.remove:".Length);
+        }
+
+        return value.Trim();
+    }
+
     /// <summary>
     /// 判断背包中是否包含指定道具。
     /// </summary>
     public bool HasItem(string characterId, string itemId)
     {
         if (string.IsNullOrEmpty(itemId))
+        {
+            return false;
+        }
+
+        string normalizedItemId = NormalizeItemId(itemId);
+        if (string.IsNullOrEmpty(normalizedItemId))
         {
             return false;
         }
@@ -228,7 +277,7 @@ public sealed class BackBoardCharacterService
         for (int i = 0; i < bag.Count; i++)
         {
             ItemData item = bag[i];
-            if (item != null && item.id == itemId)
+            if (item != null && NormalizeItemId(item.id) == normalizedItemId)
             {
                 return true;
             }
@@ -247,6 +296,12 @@ public sealed class BackBoardCharacterService
             return null;
         }
 
+        string normalizedItemId = NormalizeItemId(itemId);
+        if (string.IsNullOrEmpty(normalizedItemId))
+        {
+            return null;
+        }
+
         List<ItemData> bag = GetBag(characterId);
         if (bag == null)
         {
@@ -256,7 +311,7 @@ public sealed class BackBoardCharacterService
         for (int i = 0; i < bag.Count; i++)
         {
             ItemData item = bag[i];
-            if (item != null && item.id == itemId)
+            if (item != null && NormalizeItemId(item.id) == normalizedItemId)
             {
                 return item;
             }
