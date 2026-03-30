@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
-
+using TMPro;
 public class EventTreeUI : MonoBehaviour
 {
     [Header("=== 面板设置 ===")]
     public GameObject treePanel;       // 事件树
-    public GameObject detailPanel;      // 详情框
-    public Text detailText;            // 详情文字
+    public GameObject detailPanel;     // 详情框
+    public TextMeshProUGUI detailText;            // 详情文字
 
     [Header("=== 节点配置  ===")]
     public EventNode[] eventNodes;
@@ -20,6 +20,9 @@ public class EventTreeUI : MonoBehaviour
     private string currentEventId = "A0";
     private StoryEventData currentNode;
     private string lastClickId = "";
+
+    // 当前悬浮的节点 id（用于退出时判断）
+    private string lastHoverId;
 
     private HashSet<string> unlockedIds = new HashSet<string>(System.StringComparer.Ordinal);
 
@@ -44,7 +47,7 @@ public class EventTreeUI : MonoBehaviour
         if (detailPanel != null)
             detailPanel.SetActive(false);
 
-        // 给所有节点加点击（只绑定一次）
+        // 给所有节点加点击（只绑定一次），并添加悬浮处理器
         foreach (var node in eventNodes)
         {
             if (node == null || node.nodeObj == null) continue;
@@ -56,6 +59,12 @@ public class EventTreeUI : MonoBehaviour
             // 防止重复绑定（在编辑器重复进入 Play 时可能重复）
             btn.onClick.RemoveAllListeners();
             btn.onClick.AddListener(() => OnNodeClicked(clickId));
+
+            // 添加或配置悬浮处理组件，用于显示悬浮文本
+            var hover = node.nodeObj.GetComponent<NodeHoverHandler>();
+            if (hover == null) hover = node.nodeObj.AddComponent<NodeHoverHandler>();
+            hover.nodeId = node.nodeId;
+            hover.owner = this;
         }
     }
 
@@ -86,11 +95,10 @@ public class EventTreeUI : MonoBehaviour
         {
             if (node == null || string.IsNullOrEmpty(node.nodeId)) continue;
         }
-        // 再次保证初始显示正确（BackBoard 可能在 Start 里触发第一次 OnNodeChanged）
+        // 再次保证初始化显示正确（BackBoard 可能在 Start 里触发第一次 OnNodeChanged）
         if (BackBoard.Instance != null)
         {
             currentEventId = BackBoard.Instance.CurrentNodeId ?? currentEventId;
-            
             UpdateUnlockedFromBackboard();
         }
         RefreshTreeUI();
@@ -101,6 +109,7 @@ public class EventTreeUI : MonoBehaviour
     {
         currentEventId = newId;
         lastClickId = "";
+        lastHoverId = null;
         if (detailPanel != null) detailPanel.SetActive(false);
         RefreshTreeUI();
     }
@@ -116,6 +125,7 @@ public class EventTreeUI : MonoBehaviour
             UpdateUnlockedFromBackboard();
         }
         lastClickId = "";
+        lastHoverId = null;
         if (detailPanel != null) detailPanel.SetActive(false);
         RefreshTreeUI();
     }
@@ -210,21 +220,56 @@ public class EventTreeUI : MonoBehaviour
             return;
         }
 
-        //// 若点击的不是当前节点，则尝试通过 BackBoard 进入该节点（会触发 OnNodeChanged）
-        //if (BackBoard.Instance != null && id != currentEventId)
-        //{
-        //    bool entered = BackBoard.Instance.EnterNode(id);
-        //    if (entered)
-        //    {
-        //        // EnterNode 会触发 HandleNodeChanged 并刷新 UI；直接返回以避免重复处理
-        //        return;
-        //    }
-        //}
-
-        // 显示详情：优先从 BackBoard 的事件表获取文本（自动同步），不存在则使用 inspector 的 detailDesc
+        // 点击现在只显示详情（不直接切换节点）
         string displayText = node.detailDesc ?? string.Empty;
         if (detailText != null) detailText.text = displayText;
         if (detailPanel != null) detailPanel.SetActive(true);
         lastClickId = id;
     }
+
+    // ========== 悬浮处理接口 ==========
+    // 鼠标进入节点时调用（由 NodeHoverHandler 转发）
+    public void OnNodeHoverEnter(string id)
+    {
+        if (string.IsNullOrEmpty(id)) return;
+        if (!IsUnlocked(id)) return;
+
+        var node = System.Array.Find(eventNodes, n => n.nodeId == id);
+        if (node == null) return;
+
+        string displayText = node.detailDesc ?? string.Empty;
+        // 优先使用 BackBoard 的事件文本（若可用且匹配 id）
+        if (BackBoard.Instance != null)
+        {
+            var evt = BackBoard.Instance.CurrentNode;
+            if (evt != null && evt.id == id && !string.IsNullOrEmpty(evt.Text))
+            {
+                displayText = evt.Text;
+            }
+        }
+
+        if (detailText != null) detailText.text = displayText;
+        if (detailPanel != null)
+        {
+            detailPanel.SetActive(true);
+            lastHoverId = id;
+        }
+    }
+
+    // 鼠标离开节点时调用（由 NodeHoverHandler 转发）
+    public void OnNodeHoverExit(string id)
+    {
+        if (string.IsNullOrEmpty(id)) return;
+
+        // 如果当前该节点被点击并保持展示，则不要在离开时关闭
+        if (!string.IsNullOrEmpty(lastClickId) && lastClickId == id) return;
+
+        if (!string.IsNullOrEmpty(lastHoverId) && lastHoverId == id)
+        {
+            if (detailPanel != null) detailPanel.SetActive(false);
+            lastHoverId = null;
+        }
+    }
+
+
 }
