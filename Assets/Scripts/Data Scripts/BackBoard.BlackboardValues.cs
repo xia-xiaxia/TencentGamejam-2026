@@ -61,6 +61,7 @@ public partial class BackBoard
                 break;
             case EffectType.UnlockNode:
                 storyService.UnlockNode(effect.targetKey);
+                TryGrantItemFromEffectDescriptor(effect);
                 break;
             case EffectType.ApplyStatus:
                 ApplyStatusFromEffect(effect);
@@ -217,6 +218,19 @@ public partial class BackBoard
         {
             Debug.LogWarning("Bag 已包含相同 id 的道具或角色不存在: " + item.id, this);
         }
+    }
+
+    /// <summary>
+    /// 从效果 stringValue 中尝试发放道具，兼容 UnlockNode 的附带奖励。
+    /// </summary>
+    private void TryGrantItemFromEffectDescriptor(EffectData effect)
+    {
+        if (effect == null || string.IsNullOrWhiteSpace(effect.stringValue))
+        {
+            return;
+        }
+
+        HandleAddItemEffect(effect);
     }
 
     private static ItemData CreateItemFromDescriptor(string descriptor)
