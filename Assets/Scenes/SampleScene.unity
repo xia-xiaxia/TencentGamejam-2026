@@ -2022,6 +2022,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2168775162087768555, guid: 88a81a5582d0acb4abac03a59b5da3cf, type: 3}
   m_PrefabInstance: {fileID: 437323327}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1229019912 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8705065011717312946, guid: 87475f19951789b44b13f1a742f16fe0, type: 3}
+  m_PrefabInstance: {fileID: 1963779402}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1264197641 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4828642034119615388, guid: 87475f19951789b44b13f1a742f16fe0, type: 3}
@@ -3666,6 +3677,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5969774640963244086, guid: 87475f19951789b44b13f1a742f16fe0, type: 3}
+      propertyPath: detailText
+      value: 
+      objectReference: {fileID: 1229019912}
+    - target: {fileID: 5969774640963244086, guid: 87475f19951789b44b13f1a742f16fe0, type: 3}
       propertyPath: eventLines.Array.size
       value: 46
       objectReference: {fileID: 0}
@@ -4217,6 +4232,26 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 15152c3c1c74fde40a2e5ef4d0118026, type: 3}
+    - target: {fileID: 8705065011717312946, guid: 87475f19951789b44b13f1a742f16fe0, type: 3}
+      propertyPath: m_text
+      value: "\u95EA\u70C1"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705065011717312946, guid: 87475f19951789b44b13f1a742f16fe0, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e98bca3199bb4e74286b451b7f1a05c4, type: 2}
+    - target: {fileID: 8705065011717312946, guid: 87475f19951789b44b13f1a742f16fe0, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 5773852370328273152, guid: e98bca3199bb4e74286b451b7f1a05c4, type: 2}
+    - target: {fileID: 8705065011717312946, guid: 87475f19951789b44b13f1a742f16fe0, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705065011717312946, guid: 87475f19951789b44b13f1a742f16fe0, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8736484353176173383, guid: 87475f19951789b44b13f1a742f16fe0, type: 3}
       propertyPath: m_Color.b
       value: 1
@@ -4318,7 +4353,8 @@ PrefabInstance:
       value: -236.8384
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5447129694934332781, guid: 87475f19951789b44b13f1a742f16fe0, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3929276841324575853, guid: 87475f19951789b44b13f1a742f16fe0, type: 3}

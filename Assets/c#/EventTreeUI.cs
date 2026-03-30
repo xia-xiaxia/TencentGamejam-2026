@@ -232,22 +232,27 @@ public class EventTreeUI : MonoBehaviour
     public void OnNodeHoverEnter(string id)
     {
         if (string.IsNullOrEmpty(id)) return;
-        if (!IsUnlocked(id)) return;
+        if (!IsUnlocked(id)) return; // 只有解锁了才显示
 
+        // 1. 尝试从 eventNodes 配置中找默认文本
         var node = System.Array.Find(eventNodes, n => n.nodeId == id);
-        if (node == null) return;
+        string displayText = (node != null) ? node.detailDesc : string.Empty;
 
-        string displayText = node.detailDesc ?? string.Empty;
-        // 优先使用 BackBoard 的事件文本（若可用且匹配 id）
+        // 2. 【关键修改】：不再只看 CurrentNode，而是根据 ID 获取文本
+        // 假设你的 BackBoard 有一个能根据 ID 获取历史节点数据的方法
         if (BackBoard.Instance != null)
         {
-            var evt = BackBoard.Instance.CurrentNode;
-            if (evt != null && evt.id == id && !string.IsNullOrEmpty(evt.Text))
+            // 如果 BackBoard 能获取任意节点的 StoryEventData
+            var historyNode = BackBoard.Instance.GetstoryBaseDatabyId(id);
+            Debug.Log(IsUnlocked(id) ? $"EventTreeUI: 节点 {id} 已解锁，尝试获取文本。" : $"EventTreeUI: 节点 {id} 未解锁，无法获取文本。");  
+            if (historyNode != null && !string.IsNullOrEmpty(historyNode.Text))
             {
-                displayText = evt.Text;
+                displayText = historyNode.Text;
+                Debug.Log($"EventTreeUI: 获取到节点 {id} 的文本：{displayText}");
             }
         }
 
+        // 3. 渲染
         if (detailText != null) detailText.text = displayText;
         if (detailPanel != null)
         {
