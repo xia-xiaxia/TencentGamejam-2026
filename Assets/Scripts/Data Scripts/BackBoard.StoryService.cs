@@ -181,6 +181,25 @@ public sealed class BackBoardStoryService
         return result;
     }
 
+    /// <summary>
+    /// 通过节点 id 获取节点数据。
+    /// </summary>
+    public StoryEventData GetStoryBaseDataById(string nodeId)
+    {
+        if (string.IsNullOrEmpty(nodeId))
+        {
+            return null;
+        }
+
+        StoryEventData node;
+        if (eventMap.TryGetValue(nodeId, out node))
+        {
+            return node;
+        }
+
+        return null;
+    }
+
     public string BuildOptionKey(string nodeId, int optionIndex)
     {
         if (string.IsNullOrEmpty(nodeId) || optionIndex < 0)

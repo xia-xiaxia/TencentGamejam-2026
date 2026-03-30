@@ -38,6 +38,11 @@ public interface IStoryRuntime
     List<string> GetCurrentLifeNodeIds();
 
     /// <summary>
+    /// 通过节点 id 获取节点数据。
+    /// </summary>
+    StoryEventData GetstoryBaseDatabyId(string nodeId);
+
+    /// <summary>
     /// 获取当前节点图片资源。
     /// </summary>
     Sprite GetCurrentNodeSprite();
