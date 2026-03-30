@@ -133,8 +133,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 721537effa55b014f8ad706a010339a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemId: 
-  itemName: "\u6551\u63F4\u624B\u518C\u533B\u7597\u7BC7"
+  itemIcon: {fileID: 0}
+  itemName: "\u77E5\u8BC6\uFF1A\u6551\u63F4\u624B\u518C\u533B\u7597\u7BC7"
   itemDescription: 
   hoverTipText: {fileID: 0}
   showName: 1
