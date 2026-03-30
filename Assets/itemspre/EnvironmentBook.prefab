@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3634968640991873194}
   - component: {fileID: 3214866616942653793}
   - component: {fileID: 1005802439487721201}
+  - component: {fileID: 1329726884696735098}
   m_Layer: 5
   m_Name: EnvironmentBook
   m_TagString: Untagged
@@ -120,3 +121,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1329726884696735098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1810346334870376203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 721537effa55b014f8ad706a010339a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 
+  itemName: "\u6551\u63F4\u624B\u518C\u73AF\u5883\u7BC7"
+  itemDescription: 
+  hoverTipText: {fileID: 0}
+  showName: 1
+  showDescription: 1

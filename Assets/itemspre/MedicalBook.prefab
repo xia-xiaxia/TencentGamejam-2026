@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8304959224845396518}
   - component: {fileID: 1126284796851695166}
   - component: {fileID: 5358340396898494212}
+  - component: {fileID: -2187023094724778473}
   m_Layer: 5
   m_Name: MedicalBook
   m_TagString: Untagged
@@ -120,3 +121,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-2187023094724778473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3548553971366014593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 721537effa55b014f8ad706a010339a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 
+  itemName: "\u6551\u63F4\u624B\u518C\u533B\u7597\u7BC7"
+  itemDescription: 
+  hoverTipText: {fileID: 0}
+  showName: 1
+  showDescription: 1
