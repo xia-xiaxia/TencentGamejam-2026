@@ -27,6 +27,14 @@ public partial class BackBoard
     }
 
     /// <summary>
+    /// 通过节点 id 获取节点数据。
+    /// </summary>
+    public StoryEventData GetstoryBaseDatabyId(string nodeId)
+    {
+        return storyService.GetStoryBaseDataById(nodeId);
+    }
+
+    /// <summary>
     /// 获取整局累计玩过的节点 id 列表（兼容旧命名，调试用途）。
     /// </summary>
     public List<string> GetUnlockedNodeIds()

@@ -2,12 +2,12 @@
     "events": [
         {
             "id": "Start",
-            "Text": "开始游戏",
+            "Text": "<size=400%>开始游戏</size=200>",
             "effectDatas": [],
             "image": "",
             "options": [
                 {
-                    "Text": "开始游戏",
+                    "Text": "<size=150%>开始游戏</size=150>",
                     "nextNodeId": "A0",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
@@ -19,7 +19,7 @@
         },
         {
             "id": "A0",
-            "Text": "你从燃烧的飞机残骸中醒来，身上多处受伤，鲜血喷涌不止。\r\n手上不知何时出现一个笔记本，封皮写着“听从树的指引，在循环往复中寻找出路。”\r\n不知所云。当务之急是处理好身上的伤口。",
+            "Text": "你从燃烧的飞机残骸中醒来，身上多处受伤</color>，鲜血喷涌不止。\r\n手上不知何时出现一个笔记本，封皮写着<color=green>“听从树的指引，在循环往复中寻找出路。”</color>\r\n不知所云。<color=red>当务之急是处理好身上的伤口。</color>",
             "effectDatas": [
                 {
                     "targetKey": "bleed",
@@ -56,7 +56,7 @@
                     "nextNodeId": "A2",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "A3",
-                    "unlockConditionText": "需要知识：行李箱密码",
+                    "unlockConditionText": "\\n<color=blue>需要知识：行李箱密码</color>",
                     "consumeItemId": "",
                     "effects": []
                 },
@@ -152,7 +152,7 @@
         },
         {
             "id": "A3",
-            "Text": "乘客已无气息，你从口袋里搜出一张染血身份证。死者的出生日期吸引了你的视线，但你已经失血过多。临死前，那六个数字仍然在脑中清晰可见。",
+            "Text": "乘客已无气息，你从口袋里搜出一张染血身份证。死者的出生日期吸引了你的视线，但你已经失血过多。临死前，那六个数字仍然在脑中清晰可见。\\n<color=blue>(获得知识：行李箱密码)</color>",
             "effectDatas": [
                 {
                     "targetKey": "A3",
@@ -303,7 +303,7 @@
         },
         {
             "id": "B4",
-            "Text": "你屏住呼吸，踮着脚离开。没走多远，另一片飞机残骸出现在眼前。\r\n染红的绷带渗出鲜血，你需要迅速找到急救包。",
+            "Text": "你屏住呼吸，踮着脚离开。没走多远，另一片飞机残骸出现在眼前。\r\n染红的绷带渗出鲜血，<color=red>你需要迅速找到急救包。</color>",
             "effectDatas": [],
             "image": "B4另一片飞机残骸.png",
             "options": [
@@ -329,7 +329,7 @@
         },
         {
             "id": "B5",
-            "Text": "你拼命寻找，只摸到一本《求生手册环境篇》。你翻开书页，里面讲述了将布匹浸湿就能有效阻挡毒雾的知识。\r\n没有可以用于止血的东西。\r\n“也许下辈子有用吧。”你瘫倒在地。",
+            "Text": "你拼命寻找，只摸到一本《求生手册环境篇》。你翻开书页，里面讲述了将布匹浸湿就能有效阻挡毒雾的知识。\r\n没有可以用于止血的东西。\r\n“也许下辈子有用吧。”你瘫倒在地。\\n<color=blue>(获得知识：求生手册环境篇)</color>",
             "effectDatas": [
                 {
                     "targetKey": "B5",
@@ -384,7 +384,7 @@
         },
         {
             "id": "B7",
-            "Text": "你拼命寻找，只摸到一本《求生手册救援篇》。你翻开书页，里面讲述了野外求生如何使用信号塔呼叫直升机救援的知识。\r\n没有可以用于止血的东西。\r\n“也许下辈子有用吧。”你瘫倒在地。",
+            "Text": "你拼命寻找，只摸到一本《求生手册救援篇》。你翻开书页，里面讲述了野外求生如何使用信号塔呼叫直升机救援的知识。\r\n没有可以用于止血的东西。\r\n“也许下辈子有用吧。”你瘫倒在地。\\n<color=blue>(获得知识：求生手册救援篇)</color>",
             "effectDatas": [
                 {
                     "targetKey": "B7",
@@ -444,7 +444,7 @@
             "image": "C0浆果 (1).png",
             "options": [
                 {
-                    "Text": "摘下拿走",
+                    "Text": "摘下拿走\\n<color=orange>(获得物品：浆果)</color>",
                     "nextNodeId": "C1",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
@@ -506,7 +506,7 @@
                     "nextNodeId": "C3",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "D0",
-                    "unlockConditionText": "需要物品：浸湿的破布",
+                    "unlockConditionText": "\\n<color=orange>需要物品：浸湿的破布</color>",
                     "consumeItemId": "",
                     "effects": []
                 }
@@ -545,7 +545,7 @@
         },
         {
             "id": "C3",
-            "Text": "穿过层层毒雾，你看到地上横躺着一本《求生手册医疗篇》。里面讲述了如何救助失血过多的伤者。\r\n很快你来到了分岔路口，向左走还是向右走？",
+            "Text": "穿过层层毒雾，你看到地上横躺着一本《求生手册医疗篇》。里面讲述了如何救助失血过多的伤者。\\n<color=blue>(获得知识：求生手册医疗篇)</color>\r\n很快你来到了分岔路口，向左走还是向右走？",
             "effectDatas": [
                 {
                     "targetKey": "C3",
@@ -580,7 +580,7 @@
             "id": "C4",
             "Text": "你向左走，一个男人手持棍棒，恶狠狠地盯着你。你很清楚，需要武器才能与之搏斗。",
             "effectDatas": [],
-            "image": "B2C4坏人.png",
+            "image": "C4坏人.png",
             "options": [
                 {
                     "Text": "与之交流",
@@ -596,7 +596,7 @@
                     "nextNodeId": "C6",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "D2",
-                    "unlockConditionText": "需要物品：手术刀",
+                    "unlockConditionText": "\\n<color=orange>需要物品：手术刀</color>",
                     "consumeItemId": "",
                     "effects": []
                 }
@@ -635,7 +635,7 @@
         },
         {
             "id": "C6",
-            "Text": "你拿出手术刀，他大吼一声扑了过来。棍棒砸在身上，你无暇顾及疼痛，将刀刃刺入他的脖颈。\r\n在他温热的尸体上，你搜出了信号塔的电台密码。",
+            "Text": "你拿出手术刀，他大吼一声扑了过来。棍棒砸在身上，你无暇顾及疼痛，将刀刃刺入他的脖颈。\r\n在他温热的尸体上，你搜出了信号塔的电台密码。\\n<color=blue>(获得知识：信号塔密码)</color>",
             "effectDatas": [
                 {
                     "targetKey": "health",
@@ -721,7 +721,7 @@
                     "nextNodeId": "E2",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "C0",
-                    "unlockConditionText": "需要物品：浆果",
+                    "unlockConditionText": "\\n<color=orange>需要物品：浆果</color>",
                     "consumeItemId": "",
                     "effects": []
                 }
@@ -802,7 +802,7 @@
         },
         {
             "id": "D2",
-            "Text": "穿过小溪，在松软的草地上，一个锃亮的急救箱半开着。\r\n看到救命稻草，你扑了上去，手忙脚乱地打开了急救箱。\r\n万幸，里面真的有止血带和药物。经过仔细的处理，你确信自己已经完全止住了血。\r\n锋利的手术刀吸引了你的注意力。“带上吧，或许有用。”\r\n合上急救箱，眼前呈现出两条路。",
+            "Text": "穿过小溪，在松软的草地上，一个锃亮的急救箱半开着。\r\n看到救命稻草，你扑了上去，手忙脚乱地打开了急救箱。\r\n万幸，里面真的有止血带和药物。经过仔细的处理，你确信自己已经完全止住了血。\r\n锋利的手术刀吸引了你的注意力。“带上吧，或许有用。”\\n<color=orange>(获得物品：手术刀)</color>\r\n合上急救箱，眼前呈现出两条路。",
             "effectDatas": [
                 {
                     "targetKey": "bleed",
@@ -1045,7 +1045,7 @@
                     "nextNodeId": "E3",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "C3",
-                    "unlockConditionText": "需要知识：求生手册医疗篇",
+                    "unlockConditionText": "\\n<color=blue>需要知识：求生手册医疗篇</color>",
                     "consumeItemId": "",
                     "effects": []
                 }
@@ -1058,7 +1058,7 @@
             "image": "E1荆棘电池.png",
             "options": [
                 {
-                    "Text": "拿",
+                    "Text": "拿\\n<color=orange>(获得物品：电池)</color>",
                     "nextNodeId": "E2",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "",
@@ -1110,7 +1110,7 @@
                     "nextNodeId": "E5",
                     "requiredItemId": "",
                     "requiredUnlockedNodeId": "E3",
-                    "unlockConditionText": "需要知识：信号塔位置",
+                    "unlockConditionText": "\\n<color=blue>需要知识：信号塔位置</color>",
                     "consumeItemId": "",
                     "effects": []
                 }
@@ -1190,8 +1190,8 @@
                     "Text": "呼叫直升机救援",
                     "nextNodeId": "End",
                     "requiredItemId": "",
-                    "requiredUnlockedNodeId": "C6|B7",
-                    "unlockConditionText": "需要物品：电池。需要知识：电台密码，求生手册救援篇",
+                    "requiredUnlockedNodeId": "C6&B7",
+                    "unlockConditionText": "\\n<color=orange>需要物品：电池。</color>\\n<color=blue>需要知识：电台密码，求生手册救援篇</color>",
                     "consumeItemId": "",
                     "effects": []
                 },
@@ -1239,7 +1239,7 @@
         },
         {
             "id": "End",
-            "Text": "你输入密码，给电台装上电池，按照求生手册上说的方法呼叫了直升机救援。\r\n你靠着铁塔坐下来，就这么坐着。铁塔在风中摇晃，吱呀作响。\r\n终于，远处传来轰隆隆的声音。一架直升机从树梢上方冒出来，旋翼卷起的风把树叶卷起又吹散。\r\n得救了。\r\n“听从树的指引，在循环往复中寻找出路。”回头望向身后层层叠叠的树，风吹过来，你打了个寒战，就好像自己死过一样。",
+            "Text": "你输入密码，给电台装上电池，按照求生手册上说的方法呼叫了直升机救援。\r\n你靠着铁塔坐下来，就这么坐着。铁塔在风中摇晃，吱呀作响。\r\n终于，远处传来轰隆隆的声音。一架直升机从树梢上方冒出来，旋翼卷起的风把树叶卷起又吹散。\r\n得救了。\r\n<color=green>“听从树的指引，在循环往复中寻找出路。”</color>回头望向身后层层叠叠的树，风吹过来，你打了个寒战，就好像自己死过一样。",
             "effectDatas": [],
             "image": "",
             "options": [
