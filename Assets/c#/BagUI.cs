@@ -44,8 +44,15 @@ public class BagUI : MonoBehaviour
     private bool isOpen;
     public static BagUI Instance { get; private set; }
 
+    private const string DefaultBagRefreshPrefix = "bag:";
+    private const string DefaultAddPrefix = "bag.add:";
+    private const string DefaultRemovePrefix = "bag.remove:";
+
     private void Awake()
     {
+        // 兼容旧预制体缺少新字段序列化时的空前缀问题。
+        EnsureEventPrefixes();
+
         if (contentParent != null)
             gridLayout = contentParent.GetComponent<GridLayoutGroup>();
 
@@ -63,6 +70,24 @@ public class BagUI : MonoBehaviour
         else
         {
             Debug.LogWarning("BagUI: 已存在实例，Awake 中未覆盖。", this);
+        }
+    }
+
+    private void EnsureEventPrefixes()
+    {
+        if (string.IsNullOrEmpty(bagRefreshPrefix))
+        {
+            bagRefreshPrefix = DefaultBagRefreshPrefix;
+        }
+
+        if (string.IsNullOrEmpty(addPrefix))
+        {
+            addPrefix = DefaultAddPrefix;
+        }
+
+        if (string.IsNullOrEmpty(removePrefix))
+        {
+            removePrefix = DefaultRemovePrefix;
         }
     }
 

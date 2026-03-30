@@ -176,6 +176,40 @@ public sealed class BackBoardCharacterService
     }
 
     /// <summary>
+    /// 清空角色背包，但保留指定 id 的道具。
+    /// </summary>
+    public bool ClearBagExcept(string characterId, ISet<string> preservedItemIds)
+    {
+        List<ItemData> bag = GetBag(characterId);
+        if (bag == null)
+        {
+            return false;
+        }
+
+        if (bag.Count == 0)
+        {
+            return true;
+        }
+
+        if (preservedItemIds == null || preservedItemIds.Count == 0)
+        {
+            bag.Clear();
+            return true;
+        }
+
+        for (int i = bag.Count - 1; i >= 0; i--)
+        {
+            ItemData item = bag[i];
+            if (item == null || string.IsNullOrEmpty(item.id) || !preservedItemIds.Contains(item.id))
+            {
+                bag.RemoveAt(i);
+            }
+        }
+
+        return true;
+    }
+
+    /// <summary>
     /// 判断背包中是否包含指定道具。
     /// </summary>
     public bool HasItem(string characterId, string itemId)

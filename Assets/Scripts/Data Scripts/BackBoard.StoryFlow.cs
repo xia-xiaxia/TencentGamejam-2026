@@ -1,9 +1,19 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
 public partial class BackBoard
 {
+    private static readonly HashSet<string> PreservedBagItemIdsOnDeath = new HashSet<string>(StringComparer.Ordinal)
+    {
+        "求生手册环境篇",
+        "求生手册救援篇",
+        "求生手册医疗篇",
+        "信号塔密码",
+        "行李箱密码"
+    };
+
     /// <summary>
     /// 进入游戏结束状态：清理节点与状态效果，并通知 UI 退出当前事件展示。
     /// </summary>
@@ -62,11 +72,11 @@ public partial class BackBoard
             return false;
         }
 
-        // 重玩时重置玩家运行态：清空状态、回满生命、清空当前角色背包。
+        // 重玩时重置玩家运行态：清空状态、回满生命、清空背包（保留跨死亡知识道具）。
         statusService.Clear();
         SetCurrentHealth(GetCurrentMaxHealth());
 
-        ClearBag(currentCharacterId);
+        ClearBagExcept(currentCharacterId, PreservedBagItemIdsOnDeath);
         storyService.ResetCurrentLifeProgress();
 
         if (!EnterNode(nodeId))

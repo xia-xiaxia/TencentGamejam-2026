@@ -192,7 +192,7 @@ public partial class BackBoard
         {
             if (string.Equals(effect.type, "Clear", StringComparison.OrdinalIgnoreCase))
             {
-                ClearBag(currentCharacterId);
+                ClearBagExcept(currentCharacterId, PreservedBagItemIdsOnDeath);
                 return true;
             }
         }

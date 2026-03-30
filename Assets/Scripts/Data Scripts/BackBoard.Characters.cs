@@ -145,6 +145,7 @@ public partial class BackBoard
         if (item != null && !string.IsNullOrEmpty(item.id))
         {
             NotifyBlackboardChanged("bag.add:" + item.id);
+            Debug.Log("the item id is " + item.id);
         }
         return true;
     }
@@ -173,6 +174,20 @@ public partial class BackBoard
     public bool ClearBag(string characterId)
     {
         if (!characterService.ClearBag(characterId))
+        {
+            return false;
+        }
+
+        NotifyBlackboardChanged("bag:" + characterId);
+        return true;
+    }
+
+    /// <summary>
+    /// 清空角色背包，但保留指定 id 的道具。
+    /// </summary>
+    public bool ClearBagExcept(string characterId, ISet<string> preservedItemIds)
+    {
+        if (!characterService.ClearBagExcept(characterId, preservedItemIds))
         {
             return false;
         }
