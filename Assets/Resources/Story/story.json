@@ -4,7 +4,7 @@
             "id": "Start",
             "Text": "<size=400%>林际拓荒</size>",
             "effectDatas": [],
-            "image": "",
+            "image": "start.png",
             "options": [
                 {
                     "Text": "<size=150%>开始游戏</size>",
