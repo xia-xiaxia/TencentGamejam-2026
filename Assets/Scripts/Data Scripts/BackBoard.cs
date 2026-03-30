@@ -9,6 +9,7 @@ public partial class BackBoard : MonoBehaviour, IStoryRuntime
     [SerializeField] private TextAsset storyJson;
     [SerializeField] private string storyJsonResourcePath = "Story/story";
     [SerializeField] private StoryDatabase storyDatabase;
+    [SerializeField] private bool loadUnlockSaveOnStart = false;
     [SerializeField] private string startNodeId;
     [SerializeField] private string currentCharacterId;
 
@@ -101,7 +102,10 @@ public partial class BackBoard : MonoBehaviour, IStoryRuntime
         statusService.Clear();
         IsGameEnded = false;
         storyService.BuildEventMap(storyDatabase != null ? storyDatabase.events : null, this);
-        storyService.LoadUnlockProgress(this);
+        if (loadUnlockSaveOnStart)
+        {
+            storyService.LoadUnlockProgress(this);
+        }
         characterService.BuildCharacterMap(storyDatabase != null ? storyDatabase.characters : null, this);
 
         if (storyDatabase == null)

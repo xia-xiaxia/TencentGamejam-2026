@@ -15,6 +15,10 @@ public class EventUIManager : MonoBehaviour
     public TextMeshProUGUI eventText;
     public Image eventImage;
 
+    [Header("Event Image Layout")]
+    [SerializeField] private bool fitEventImageToParent = true;
+    [SerializeField] private Vector2 eventImagePadding = Vector2.zero;
+
     private IStoryRuntime storyRuntime;
     private Coroutine bindCoroutine;
     private Button[] optionButtons;
@@ -460,8 +464,9 @@ public class EventUIManager : MonoBehaviour
             return;
         }
 
-        float baseWidth = Mathf.Max(1f, eventImageBaseSize.x);
-        float baseHeight = Mathf.Max(1f, eventImageBaseSize.y);
+        Vector2 bounds = GetEventImageBounds(rect);
+        float baseWidth = Mathf.Max(1f, bounds.x);
+        float baseHeight = Mathf.Max(1f, bounds.y);
         float baseAspect = baseWidth / baseHeight;
 
         float spriteWidth = Mathf.Max(1f, sprite.rect.width);
@@ -475,6 +480,24 @@ public class EventUIManager : MonoBehaviour
         }
 
         rect.sizeDelta = new Vector2(baseHeight * spriteAspect, baseHeight);
+    }
+
+    private Vector2 GetEventImageBounds(RectTransform imageRect)
+    {
+        if (!fitEventImageToParent || imageRect == null)
+        {
+            return eventImageBaseSize;
+        }
+
+        RectTransform parent = imageRect.parent as RectTransform;
+        if (parent == null)
+        {
+            return eventImageBaseSize;
+        }
+
+        float width = Mathf.Max(1f, parent.rect.width - eventImagePadding.x);
+        float height = Mathf.Max(1f, parent.rect.height - eventImagePadding.y);
+        return new Vector2(width, height);
     }
 
     public void OnClickOption(int visibleOptionIndex)

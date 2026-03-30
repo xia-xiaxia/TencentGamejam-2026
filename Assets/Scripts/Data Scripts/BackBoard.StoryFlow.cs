@@ -262,13 +262,13 @@ public partial class BackBoard
             return false;
         }
 
-        string requiredItemId = string.IsNullOrEmpty(option.requiredItemId) ? string.Empty : option.requiredItemId.Trim();
-        if (string.IsNullOrEmpty(requiredItemId))
+        string requiredItemIdCondition = string.IsNullOrEmpty(option.requiredItemId) ? string.Empty : option.requiredItemId.Trim();
+        if (string.IsNullOrEmpty(requiredItemIdCondition))
         {
-            requiredItemId = InferRequiredItemIdFromUnlockConditionText(option.unlockConditionText);
+            requiredItemIdCondition = InferRequiredItemIdFromUnlockConditionText(option.unlockConditionText);
         }
 
-        if (!string.IsNullOrEmpty(requiredItemId) && !HasItem(currentCharacterId, requiredItemId))
+        if (!IsRequiredItemConditionMet(requiredItemIdCondition))
         {
             return false;
         }
@@ -294,6 +294,54 @@ public partial class BackBoard
         }
 
         return match.Groups[1].Value.Trim();
+    }
+
+    /// <summary>
+    /// 解析并判断道具条件：支持 "A|B"（任一满足）和 "A&B"（同时满足）。
+    /// </summary>
+    private bool IsRequiredItemConditionMet(string requiredItemCondition)
+    {
+        if (string.IsNullOrWhiteSpace(requiredItemCondition))
+        {
+            return true;
+        }
+
+        string[] orGroups = requiredItemCondition.Split('|');
+        for (int i = 0; i < orGroups.Length; i++)
+        {
+            string group = orGroups[i];
+            if (string.IsNullOrWhiteSpace(group))
+            {
+                continue;
+            }
+
+            string[] andItems = group.Split('&');
+            bool hasItem = false;
+            bool allMet = true;
+
+            for (int j = 0; j < andItems.Length; j++)
+            {
+                string itemId = andItems[j].Trim();
+                if (string.IsNullOrEmpty(itemId))
+                {
+                    continue;
+                }
+
+                hasItem = true;
+                if (!HasItem(currentCharacterId, itemId))
+                {
+                    allMet = false;
+                    break;
+                }
+            }
+
+            if (hasItem && allMet)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
