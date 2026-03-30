@@ -3967,6 +3967,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 15152c3c1c74fde40a2e5ef4d0118026, type: 3}
     - target: {fileID: 6523253616474633185, guid: 87475f19951789b44b13f1a742f16fe0, type: 3}
+      propertyPath: minScale
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523253616474633185, guid: 87475f19951789b44b13f1a742f16fe0, type: 3}
       propertyPath: zoomSpeed
       value: 1
       objectReference: {fileID: 0}
